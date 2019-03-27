@@ -1,0 +1,1 @@
+Typescript bindings for custom edgeware-node modules.
