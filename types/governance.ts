@@ -1,4 +1,4 @@
-import { AccountId, Null, u32, Text, u64, Moment } from '@polkadot/types';
+import { AccountId, Null, u32, Text, u64, Moment, Bytes } from '@polkadot/types';
 import { EnumType, Struct, Vector, Tuple } from '@polkadot/types/codec';
 
 export class Signaling extends Null { }
@@ -85,4 +85,6 @@ export const GovernanceTypes = {
   ProposalComment,
   ProposalCategory,
   ProposalRecord,
+  ProposalContents: Bytes,
+  ProposalTitle: Bytes,
 };
