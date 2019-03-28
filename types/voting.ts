@@ -129,4 +129,6 @@ export const VotingTypes = {
   Tally,
   VoteData,
   VoteRecord,
+  "voting::VoteType": VoteType,
+  "voting::TallyType": TallyType,
 };
