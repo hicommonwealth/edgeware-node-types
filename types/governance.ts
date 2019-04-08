@@ -2,15 +2,11 @@ import { AccountId, Null, u32, Text, u64, Moment, Bytes } from '@polkadot/types'
 import { EnumType, Struct, Vector, Tuple } from '@polkadot/types/codec';
 
 export class Signaling extends Null { }
-export class Funding extends u32 { }
-export class Upgrade extends Null { }
 
-export class ProposalCategory extends EnumType<Signaling | Funding | Upgrade> {
+export class ProposalCategory extends EnumType<Signaling> {
   constructor (value?: string, index?: number) {
       super({
           signaling: Signaling,
-          funding: Funding,
-          upgrade: Upgrade,
     }, value, index);
   }
 }
@@ -29,8 +25,6 @@ export class ProposalStage extends EnumType<PreVoting | Voting | Completed> {
   }
 }
 
-export class ProposalComment extends Tuple.with([Text, AccountId]) { }
-
 export class ProposalRecord extends Struct {
   constructor (value: any) {
     super({
@@ -41,7 +35,6 @@ export class ProposalRecord extends Struct {
       category: ProposalCategory,
       title: Text,
       contents: Text,
-      comments: Vector.with(ProposalComment),
       vote_id: u64,
     }, value);
   }
@@ -66,9 +59,6 @@ export class ProposalRecord extends Struct {
   get contents () : Text {
     return this.get('contents') as Text;
   }
-  get comments () : Vector<ProposalComment> {
-    return this.get('comments') as Vector<ProposalComment>;
-  }
   get vote_id () : u64 {
     return this.get('vote_id') as u64;
   }
@@ -76,13 +66,10 @@ export class ProposalRecord extends Struct {
 
 export const GovernanceTypes = {
   Signaling,
-  Funding,
-  Upgrade,
   PreVoting,
   Voting,
   Completed,
   ProposalStage,
-  ProposalComment,
   ProposalCategory,
   ProposalRecord,
   ProposalContents: Bytes,
