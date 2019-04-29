@@ -1,4 +1,4 @@
-import { Bytes, AccountId, Text, u32, Null, Moment } from '@polkadot/types';
+import { Bytes, AccountId, Text, u32, Null, Moment, Metadata } from '@polkadot/types';
 import { Option, Struct, EnumType } from '@polkadot/types/codec';
 
 export class MetadataRecord extends Struct {
@@ -55,16 +55,14 @@ export class IdentityRecord extends Struct {
   get stage (): IdentityStage {
     return this.get('stage') as IdentityStage;
   }
-  get expiration_time(): Date {
-    return Moment.decodeMoment(this.get('expiration_time') as Moment);
+  get expiration_time(): Moment {
+    return this.get('expiration_time') as Moment;
   }
-  get proof (): Text | null {
-    const opt = this.get('proof') as Option<Text>;
-    return opt.unwrapOr(null);
+  get proof (): Option<Text> {
+    return this.get('proof') as Option<Text>;
   }
-  get metadata (): MetadataRecord | null {
-    const opt = this.get('metadata') as Option<MetadataRecord>;
-    return opt.unwrapOr(null);
+  get metadata (): Option<MetadataRecord> {
+    return this.get('metadata') as Option<MetadataRecord>;
   }
 }
 
