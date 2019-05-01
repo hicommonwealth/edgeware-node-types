@@ -1,5 +1,5 @@
-import { AccountId, Null, u32, Text, u64, Moment, Bytes } from '@polkadot/types';
-import { EnumType, Struct, Vector, Tuple } from '@polkadot/types/codec';
+import { AccountId, Null, u32, Text, u64, Bytes, BlockNumber } from '@polkadot/types';
+import { EnumType, Struct } from '@polkadot/types/codec';
 
 export class Signaling extends Null { }
 
@@ -31,7 +31,7 @@ export class ProposalRecord extends Struct {
       index: u32,
       author: AccountId,
       stage: ProposalStage,
-      transition_time: Moment,
+      transition_time: BlockNumber,
       category: ProposalCategory,
       title: Text,
       contents: Text,
@@ -47,8 +47,8 @@ export class ProposalRecord extends Struct {
   get stage (): ProposalStage {
     return this.get('stage') as ProposalStage;
   }
-  get transition_time () : Date {
-    return Moment.decodeMoment(this.get('transition_time') as Moment);
+  get transition_time (): BlockNumber {
+    return this.get('transition_time') as BlockNumber;
   }
   get category () : ProposalCategory {
     return this.get('category') as ProposalCategory;
