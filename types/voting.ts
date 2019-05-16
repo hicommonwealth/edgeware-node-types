@@ -8,7 +8,7 @@ export class Commit extends Null { }
 export class Voting extends Null { }
 export class Completed extends Null { }
 
-export class VoteStage extends EnumType<PreVoting | Commit | Voting | Completed> {
+export class VoteStage extends EnumType {
   constructor (value?: string, index?: number) {
       super({
           prevoting: PreVoting,
@@ -22,7 +22,7 @@ export class VoteStage extends EnumType<PreVoting | Commit | Voting | Completed>
 export class Binary extends Null { }
 export class MultiOption extends Null { }
 
-export class VoteType extends EnumType<Binary | MultiOption> {
+export class VoteType extends EnumType {
   constructor (value?: string, index?: number) {
     super({
       binary: Binary,
@@ -34,7 +34,7 @@ export class VoteType extends EnumType<Binary | MultiOption> {
 export class OnePerson extends Null { }
 export class OneCoin extends Null { }
 
-export class TallyType extends EnumType<OnePerson | OneCoin> {
+export class TallyType extends EnumType {
   constructor (value?: string, index?: number) {
     super({
       oneperson: OnePerson,

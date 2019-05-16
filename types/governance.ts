@@ -3,7 +3,7 @@ import { EnumType, Struct } from '@polkadot/types/codec';
 
 export class Signaling extends Null { }
 
-export class ProposalCategory extends EnumType<Signaling> {
+export class ProposalCategory extends EnumType {
   constructor (value?: string, index?: number) {
       super({
           signaling: Signaling,
@@ -15,7 +15,7 @@ export class PreVoting extends Null { }
 export class Voting extends Null { }
 export class Completed extends Null { }
 
-export class ProposalStage extends EnumType<PreVoting | Voting | Completed> {
+export class ProposalStage extends EnumType {
   constructor (value?: string, index?: number) {
     super({
       prevoting: PreVoting,
