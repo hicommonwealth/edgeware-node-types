@@ -24,7 +24,7 @@ export class Registered extends Null { }
 export class Attested extends Null { }
 export class Verified extends Null { }
 
-export class IdentityStage extends EnumType<Registered | Attested | Verified> {
+export class IdentityStage extends EnumType {
   constructor (value?: string, index?: number) {
     super({
       registered: Registered,
