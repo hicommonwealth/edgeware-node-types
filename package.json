@@ -1,0 +1,25 @@
+{
+  "name": "edgeware-node-types",
+  "version": "1.0.0",
+  "description": "Type definitions for edgeware chain.",
+  "main": "index.js",
+  "files": [
+    "types/"
+  ],
+  "depndencies": {
+    "@polkadot/api": "^0.79.0-beta.31"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hicommonwealth/edgeware-node-types.git"
+  },
+  "author": "jake@commonwealth.im",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hicommonwealth/edgeware-node-types/issues"
+  },
+  "homepage": "https://github.com/hicommonwealth/edgeware-node-types#readme"
+}
