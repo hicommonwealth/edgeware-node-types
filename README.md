@@ -10,7 +10,7 @@ import { VotingTypes } from 'edgeware-node-types/dist/voting';
 import { GovernanceTypes } from 'edgeware-node-types/dist/governance';
 
 const options: ApiOptions = {
-  provider : new WsProvider(remoteNodeUrl),
+  provider : new WsProvider('ws://localhost:9944'),
   types : {
     ...IdentityTypes,
     ...GovernanceTypes,
