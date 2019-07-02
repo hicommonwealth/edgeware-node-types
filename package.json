@@ -1,13 +1,13 @@
 {
   "name": "edgeware-node-types",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Type definitions for edgeware chain.",
   "main": "index.js",
   "files": [
     "dist/"
   ],
-  "dependencies": {
-    "@polkadot/api": "^0.82.0-beta.23"
+  "devDependencies": {
+    "@polkadot/api": "^0.82.0-beta.26"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
