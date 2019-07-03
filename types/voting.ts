@@ -21,12 +21,14 @@ export class VoteStage extends EnumType {
 
 export class Binary extends Null { }
 export class MultiOption extends Null { }
+export class RankedChoice extends Null { }
 
 export class VoteType extends EnumType {
   constructor (value?: string, index?: number) {
     super({
       binary: Binary,
       multioption: MultiOption,
+      rankedchoice: RankedChoice,
     }, value, index);
   }
 }
@@ -78,32 +80,33 @@ export class VoteData extends Struct {
   }
 }
 
-export class AccountVotePairs extends Vector.with(Tuple.with([AccountId, VoteOutcome])) { }
+export class Commitments extends Vector.with(Tuple.with([AccountId, VoteOutcome])) { }
+export class Reveals extends Vector.with(Tuple.with([AccountId, Vector.with(VoteOutcome)])) { }
 
 export class VoteRecord extends Struct {
   constructor (value: any) {
     super({
       id: u64,
-      commitments: AccountVotePairs,
-      reveals: AccountVotePairs,
-      data: VoteData,
+      commitments: Commitments,
+      reveals: Reveals,
       outcomes: Vector.with(VoteOutcome),
+      data: VoteData,
     }, value);
   }
   get id (): u64 {
     return this.get('id') as u64;
   }
-  get commitments (): AccountVotePairs {
-    return this.get('commits') as AccountVotePairs;
+  get commitments (): Commitments {
+    return this.get('commits') as Commitments;
   }
-  get reveals (): AccountVotePairs {
-    return this.get('reveals') as AccountVotePairs;
-  }
-  get data () : VoteData {
-    return this.get('data') as VoteData;
+  get reveals (): Reveals {
+    return this.get('reveals') as Reveals;
   }
   get outcomes () : Vector<VoteOutcome> {
     return this.get('outcomes') as Vector<VoteOutcome>;
+  }
+  get data () : VoteData {
+    return this.get('data') as VoteData;
   }
 }
 
