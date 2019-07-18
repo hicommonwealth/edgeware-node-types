@@ -89,8 +89,8 @@ export class VoteRecord extends Struct {
       id: u64,
       commitments: Commitments,
       reveals: Reveals,
-      outcomes: Vector.with(VoteOutcome),
       data: VoteData,
+      outcomes: Vector.with(VoteOutcome),
     }, value);
   }
   get id (): u64 {
@@ -102,11 +102,11 @@ export class VoteRecord extends Struct {
   get reveals (): Reveals {
     return this.get('reveals') as Reveals;
   }
-  get outcomes () : Vector<VoteOutcome> {
-    return this.get('outcomes') as Vector<VoteOutcome>;
-  }
   get data () : VoteData {
     return this.get('data') as VoteData;
+  }
+  get outcomes () : Vector<VoteOutcome> {
+    return this.get('outcomes') as Vector<VoteOutcome>;
   }
 }
 
