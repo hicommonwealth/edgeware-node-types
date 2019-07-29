@@ -1,7 +1,7 @@
-import { Null, AccountId, bool, u64, Balance } from '@polkadot/types';
-import { EnumType, Struct, Vector, Tuple, Option } from '@polkadot/types/codec';
+import { Null, bool, u64, EnumType, Struct, Vec, Tuple, Option, u128 } from '@polkadot/types';
 import U8aFixed from '@polkadot/types/codec/U8aFixed';
 import { AnyU8a } from '@polkadot/types/types';
+import AccountId from '@polkadot/types/primitive/Generic/AccountId';
 
 export class PreVoting extends Null { }
 export class Commit extends Null { }
@@ -51,7 +51,7 @@ export class VoteOutcome extends U8aFixed {
   }
 }
 
-export class Tally extends Option.with(Vector.with(Tuple.with([VoteOutcome, Balance]))) { }
+export class Tally extends Option.with(Vec.with(Tuple.with([VoteOutcome, u128]))) { }
 
 export class VoteData extends Struct {
   constructor (value: any) {
@@ -80,8 +80,8 @@ export class VoteData extends Struct {
   }
 }
 
-export class Commitments extends Vector.with(Tuple.with([AccountId, VoteOutcome])) { }
-export class Reveals extends Vector.with(Tuple.with([AccountId, Vector.with(VoteOutcome)])) { }
+export class Commitments extends Vec.with(Tuple.with([AccountId, VoteOutcome])) { }
+export class Reveals extends Vec.with(Tuple.with([AccountId, Vec.with(VoteOutcome)])) { }
 
 export class VoteRecord extends Struct {
   constructor (value: any) {
@@ -90,7 +90,7 @@ export class VoteRecord extends Struct {
       commitments: Commitments,
       reveals: Reveals,
       data: VoteData,
-      outcomes: Vector.with(VoteOutcome),
+      outcomes: Vec.with(VoteOutcome),
     }, value);
   }
   get id (): u64 {
@@ -105,8 +105,8 @@ export class VoteRecord extends Struct {
   get data () : VoteData {
     return this.get('data') as VoteData;
   }
-  get outcomes () : Vector<VoteOutcome> {
-    return this.get('outcomes') as Vector<VoteOutcome>;
+  get outcomes () : Vec<VoteOutcome> {
+    return this.get('outcomes') as Vec<VoteOutcome>;
   }
 }
 

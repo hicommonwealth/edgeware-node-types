@@ -1,5 +1,6 @@
-import { AccountId, Null, u32, Text, u64, Bytes, BlockNumber } from '@polkadot/types';
+import { Null, u32, Text, u64, Bytes } from '@polkadot/types';
 import { EnumType, Struct } from '@polkadot/types/codec';
+import AccountId from '@polkadot/types/primitive/Generic/AccountId';
 
 export class Signaling extends Null { }
 
@@ -31,7 +32,7 @@ export class ProposalRecord extends Struct {
       index: u32,
       author: AccountId,
       stage: ProposalStage,
-      transition_time: BlockNumber,
+      transition_time: u64,
       category: ProposalCategory,
       title: Text,
       contents: Text,
@@ -47,8 +48,8 @@ export class ProposalRecord extends Struct {
   get stage (): ProposalStage {
     return this.get('stage') as ProposalStage;
   }
-  get transition_time (): BlockNumber {
-    return this.get('transition_time') as BlockNumber;
+  get transition_time (): u64 {
+    return this.get('transition_time') as u64;
   }
   get category () : ProposalCategory {
     return this.get('category') as ProposalCategory;
