@@ -1,6 +1,7 @@
-import { AccountId, Null, u32, Text, u64, Bytes, BlockNumber } from '@polkadot/types';
-import { EnumType, Struct } from '@polkadot/types/codec';
+import { u32, Text, u64, Bytes } from '@polkadot/types';
+import { Struct } from '@polkadot/types/codec';
 import { VotingTypes, VoteStage } from './voting';
+import AccountId from '@polkadot/types/primitive/Generic/AccountId';
 
 export class ProposalRecord extends Struct {
   constructor (value: any) {
@@ -8,7 +9,7 @@ export class ProposalRecord extends Struct {
       index: u32,
       author: AccountId,
       stage: VoteStage,
-      transition_time: BlockNumber,
+      transition_time: u64,
       title: Text,
       contents: Text,
       vote_id: u64,
@@ -23,8 +24,8 @@ export class ProposalRecord extends Struct {
   get stage (): VoteStage {
     return this.get('stage') as VoteStage;
   }
-  get transition_time (): BlockNumber {
-    return this.get('transition_time') as BlockNumber;
+  get transition_time (): u64 {
+    return this.get('transition_time') as u64;
   }
   get title () : Text {
     return this.get('title') as Text;
