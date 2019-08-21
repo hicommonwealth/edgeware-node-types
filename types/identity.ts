@@ -1,5 +1,5 @@
 import { Bytes, Text, u32, Null, u64 } from '@polkadot/types';
-import { Option, Struct, EnumType } from '@polkadot/types/codec';
+import { Option, Struct, Enum } from '@polkadot/types/codec';
 import AccountId from '@polkadot/types/primitive/Generic/AccountId';
 
 export class MetadataRecord extends Struct {
@@ -25,7 +25,7 @@ export class Registered extends Null { }
 export class Attested extends Null { }
 export class Verified extends Null { }
 
-export class IdentityStage extends EnumType {
+export class IdentityStage extends Enum {
   constructor (value?: string, index?: number) {
     super({
       registered: Registered,

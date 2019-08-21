@@ -1,4 +1,4 @@
-import { Null, bool, u64, EnumType, Struct, Vec, Tuple, Option, u128 } from '@polkadot/types';
+import { Null, bool, u64, Enum, Struct, Vec, Tuple, Option, u128 } from '@polkadot/types';
 import U8aFixed from '@polkadot/types/codec/U8aFixed';
 import { AnyU8a } from '@polkadot/types/types';
 import AccountId from '@polkadot/types/primitive/Generic/AccountId';
@@ -8,7 +8,7 @@ export class Commit extends Null { }
 export class Voting extends Null { }
 export class Completed extends Null { }
 
-export class VoteStage extends EnumType {
+export class VoteStage extends Enum {
   constructor (value?: string, index?: number) {
       super({
           prevoting: PreVoting,
@@ -23,7 +23,7 @@ export class Binary extends Null { }
 export class MultiOption extends Null { }
 export class RankedChoice extends Null { }
 
-export class VoteType extends EnumType {
+export class VoteType extends Enum {
   constructor (value?: string, index?: number) {
     super({
       binary: Binary,
@@ -36,7 +36,7 @@ export class VoteType extends EnumType {
 export class OnePerson extends Null { }
 export class OneCoin extends Null { }
 
-export class TallyType extends EnumType {
+export class TallyType extends Enum {
   constructor (value?: string, index?: number) {
     super({
       oneperson: OnePerson,
