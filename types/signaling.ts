@@ -9,7 +9,7 @@ export class ProposalRecord extends Struct {
       index: u32,
       author: AccountId,
       stage: VoteStage,
-      transition_time: u64,
+      transition_time: u32,
       title: Text,
       contents: Text,
       vote_id: u64,
@@ -24,8 +24,8 @@ export class ProposalRecord extends Struct {
   get stage (): VoteStage {
     return this.get('stage') as VoteStage;
   }
-  get transition_time (): u64 {
-    return this.get('transition_time') as u64;
+  get transition_time (): u32 {
+    return this.get('transition_time') as u32;
   }
   get title () : Text {
     return this.get('title') as Text;

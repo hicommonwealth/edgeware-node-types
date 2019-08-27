@@ -42,7 +42,7 @@ export class IdentityRecord extends Struct {
       identity_type: Text,
       identity: Bytes,
       stage: IdentityStage,
-      expiration_time: u64,
+      expiration_time: u32,
       proof: Option.with(Text),
       metadata: Option.with(MetadataRecord),
     }, value);
@@ -56,8 +56,8 @@ export class IdentityRecord extends Struct {
   get stage (): IdentityStage {
     return this.get('stage') as IdentityStage;
   }
-  get expiration_time(): u64 {
-    return this.get('expiration_time') as u64;
+  get expiration_time(): u32 {
+    return this.get('expiration_time') as u32;
   }
   get proof (): Option<Text> {
     return this.get('proof') as Option<Text>;
