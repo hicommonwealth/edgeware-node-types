@@ -7,13 +7,13 @@ import { ApiOptions } from '@polkadot/api/types';
 import { ApiRx } from '@polkadot/api';
 import { IdentityTypes } from 'edgeware-node-types/dist/identity';
 import { VotingTypes } from 'edgeware-node-types/dist/voting';
-import { GovernanceTypes } from 'edgeware-node-types/dist/governance';
+import { SignalingTypes } from 'edgeware-node-types/dist/signaling';
 
 const options: ApiOptions = {
   provider : new WsProvider('ws://localhost:9944'),
   types : {
     ...IdentityTypes,
-    ...GovernanceTypes,
+    ...SignalingTypes,
     ...VotingTypes,
   },
 };
