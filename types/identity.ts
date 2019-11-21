@@ -1,4 +1,4 @@
-import { Bytes, Text, u32, Null, u64 } from '@polkadot/types';
+import { Bytes, Text, u32, Null } from '@polkadot/types';
 import { Option, Struct, Enum } from '@polkadot/types/codec';
 import { Registry } from '@polkadot/types/types';
 import AccountId from '@polkadot/types/primitive/Generic/AccountId';
