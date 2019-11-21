@@ -1,6 +1,6 @@
 import { Null, bool, u64, Enum, Struct, Vec, Tuple, Option, u128 } from '@polkadot/types';
 import U8aFixed from '@polkadot/types/codec/U8aFixed';
-import { AnyU8a } from '@polkadot/types/types';
+import { AnyU8a, Registry } from '@polkadot/types/types';
 import AccountId from '@polkadot/types/primitive/Generic/AccountId';
 
 export class PreVoting extends Null { }
@@ -9,12 +9,12 @@ export class Voting extends Null { }
 export class Completed extends Null { }
 
 export class VoteStage extends Enum {
-  constructor (value?: string, index?: number) {
-      super({
-          prevoting: PreVoting,
-          commit: Commit,
-          voting: Voting,
-          completed: Completed,
+  constructor (registry: Registry, value?: string, index?: number) {
+    super(registry, {
+      prevoting: PreVoting,
+      commit: Commit,
+      voting: Voting,
+      completed: Completed,
     }, value, index);
   }
 }
@@ -24,8 +24,8 @@ export class MultiOption extends Null { }
 export class RankedChoice extends Null { }
 
 export class VoteType extends Enum {
-  constructor (value?: string, index?: number) {
-    super({
+  constructor (registry: Registry, value?: string, index?: number) {
+    super(registry, {
       binary: Binary,
       multioption: MultiOption,
       rankedchoice: RankedChoice,
@@ -37,8 +37,8 @@ export class OnePerson extends Null { }
 export class OneCoin extends Null { }
 
 export class TallyType extends Enum {
-  constructor (value?: string, index?: number) {
-    super({
+  constructor (registry: Registry, value?: string, index?: number) {
+    super(registry, {
       oneperson: OnePerson,
       onecoin: OneCoin,
     }, value, index);
@@ -46,16 +46,16 @@ export class TallyType extends Enum {
 }
 
 export class VoteOutcome extends U8aFixed {
-  constructor (value?: AnyU8a) {
-    super(value, 256);
+  constructor (registry: Registry, value?: AnyU8a) {
+    super(registry, value, 256);
   }
 }
 
 export class Tally extends Option.with(Vec.with(Tuple.with([VoteOutcome, u128]))) { }
 
 export class VoteData extends Struct {
-  constructor (value: any) {
-    super({
+  constructor (registry: Registry, value: any) {
+    super(registry, {
       initiator: AccountId,
       stage: VoteStage,
       vote_type: VoteType,
@@ -84,8 +84,8 @@ export class Commitments extends Vec.with(Tuple.with([AccountId, VoteOutcome])) 
 export class Reveals extends Vec.with(Tuple.with([AccountId, Vec.with(VoteOutcome)])) { }
 
 export class VoteRecord extends Struct {
-  constructor (value: any) {
-    super({
+  constructor (registry: Registry, value: any) {
+    super(registry, {
       id: u64,
       commitments: Commitments,
       reveals: Reveals,
