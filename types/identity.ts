@@ -1,10 +1,11 @@
-import { Bytes, Text, u32, Null, u64 } from '@polkadot/types';
+import { Bytes, Text, u32, Null } from '@polkadot/types';
 import { Option, Struct, Enum } from '@polkadot/types/codec';
+import { Registry } from '@polkadot/types/types';
 import AccountId from '@polkadot/types/primitive/Generic/AccountId';
 
 export class MetadataRecord extends Struct {
-  constructor (value: any) {
-    super({
+  constructor (registry: Registry, value: any) {
+    super(registry, {
       avatar: Text,
       display_name: Text,
       tagline: Text,
@@ -26,8 +27,8 @@ export class Attested extends Null { }
 export class Verified extends Null { }
 
 export class IdentityStage extends Enum {
-  constructor (value?: string, index?: number) {
-    super({
+  constructor (registry: Registry, value?: string, index?: number) {
+    super(registry, {
       registered: Registered,
       attested: Attested,
       verified: Verified,
@@ -36,8 +37,8 @@ export class IdentityStage extends Enum {
 }
 
 export class IdentityRecord extends Struct {
-  constructor (value: any) {
-    super({
+  constructor (registry: Registry, value: any) {
+    super(registry, {
       account: AccountId,
       identity_type: Text,
       identity: Bytes,
