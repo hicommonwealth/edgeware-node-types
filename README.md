@@ -5,18 +5,12 @@ After adding this npm module to your project, use the following snippet to conne
 ```
 import { ApiOptions } from '@polkadot/api/types';
 import { ApiRx } from '@polkadot/api';
-import { IdentityTypes } from 'edgeware-node-types/dist/identity';
-import { SignalingTypes } from 'edgeware-node-types/dist/signaling';
-import { TreasuryRewardTypes } from 'edgeware-node-types/dist/treasuryReward';
-import { VotingTypes } from 'edgeware-node-types/dist/voting';
+import { EdgewareTypes } from 'edgeware-node-types/dist';
 
 const options: ApiOptions = {
   provider : new WsProvider('ws://localhost:9944'),
   types : {
-    ...IdentityTypes,
-    ...SignalingTypes,
-    ...TreasuryRewardTypes,
-    ...VotingTypes,
+    ...EdgewareTypes,
   },
 };
 
