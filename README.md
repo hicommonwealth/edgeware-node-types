@@ -1,18 +1,54 @@
 # edgeware-node-types
-This repo contains Typescript bindings for custom edgeware-node modules. In order to use the standard API against Edgeware you must import these types into the Polkadot API as is shown below.
 
-After adding this npm module to your project, use the following snippet to connect an API 
+## Usage
+
+This repo contains Typescript bindings for custom edgeware-node modules.
+
+In order to use the standard API against Edgeware you must initialize the API's options object as follows:
+
 ```
-import { ApiOptions } from '@polkadot/api/types';
-import { ApiRx } from '@polkadot/api';
-import { EdgewareTypes } from 'edgeware-node-types/dist';
+import * as edgewareDefinitions from 'edgeware-node-types/dist/definitions';
+
+const types = Object.values(edgewareDefinitions).reduce((res, { types }): object => ({ ...res, ...types }), {});
 
 const options: ApiOptions = {
   provider : new WsProvider('ws://localhost:9944'),
-  types : {
-    ...EdgewareTypes,
+  types: {
+    ...types,
+    // aliases that don't do well as part of interfaces
+    'voting::VoteType': 'VoteType',
+    'voting::TallyType': 'TallyType',
+    // chain-specific overrides
+    Address: 'GenericAddress',
+    Keys: 'SessionKeys4',
+    StakingLedger: 'StakingLedgerTo223',
+    Votes: 'VotesTo230',
+    ReferendumInfo: 'ReferendumInfoTo239',
   },
+  // override duplicate type name
+  typesAlias: { voting: { Tally: 'VotingTally' } },
 };
 
 const api = new ApiRx(options);
 ```
+
+## Building
+
+This project depends on the [@polkadot/typegen](https://github.com/polkadot-js/api/tree/master/docs/examples/promise/90_typegen) project, which has a step-by-step guide to building this project.
+
+The quick version is as follows:
+
+Ensure that all the `definitions.ts` files in `src/interfaces` are updated to the latest versions of each type.
+
+Run an [edgeware-node](https://github.com/hicommonwealth/edgeware-node) chain on localhost. Then, run `./generateMetadata.bash` to update the `edgeware.json` file.
+
+Once you have an `edgeware.json` file, you can rebuild the types with:
+
+```
+$ yarn build
+$ yarn lint
+```
+
+and ensure the final command does not print any errors.
+
+To rebuild the `dist/` folder for publication on npm, simply run `tsc` in the project root.

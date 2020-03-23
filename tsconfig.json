@@ -1,16 +1,31 @@
 {
   "compilerOptions": {
-    "allowJs": false,
     "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
-    "module": "commonjs",
     "allowSyntheticDefaultImports": true,
     "outDir": "./dist",
-    "baseUrl": "./types",
+    "baseUrl": ".",
+    "skipLibCheck": true,
     "resolveJsonModule": true,
-    "declaration": true
+    "esModuleInterop": true,
+    "strict": true,
+    "declaration": true,
+    "jsx": "preserve",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "paths": {
+      "edgeware-node-types/*": ["src/*"],
+      "@polkadot/api/augment": ["src/interfaces/augment-api.ts"],
+      "@polkadot/types/augment": ["src/interfaces/augment-types.ts"]
+    },
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   },
-  "include": [
-    "./types/*"
+  "exclude": [
+    "dist/**/*",
+    "node_modules"
   ]
 }
