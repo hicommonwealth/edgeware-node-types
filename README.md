@@ -32,6 +32,20 @@ const options: ApiOptions = {
 const api = new ApiRx(options);
 ```
 
+You will also need to update the `tsconfig.json` of your project to include the following:
+
+```
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@polkadot/api/augment": ["./node_modules/edgeware-node-types/dist/augment-api.d.ts"],
+      "@polkadot/types/augment": ["./node_modules/edgeware-node-types/dist/augment-types.d.ts"],
+    }
+  }
+}
+```
+
 ## Building
 
 This project depends on the [@polkadot/typegen](https://github.com/polkadot-js/api/tree/master/docs/examples/promise/90_typegen) project, which has a step-by-step guide to building this project.
