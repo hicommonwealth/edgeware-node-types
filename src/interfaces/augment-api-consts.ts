@@ -2,9 +2,8 @@
 /* eslint-disable */
 
 import { Codec } from '@polkadot/types/types';
-import { Bytes, u32 } from '@polkadot/types/primitive';
-import { Gas } from '@polkadot/types/interfaces/contracts';
-import { Balance, BalanceOf, BlockNumber, Moment, Percent, Permill } from '@polkadot/types/interfaces/runtime';
+import { u32 } from '@polkadot/types/primitive';
+import { Balance, BalanceOf, BlockNumber, LockIdentifier, ModuleId, Moment, Percent, Permill, RuntimeDbWeight, Weight } from '@polkadot/types/interfaces/runtime';
 import { SessionIndex } from '@polkadot/types/interfaces/session';
 import { EraIndex } from '@polkadot/types/interfaces/staking';
 
@@ -14,40 +13,12 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
     balances: {
       [index: string]: AugmentedConst<object & Codec>;
       /**
-       * The fee required to create an account.
-       **/
-      creationFee: AugmentedConst<Balance>;
-      /**
        * The minimum amount required to keep an account open.
        **/
       existentialDeposit: AugmentedConst<Balance>;
     };
     contracts: {
       [index: string]: AugmentedConst<object & Codec>;
-      /**
-       * The maximum amount of gas that could be expended per block. A reasonable
-       * default value is 10_000_000.
-       **/
-      blockGasLimit: AugmentedConst<Gas>;
-      /**
-       * The base fee charged for calling into a contract. A reasonable default
-       * value is 135.
-       **/
-      callBaseFee: AugmentedConst<Gas>;
-      /**
-       * The fee required to instantiate a contract instance. A reasonable default value
-       * is 21.
-       **/
-      contractFee: AugmentedConst<BalanceOf>;
-      /**
-       * The fee required to create an account.
-       **/
-      creationFee: AugmentedConst<BalanceOf>;
-      /**
-       * The base fee charged for instantiating a contract. A reasonable default value
-       * is 175.
-       **/
-      instantiateBaseFee: AugmentedConst<Gas>;
       /**
        * The maximum nesting level of a call/instantiate stack. A reasonable default
        * value is 100.
@@ -64,6 +35,7 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
       /**
        * The amount of funds a contract should deposit in order to offset
        * the cost of one byte.
+       * 
        * Let's suppose the deposit is 1,000 BU (balance units)/byte and the rent is 1 BU/byte/day,
        * then a contract with 1,000,000 BU that uses 1,000 bytes of storage would pay no rent.
        * But if the balance reduced to 500,000 BU and the storage stayed the same at 1,000,
@@ -72,12 +44,13 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
       rentDepositOffset: AugmentedConst<BalanceOf>;
       /**
        * Number of block delay an extrinsic claim surcharge has.
+       * 
        * When claim surcharge is called by an extrinsic the rent is checked
        * for current_block - delay
        **/
       signedClaimHandicap: AugmentedConst<BlockNumber>;
       /**
-       * Size of a contract at the time of instantiaion. This is a simple way to ensure that
+       * Size of a contract at the time of instantiation. This is a simple way to ensure that
        * empty contracts eventually gets deleted.
        **/
       storageSizeOffset: AugmentedConst<u32>;
@@ -90,14 +63,6 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
        * The minimum amount required to generate a tombstone.
        **/
       tombstoneDeposit: AugmentedConst<BalanceOf>;
-      /**
-       * The fee to be paid for making a transaction; the base.
-       **/
-      transactionBaseFee: AugmentedConst<BalanceOf>;
-      /**
-       * The fee to be paid for making a transaction; the per-byte portion.
-       **/
-      transactionByteFee: AugmentedConst<BalanceOf>;
     };
     democracy: {
       [index: string]: AugmentedConst<object & Codec>;
@@ -106,16 +71,17 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
        **/
       cooloffPeriod: AugmentedConst<BlockNumber>;
       /**
-       * Minimum voting period allowed for an emergency referendum.
-       **/
-      emergencyVotingPeriod: AugmentedConst<BlockNumber>;
-      /**
        * The minimum period of locking and the period between a proposal being approved and enacted.
+       * 
        * It should generally be a little more than the unstake period to ensure that
        * voting stakers have an opportunity to remove themselves from the system in the case where
        * they are on the losing side of a vote.
        **/
       enactmentPeriod: AugmentedConst<BlockNumber>;
+      /**
+       * Minimum voting period allowed for an emergency referendum.
+       **/
+      fastTrackVotingPeriod: AugmentedConst<BlockNumber>;
       /**
        * How often (in blocks) new public referenda are launched.
        **/
@@ -138,8 +104,13 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
       candidacyBond: AugmentedConst<BalanceOf>;
       desiredMembers: AugmentedConst<u32>;
       desiredRunnersUp: AugmentedConst<u32>;
+      moduleId: AugmentedConst<LockIdentifier>;
       termDuration: AugmentedConst<BlockNumber>;
       votingBond: AugmentedConst<BalanceOf>;
+    };
+    evm: {
+      [index: string]: AugmentedConst<object & Codec>;
+      moduleId: AugmentedConst<ModuleId>;
     };
     finalityTracker: {
       [index: string]: AugmentedConst<object & Codec>;
@@ -152,28 +123,36 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
        **/
       windowSize: AugmentedConst<BlockNumber>;
     };
-    nicks: {
+    identity: {
       [index: string]: AugmentedConst<object & Codec>;
       /**
-       * The maximum length a name may be.
+       * The amount held on deposit for a registered identity.
        **/
-      maxLength: AugmentedConst<u32>;
+      basicDeposit: AugmentedConst<BalanceOf>;
       /**
-       * The minimum length a name may be.
+       * The amount held on deposit per additional field for a registered identity.
        **/
-      minLength: AugmentedConst<u32>;
+      fieldDeposit: AugmentedConst<BalanceOf>;
       /**
-       * Reservation fee.
+       * Maximum number of additional fields that may be stored in an ID. Needed to bound the I/O
+       * required to access an identity, but can be pretty high.
        **/
-      reservationFee: AugmentedConst<BalanceOf>;
-    };
-    session: {
-      [index: string]: AugmentedConst<object & Codec>;
+      maxAdditionalFields: AugmentedConst<u32>;
       /**
-       * Used as first key for `NextKeys` and `KeyOwner` to put all the data into the same branch
-       * of the trie.
+       * Maxmimum number of registrars allowed in the system. Needed to bound the complexity
+       * of, e.g., updating judgements.
        **/
-      dedupKeyPrefix: AugmentedConst<Bytes>;
+      maxRegistrars: AugmentedConst<u32>;
+      /**
+       * The maximum number of sub-accounts allowed per identified account.
+       **/
+      maxSubAccounts: AugmentedConst<u32>;
+      /**
+       * The amount held on deposit for a registered subaccount. This should account for the fact
+       * that one storage item's value will increase by the size of an account ID, and there will be
+       * another trie item whose value is the size of an account ID plus 32 bytes.
+       **/
+      subAccountDeposit: AugmentedConst<BalanceOf>;
     };
     staking: {
       [index: string]: AugmentedConst<object & Codec>;
@@ -185,6 +164,33 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
        * Number of sessions per era.
        **/
       sessionsPerEra: AugmentedConst<SessionIndex>;
+    };
+    system: {
+      [index: string]: AugmentedConst<object & Codec>;
+      /**
+       * The base weight of executing a block, independent of the transactions in the block.
+       **/
+      blockExecutionWeight: AugmentedConst<Weight>;
+      /**
+       * The maximum number of blocks to allow in mortal eras.
+       **/
+      blockHashCount: AugmentedConst<BlockNumber>;
+      /**
+       * The weight of runtime database operations the runtime can invoke.
+       **/
+      dbWeight: AugmentedConst<RuntimeDbWeight>;
+      /**
+       * The base weight of an Extrinsic in the block, independent of the of extrinsic being executed.
+       **/
+      extrinsicBaseWeight: AugmentedConst<Weight>;
+      /**
+       * The maximum length of a block (in bytes).
+       **/
+      maximumBlockLength: AugmentedConst<u32>;
+      /**
+       * The maximum weight of a block.
+       **/
+      maximumBlockWeight: AugmentedConst<Weight>;
     };
     timestamp: {
       [index: string]: AugmentedConst<object & Codec>;
@@ -199,10 +205,6 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
     transactionPayment: {
       [index: string]: AugmentedConst<object & Codec>;
       /**
-       * The fee to be paid for making a transaction; the base.
-       **/
-      transactionBaseFee: AugmentedConst<BalanceOf>;
-      /**
        * The fee to be paid for making a transaction; the per-byte portion.
        **/
       transactionByteFee: AugmentedConst<BalanceOf>;
@@ -213,6 +215,10 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
        * Percentage of spare funds (if any) that are burnt per spend period.
        **/
       burn: AugmentedConst<Permill>;
+      /**
+       * The treasury's module id, used for deriving its sovereign account ID.
+       **/
+      moduleId: AugmentedConst<ModuleId>;
       /**
        * Fraction of a proposal's value that should be bonded in order to place the proposal.
        * An accepted proposal gets these back. A rejected proposal does not.
@@ -242,6 +248,13 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
        * The amount held on deposit per byte within the tip report reason.
        **/
       tipReportDepositPerByte: AugmentedConst<BalanceOf>;
+    };
+    vesting: {
+      [index: string]: AugmentedConst<object & Codec>;
+      /**
+       * The minimum amount to be transferred to create a new vesting schedule.
+       **/
+      minVestedTransfer: AugmentedConst<BalanceOf>;
     };
   }
 }
