@@ -208,6 +208,10 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
        * The fee to be paid for making a transaction; the per-byte portion.
        **/
       transactionByteFee: AugmentedConst<BalanceOf>;
+      /**
+       * The polynomial that is applied in order to derive fee from weight.
+       **/
+      weightToFee: AugmentedConst<Vec<WeightToFeeCoefficient>>;
     };
     treasury: {
       [index: string]: AugmentedConst<object & Codec>;
