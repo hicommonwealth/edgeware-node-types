@@ -7,7 +7,7 @@ This repo contains Typescript bindings for custom edgeware-node modules.
 In order to use the standard API against Edgeware you must initialize the API's options object as follows:
 
 ```
-import * as edgewareDefinitions from 'edgeware-node-types/dist/definitions';
+import * as edgewareDefinitions from 'edgeware-node-types/interfaces/definitions';
 
 const types = Object.values(edgewareDefinitions).reduce((res, { types }): object => ({ ...res, ...types }), {});
 
