@@ -39,8 +39,8 @@ You will also need to update the `tsconfig.json` of your project to include the 
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@polkadot/api/augment": ["./node_modules/edgeware-node-types/dist/augment-api.d.ts"],
-      "@polkadot/types/augment": ["./node_modules/edgeware-node-types/dist/augment-types.d.ts"],
+      "@polkadot/api/augment": ["./node_modules/edgeware-node-types/interfaces/augment-api.d.ts"],
+      "@polkadot/types/augment": ["./node_modules/edgeware-node-types/interfaces/augment-types.d.ts"],
     }
   }
 }
@@ -65,4 +65,4 @@ $ yarn lint
 
 and ensure the final command does not print any errors.
 
-To rebuild the `dist/` folder for publication on npm, simply run `tsc` in the project root.
+To rebuild the `interfaces/` folder for publication on npm, simply run `tsc` in the project root.
