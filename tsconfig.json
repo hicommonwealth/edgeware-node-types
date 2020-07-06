@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "outDir": "./dist",
+    "outDir": "./interfaces",
     "baseUrl": ".",
     "skipLibCheck": true,
     "resolveJsonModule": true,
@@ -25,7 +25,7 @@
     ]
   },
   "exclude": [
-    "dist/**/*",
+    "interfaces/**/*",
     "node_modules"
   ]
 }
