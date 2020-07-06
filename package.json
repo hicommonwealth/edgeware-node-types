@@ -1,18 +1,18 @@
 {
   "name": "edgeware-node-types",
-  "version": "2.3.0",
+  "version": "2.3.3",
   "description": "Type definitions for edgeware chain.",
   "main": "index.js",
   "files": [
-    "dist/",
+    "interfaces/",
     "README.md"
   ],
   "dependencies": {
     
   },
   "devDependencies": {
-    "@polkadot/api": "1.16.1",
-    "@polkadot/typegen": "1.16.1",
+    "@polkadot/api": "^1.22.1",
+    "@polkadot/typegen": "^1.22.1",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
