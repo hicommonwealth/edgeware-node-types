@@ -3,6 +3,9 @@
 
 import { Compact, Option, Raw, Vec } from '@polkadot/types/codec';
 import { BitVec, Bytes, Data, DoNotConstruct, Null, StorageKey, Text, Type, U256, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types/primitive';
+import { ProposalContents, ProposalRecord, ProposalTitle } from '@edgeware/node-types/interfaces/signaling';
+import { Balance2 } from '@edgeware/node-types/interfaces/treasuryRewards';
+import { Commitments, Reveals, TallyType, VoteData, VoteOutcome, VoteRecord, VoteStage, VoteType, VotingTally } from '@edgeware/node-types/interfaces/voting';
 import { BlockAttestations, IncludedBlocks, MoreAttestations } from '@polkadot/types/interfaces/attestations';
 import { RawAuraPreDigest } from '@polkadot/types/interfaces/aura';
 import { ExtrinsicOrHash, ExtrinsicStatus } from '@polkadot/types/interfaces/author';
@@ -44,9 +47,6 @@ import { OpenTip, OpenTipFinderTo225, OpenTipTip, OpenTipTo225, TreasuryProposal
 import { Multiplier } from '@polkadot/types/interfaces/txpayment';
 import { CallHash, Multisig, Timepoint } from '@polkadot/types/interfaces/utility';
 import { VestingInfo } from '@polkadot/types/interfaces/vesting';
-import { ProposalContents, ProposalRecord, ProposalTitle } from 'edgeware-node-types/interfaces/signaling';
-import { Balance2 } from 'edgeware-node-types/interfaces/treasuryRewards';
-import { Commitments, Reveals, TallyType, VoteData, VoteOutcome, VoteRecord, VoteStage, VoteType, VotingTally } from 'edgeware-node-types/interfaces/voting';
 
 declare module '@polkadot/types/types/registry' {
   export interface InterfaceTypes {

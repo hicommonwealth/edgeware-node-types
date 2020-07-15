@@ -4,6 +4,8 @@
 import { AnyNumber, ITuple, Observable } from '@polkadot/types/types';
 import { Option, U8aFixed, Vec } from '@polkadot/types/codec';
 import { Bytes, Data, bool, u32, u64 } from '@polkadot/types/primitive';
+import { ProposalRecord } from '@edgeware/node-types/interfaces/signaling';
+import { VoteRecord } from '@edgeware/node-types/interfaces/voting';
 import { UncleEntryItem } from '@polkadot/types/interfaces/authorship';
 import { AccountData, BalanceLock } from '@polkadot/types/interfaces/balances';
 import { ProposalIndex, Votes } from '@polkadot/types/interfaces/collective';
@@ -26,8 +28,6 @@ import { OpenTip, TreasuryProposal } from '@polkadot/types/interfaces/treasury';
 import { Multiplier } from '@polkadot/types/interfaces/txpayment';
 import { Multisig } from '@polkadot/types/interfaces/utility';
 import { VestingInfo } from '@polkadot/types/interfaces/vesting';
-import { ProposalRecord } from 'edgeware-node-types/interfaces/signaling';
-import { VoteRecord } from 'edgeware-node-types/interfaces/voting';
 import { ApiTypes } from '@polkadot/api/types';
 
 declare module '@polkadot/api/types/storage' {

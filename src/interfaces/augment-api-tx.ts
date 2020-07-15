@@ -4,6 +4,8 @@
 import { AnyNumber, ITuple } from '@polkadot/types/types';
 import { Compact, Option, U8aFixed, Vec } from '@polkadot/types/codec';
 import { Bytes, Data, U256, bool, u16, u32, u64 } from '@polkadot/types/primitive';
+import { ProposalContents, ProposalTitle } from '@edgeware/node-types/interfaces/signaling';
+import { TallyType, VoteOutcome, VoteType } from '@edgeware/node-types/interfaces/voting';
 import { MemberCount, ProposalIndex } from '@polkadot/types/interfaces/collective';
 import { CodeHash, Gas, Schedule } from '@polkadot/types/interfaces/contracts';
 import { AccountVote, Conviction, PropIndex, Proposal, ReferendumIndex } from '@polkadot/types/interfaces/democracy';
@@ -19,8 +21,6 @@ import { CompactAssignments, ElectionScore, ElectionSize, EraIndex, RewardDestin
 import { Key } from '@polkadot/types/interfaces/system';
 import { Timepoint } from '@polkadot/types/interfaces/utility';
 import { VestingInfo } from '@polkadot/types/interfaces/vesting';
-import { ProposalContents, ProposalTitle } from 'edgeware-node-types/interfaces/signaling';
-import { TallyType, VoteOutcome, VoteType } from 'edgeware-node-types/interfaces/voting';
 import { ApiTypes, SubmittableExtrinsic } from '@polkadot/api/types';
 
 declare module '@polkadot/api/types/submittable' {

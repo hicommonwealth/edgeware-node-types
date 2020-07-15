@@ -3,8 +3,8 @@
 
 import { Struct } from '@polkadot/types/codec';
 import { Bytes, Text, u32, u64 } from '@polkadot/types/primitive';
+import { VoteStage } from '@edgeware/node-types/interfaces/voting';
 import { AccountId } from '@polkadot/types/interfaces/runtime';
-import { VoteStage } from 'edgeware-node-types/interfaces/voting';
 
 /** @name ProposalContents */
 export interface ProposalContents extends Bytes {}
