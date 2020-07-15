@@ -1,5 +1,5 @@
 {
-  "name": "edgeware-node-types",
+  "name": "@edgeware/node-types",
   "version": "2.3.4",
   "description": "Type definitions for edgeware chain.",
   "main": "index.js",
@@ -7,9 +7,7 @@
     "interfaces/",
     "README.md"
   ],
-  "dependencies": {
-    
-  },
+  "dependencies": {},
   "devDependencies": {
     "@polkadot/api": "^1.24.1",
     "@polkadot/typegen": "^1.24.1",
