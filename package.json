@@ -1,10 +1,10 @@
 {
   "name": "@edgeware/node-types",
-  "version": "2.3.5",
+  "version": "2.4.0",
   "description": "Type definitions for edgeware chain.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "files": [
-    "interfaces/",
+    "dist/",
     "README.md"
   ],
   "dependencies": {},
