@@ -3,7 +3,7 @@
 
 import { Struct } from '@polkadot/types/codec';
 import { Bytes, Text, u32, u64 } from '@polkadot/types/primitive';
-import { VoteStage } from '@edgeware/node-types/interfaces/voting';
+import { VoteStage } from '../voting';
 import { AccountId } from '@polkadot/types/interfaces/runtime';
 
 /** @name ProposalContents */

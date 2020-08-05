@@ -16,7 +16,6 @@
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "paths": {
-      "@edgeware/node-types/*": ["src/*"],
       "@polkadot/api/augment": ["src/interfaces/augment-api.ts"],
       "@polkadot/types/augment": ["src/interfaces/augment-types.ts"]
     },

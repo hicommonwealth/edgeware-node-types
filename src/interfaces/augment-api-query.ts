@@ -4,8 +4,8 @@
 import { AnyNumber, ITuple, Observable } from '@polkadot/types/types';
 import { Option, U8aFixed, Vec } from '@polkadot/types/codec';
 import { Bytes, Data, bool, u32, u64 } from '@polkadot/types/primitive';
-import { ProposalRecord } from '@edgeware/node-types/interfaces/signaling';
-import { VoteRecord } from '@edgeware/node-types/interfaces/voting';
+import { ProposalRecord } from './signaling';
+import { VoteRecord } from './voting';
 import { UncleEntryItem } from '@polkadot/types/interfaces/authorship';
 import { AccountData, BalanceLock } from '@polkadot/types/interfaces/balances';
 import { ProposalIndex, Votes } from '@polkadot/types/interfaces/collective';
