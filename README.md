@@ -7,26 +7,11 @@ This repo contains Typescript bindings for custom edgeware-node modules.
 In order to use the standard API against Edgeware you must initialize the API's options object as follows:
 
 ```
-import * as edgewareDefinitions from '@edgeware/node-types/interfaces/definitions';
-
-const types = Object.values(edgewareDefinitions).reduce((res, { types }): object => ({ ...res, ...types }), {});
+import { Mainnet } from '@edgeware/node-types';
 
 const options: ApiOptions = {
   provider : new WsProvider('ws://localhost:9944'),
-  types: {
-    ...types,
-    // aliases that don't do well as part of interfaces
-    'voting::VoteType': 'VoteType',
-    'voting::TallyType': 'TallyType',
-    // chain-specific overrides
-    Address: 'GenericAddress',
-    Keys: 'SessionKeys4',
-    StakingLedger: 'StakingLedgerTo223',
-    Votes: 'VotesTo230',
-    ReferendumInfo: 'ReferendumInfoTo239',
-  },
-  // override duplicate type name
-  typesAlias: { voting: { Tally: 'VotingTally' } },
+  ...Mainnet,
 };
 
 const api = new ApiRx(options);
