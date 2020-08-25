@@ -118,10 +118,6 @@ declare module '@polkadot/metadata/Decorated/consts/types' {
       termDuration: AugmentedConst<BlockNumber>;
       votingBond: AugmentedConst<BalanceOf>;
     };
-    evm: {
-      [index: string]: AugmentedConst<object & Codec>;
-      moduleId: AugmentedConst<ModuleId>;
-    };
     finalityTracker: {
       [index: string]: AugmentedConst<object & Codec>;
       /**

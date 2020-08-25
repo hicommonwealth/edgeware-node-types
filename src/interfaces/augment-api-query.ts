@@ -13,13 +13,13 @@ import { AuthorityId } from '@polkadot/types/interfaces/consensus';
 import { CodeHash, ContractInfo, PrefabWasmModule, Schedule } from '@polkadot/types/interfaces/contracts';
 import { PreimageStatus, PropIndex, Proposal, ReferendumIndex, ReferendumInfo, Voting } from '@polkadot/types/interfaces/democracy';
 import { VoteThreshold } from '@polkadot/types/interfaces/elections';
-import { Account } from '@polkadot/types/interfaces/evm';
 import { SetId, StoredPendingChange, StoredState } from '@polkadot/types/interfaces/grandpa';
 import { RegistrarInfo, Registration } from '@polkadot/types/interfaces/identity';
 import { AuthIndex } from '@polkadot/types/interfaces/imOnline';
 import { DeferredOffenceOf, Kind, OffenceDetails, OpaqueTimeSlot, ReportIdOf } from '@polkadot/types/interfaces/offences';
+import { ProxyType } from '@polkadot/types/interfaces/proxy';
 import { ActiveRecovery, RecoveryConfig } from '@polkadot/types/interfaces/recovery';
-import { AccountId, AccountIndex, Balance, BalanceOf, BlockNumber, ExtrinsicsWeight, H160, H256, Hash, KeyTypeId, Moment, Perbill, ProxyType, Releases, ValidatorId } from '@polkadot/types/interfaces/runtime';
+import { AccountId, AccountIndex, Balance, BalanceOf, BlockNumber, ExtrinsicsWeight, Hash, KeyTypeId, Moment, OpaqueCall, Perbill, Releases, ValidatorId } from '@polkadot/types/interfaces/runtime';
 import { Scheduled, TaskAddress } from '@polkadot/types/interfaces/scheduler';
 import { Keys, SessionIndex } from '@polkadot/types/interfaces/session';
 import { ActiveEraInfo, ElectionResult, ElectionScore, ElectionStatus, EraIndex, EraRewardPoints, Exposure, Forcing, Nominations, RewardDestination, SlashingSpans, SpanIndex, SpanRecord, StakingLedger, UnappliedSlash, ValidatorPrefs } from '@polkadot/types/interfaces/staking';
@@ -228,12 +228,6 @@ declare module '@polkadot/api/types/storage' {
        **/
       voting: AugmentedQuery<ApiType, (arg: AccountId | string | Uint8Array) => Observable<ITuple<[BalanceOf, Vec<AccountId>]>>> & QueryableStorageEntry<ApiType>;
     };
-    evm: {
-      [index: string]: QueryableStorageEntry<ApiType>;
-      accountCodes: AugmentedQuery<ApiType, (arg: H160 | string | Uint8Array) => Observable<Bytes>> & QueryableStorageEntry<ApiType>;
-      accounts: AugmentedQuery<ApiType, (arg: H160 | string | Uint8Array) => Observable<Account>> & QueryableStorageEntry<ApiType>;
-      accountStorages: AugmentedQueryDoubleMap<ApiType, (key1: H160 | string | Uint8Array, key2: H256 | string | Uint8Array) => Observable<H256>> & QueryableStorageEntry<ApiType>;
-    };
     grandpa: {
       [index: string]: QueryableStorageEntry<ApiType>;
       /**
@@ -329,7 +323,7 @@ declare module '@polkadot/api/types/storage' {
     };
     multisig: {
       [index: string]: QueryableStorageEntry<ApiType>;
-      calls: AugmentedQuery<ApiType, (arg: U8aFixed | string | Uint8Array) => Observable<Option<ITuple<[Bytes, AccountId, BalanceOf]>>>> & QueryableStorageEntry<ApiType>;
+      calls: AugmentedQuery<ApiType, (arg: U8aFixed | string | Uint8Array) => Observable<Option<ITuple<[OpaqueCall, AccountId, BalanceOf]>>>> & QueryableStorageEntry<ApiType>;
       /**
        * The set of open multisig operations.
        **/
@@ -407,6 +401,12 @@ declare module '@polkadot/api/types/storage' {
        * Lookup from identity to the block number and index of the task.
        **/
       lookup: AugmentedQuery<ApiType, (arg: Bytes | string | Uint8Array) => Observable<Option<TaskAddress>>> & QueryableStorageEntry<ApiType>;
+      /**
+       * Storage version of the pallet.
+       * 
+       * New networks start with last version.
+       **/
+      storageVersion: AugmentedQuery<ApiType, () => Observable<Releases>> & QueryableStorageEntry<ApiType>;
     };
     session: {
       [index: string]: QueryableStorageEntry<ApiType>;
