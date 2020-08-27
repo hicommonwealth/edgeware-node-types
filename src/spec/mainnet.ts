@@ -17,7 +17,10 @@ const types: RegistryTypes = {
   StakingLedger: 'StakingLedgerTo223',
   Votes: 'VotesTo230',
   ReferendumInfo: 'ReferendumInfoTo239',
-  Weight: 'u32'
+  Weight: 'u32',
+  RewardDestination: 'RewardDestinationTo257',
+  CompactAssignments: 'CompactAssignmentsTo257',
+  ContractExecResult: 'ContractExecResultTo255',
 };
 
 const typesAlias: Record<string, OverrideModuleType> = {
