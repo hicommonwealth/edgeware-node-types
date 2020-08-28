@@ -11,6 +11,8 @@ const types: RegistryTypes = {
   'voting::VoteType': 'VoteType',
   'voting::TallyType': 'TallyType',
   'voting::Tally': 'VotingTally',
+  'RewardDestination': 'RewardDestinationTo257',
+  'CompactAssignments': 'CompactAssignmentsTo257',
 };
 
 const typesAlias: Record<string, OverrideModuleType> = {
