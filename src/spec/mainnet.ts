@@ -11,16 +11,11 @@ const types: RegistryTypes = {
   'voting::VoteType': 'VoteType',
   'voting::TallyType': 'TallyType',
   'voting::Tally': 'VotingTally',
+
   // chain-specific overrides
-  Address: 'GenericAddress',
-  Keys: 'SessionKeys4',
-  StakingLedger: 'StakingLedgerTo223',
-  Votes: 'VotesTo230',
-  ReferendumInfo: 'ReferendumInfoTo239',
-  Weight: 'u32',
-  RewardDestination: 'RewardDestinationTo257',
   CompactAssignments: 'CompactAssignmentsTo257',
   ContractExecResult: 'ContractExecResultTo255',
+  RefCount: 'RefCountTo259',
 };
 
 const typesAlias: Record<string, OverrideModuleType> = {

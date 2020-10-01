@@ -1,6 +1,6 @@
 {
   "name": "@edgeware/node-types",
-  "version": "2.4.5",
+  "version": "3.0.0",
   "description": "Type definitions for edgeware chain.",
   "main": "dist/index.js",
   "files": [
@@ -9,8 +9,8 @@
   ],
   "dependencies": {},
   "devDependencies": {
-    "@polkadot/api": "^1.31.2",
-    "@polkadot/typegen": "^1.31.2",
+    "@polkadot/api": "^2.0.1",
+    "@polkadot/typegen": "^2.0.1",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
