@@ -19,7 +19,8 @@
     "generate:defs": "ts-node --skip-project node_modules/.bin/polkadot-types-from-defs --package '.' --input ./src/interfaces",
     "generate:meta": "ts-node --skip-project node_modules/.bin/polkadot-types-from-chain --package '.' --endpoint ./edgeware.json --output ./src/interfaces",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "tsc --noEmit --pretty"
+    "lint": "tsc --noEmit --pretty",
+    "verify": "ts-node ./scripts/verifySpec.ts"
   },
   "repository": {
     "type": "git",
