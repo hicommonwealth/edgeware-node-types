@@ -1,6 +1,5 @@
-import { RegistryTypes, OverrideModuleType, OverrideBundleType } from '@polkadot/types/types';
+import { RegistryTypes, OverrideModuleType } from '@polkadot/types/types';
 import * as edgewareDefinitions from '../interfaces/definitions';
-import v31 from './v31';
 
 const edgTypes = Object
   .values(edgewareDefinitions)
@@ -13,9 +12,18 @@ const types: RegistryTypes = {
   'voting::TallyType': 'TallyType',
   'voting::Tally': 'VotingTally',
 
-  // chain-specific overrides
-  CompactAssignments: 'CompactAssignmentsTo257',
+  // overrides
+  Address: 'GenericAddress',
+  Keys: 'SessionKeys4',
+  StakingLedger: 'StakingLedgerTo240',
+  Votes: 'VotesTo230',
+  ReferendumInfo: 'ReferendumInfoTo239',
+  Weight: 'u32',
+  DispatchInfo: 'DispatchInfoTo244',
+  OpenTip: 'OpenTipTo225',
   ContractExecResult: 'ContractExecResultTo255',
+  CompactAssignments: 'CompactAssignmentsTo257',
+  RewardDestination: 'RewardDestinationTo257',
   RefCount: 'RefCountTo259',
 };
 
@@ -23,20 +31,6 @@ const typesAlias: Record<string, OverrideModuleType> = {
   voting: { Tally: 'VotingTally' },
 }
 
-// Support archival
-const typesBundle: OverrideBundleType = {
-  spec: {
-    'edgeware': {
-      types: [
-        {
-          minmax: [0, 32],
-          types: v31.types,
-        },
-      ]
-    }
-  }
-}
-
 export default {
-  types, typesAlias, typesBundle
+  types, typesAlias
 };

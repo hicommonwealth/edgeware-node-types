@@ -1,15 +1,28 @@
-import { Mainnet, Beresheet, dev, v31 } from '../src';
+import { Mainnet, Beresheet, dev } from '../src';
 import { WsProvider, ApiPromise } from '@polkadot/api';
 import { TypeRegistry } from '@polkadot/types';
+import { RegistryTypes, OverrideModuleType, OverrideBundleType } from '@polkadot/types/types';
 
-const networks: { [name: string]: string } = {
+type SpecType = {
+  types?: RegistryTypes,
+  typesAlias?: Record<string, OverrideModuleType>,
+  typesBundle?: OverrideBundleType,
+}
+
+const specs: { [name: string]: SpecType } = { 
+  'mainnet': Mainnet,
+  'beresheet': Beresheet,
+  'dev': dev,
+}
+
+const urls: { [name: string]: string } = {
   'mainnet': 'ws://mainnet1.edgewa.re:9944',
+  // 'mainnet': 'ws://localhost:9944',
   'beresheet': 'wss://beresheet1.edgewa.re',
   'dev': 'ws://localhost:9944',
-  'v31': 'ws://localhost:9944',
 };
 
-const verify = async (url: string, blockNumber?: number, useDev?: boolean) => {
+const verify = async (spec: SpecType, url: string, blockNumber?: number) => {
   // connect to chain via provider
   console.log(`Connecting to url: ${url}...`);
 
@@ -19,27 +32,9 @@ const verify = async (url: string, blockNumber?: number, useDev?: boolean) => {
   const api = new ApiPromise({
     provider: new WsProvider(url),
     registry,
-    typesAlias: useDev ? dev.typesAlias : Mainnet.typesAlias,
-    typesBundle: {
-      spec: {
-        'edgeware': {
-          types: [
-            {
-              minmax: [0, 32],
-              types: v31.types,
-            },
-            {
-              minmax: [32, 39],
-              types: Mainnet.types,
-            },
-            {
-              minmax: [40],
-              types: useDev ? dev.types : Beresheet.types,
-            }
-          ]
-        }
-      }
-    }
+    typesAlias: spec.typesAlias,
+    types: spec.types,
+    typesBundle: spec.typesBundle,
   });
 
   await api.isReady;
@@ -66,11 +61,12 @@ const verify = async (url: string, blockNumber?: number, useDev?: boolean) => {
 // parse args
 const args = process.argv.slice(2);
 const network = args[0] || 'mainnet';
-const url = networks[network];
+const spec = specs[network];
+const url = urls[network];
 const block = args[1];
 
 // kick off function
-verify(url, block ? +block : undefined, network === 'dev')
+verify(spec, url, block ? +block : undefined)
 .then(() => {
   console.log('Done!');
   process.exit(0);
