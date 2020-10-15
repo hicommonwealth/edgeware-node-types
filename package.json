@@ -1,8 +1,8 @@
 {
   "name": "@edgeware/node-types",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "Type definitions for edgeware chain.",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "files": [
     "dist/",
     "README.md"
