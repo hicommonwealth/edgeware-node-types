@@ -13,9 +13,6 @@ const types: RegistryTypes = {
   'voting::VoteType': 'VoteType',
   'voting::TallyType': 'TallyType',
   'voting::Tally': 'VotingTally',
-
-  // chain-specific overrides
-  'RefCount': 'u32',
 };
 
 const typesAlias: Record<string, OverrideModuleType> = {
