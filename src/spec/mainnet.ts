@@ -16,7 +16,6 @@ const types: RegistryTypes = {
 
   // chain-specific overrides
   'RefCount': 'u32',
-  'council::Proposal': 'Vec<u8>',
 };
 
 const typesAlias: Record<string, OverrideModuleType> = {
