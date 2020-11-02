@@ -1,7 +1,7 @@
 import { RegistryTypes, OverrideModuleType, OverrideBundleType } from '@polkadot/types/types';
 import * as edgewareDefinitions from '../interfaces/definitions';
 import v31 from './v31';
-import Mainnet from './mainnet';
+import v38 from './v38';
 
 const edgTypes = Object
   .values(edgewareDefinitions)
@@ -27,10 +27,9 @@ const typesBundle: OverrideBundleType = {
         {
           minmax: [0, 32],
           types: v31.types,
-        },
-        {
-          minmax: [32, 39],
-          types: Mainnet.types,
+        }, {
+          minmax: [32, 40],
+          types: v38.types,
         },
       ]
     }

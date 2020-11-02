@@ -39,7 +39,7 @@ const verify = async (spec: SpecType, url: string, blockNumber?: number) => {
 
   await api.isReady;
 
-  console.log(`Querying hash for block ${blockNumber}...`);
+  console.log(`Querying hash for block ${blockNumber || 'latest'}...`);
   if (blockNumber) {
     const blockHash = await api.rpc.chain.getBlockHash(blockNumber);
     const version = await api.rpc.state.getRuntimeVersion(blockHash);
@@ -54,7 +54,7 @@ const verify = async (spec: SpecType, url: string, blockNumber?: number) => {
 
     console.log('Querying events...');
     const result = await api.query.system.events();
-    console.log(`Got events at block ${blockNumber}: ${JSON.stringify(result.toHuman(), null, 2)}`)
+    console.log(`Got latest events: ${JSON.stringify(result.toHuman(), null, 2)}`)
   }
 };
 
