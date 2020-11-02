@@ -33,15 +33,15 @@ You will also need to update the `tsconfig.json` of your project to include the 
 
 ### Dependencies
 
-Your project's @polkadot-js dependency versions must match the ones used in this project, including `@polkadot/api`, `@polkadot/keyring`, and all associated packages, as well as `rxjs` and `typescript`. To verify the versions required, inspect the @polkadot package.json files for the version specified in this project's package.json.
+Your project's @polkadot-js dependency versions **must match the versions used in this project**, including `@polkadot/api`, `@polkadot/keyring`, and all associated packages, as well as `rxjs` and `typescript`. To verify the versions required, inspect the @polkadot package.json files for the version specified in this project's package.json.
 
 ## Building
 
 This project depends on the [@polkadot/typegen](https://github.com/polkadot-js/api/tree/master/docs/examples/promise/90_typegen) project, which has a step-by-step guide to building this project.
 
-The quick version is as follows:
+The Edgeware-specific version is as follows:
 
-1. Ensure in [package.json](package.json) that `@polkadot/api` is set to the correct version, and that `@polkadot/typegen` is set to the same version as `@polkadot/api`.
+1. Ensure in [package.json](package.json) that `@polkadot/api` is set to the correct version, and that `@polkadot/typegen` is set to the same version as `@polkadot/api`. Increase the `@edgeware/node-types` version if necessary for publication.
 
 1. Ensure that all the `definitions.ts` files in `src/interfaces` are updated to the latest versions of each type, if any edgeware modules changed.
 
@@ -61,12 +61,10 @@ The quick version is as follows:
     + import { VoteStage } from '../voting';
     ```
 
-1. Once completed, you will need to compile the typescript to javascript to publish on npm, as follows:
+1. Upgrade all [spec files](src/spec) with any changes necessary as per the [@polkadot-js changelog](https://github.com/polkadot-js/api/blob/master/CHANGELOG.md) and the underlying Substrate version of the chain.
 
-    ```
-    $ yarn build
-    ```
+1. To compile the Typescript to Javascript for npm publication, run `yarn build`. This command should not produce any errors and will output build files to the [dist](dist/) directory.
 
-    The above command should not produce any errors.
+1. Run a simple test of the newly-built API against a live edgeware node with `yarn verify [mainnet | beresheet]`.
 
-Alternatively: to rebuild the `interfaces/` folder for publication on npm without generating new types, simply run `tsc` in the project root.
+1. Publish the new version with `npm publish`.
