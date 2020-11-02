@@ -31,36 +31,42 @@ You will also need to update the `tsconfig.json` of your project to include the 
 }
 ```
 
+### Dependencies
+
+Your project's @polkadot-js dependency versions must match the ones used in this project, including `@polkadot/api`, `@polkadot/keyring`, and all associated packages, as well as `rxjs` and `typescript`. To verify the versions required, inspect the @polkadot package.json files for the version specified in this project's package.json.
+
 ## Building
 
 This project depends on the [@polkadot/typegen](https://github.com/polkadot-js/api/tree/master/docs/examples/promise/90_typegen) project, which has a step-by-step guide to building this project.
 
 The quick version is as follows:
 
-Ensure that all the `definitions.ts` files in `src/interfaces` are updated to the latest versions of each type.
+1. Ensure in [package.json](package.json) that `@polkadot/api` is set to the correct version, and that `@polkadot/typegen` is set to the same version as `@polkadot/api`.
 
-Run an [edgeware-node](https://github.com/hicommonwealth/edgeware-node) chain on localhost. Then, run `./generateMetadata.bash` to update the `edgeware.json` file.
+1. Ensure that all the `definitions.ts` files in `src/interfaces` are updated to the latest versions of each type, if any edgeware modules changed.
 
-Once you have an `edgeware.json` file, you can rebuild the types with:
+1. Run an [edgeware-node](https://github.com/hicommonwealth/edgeware-node) chain on localhost. Then, run `./generateMetadata.bash` to update the `edgeware.json` file.
 
-```
-$ yarn generate
-$ yarn lint
-```
+1. Once you have an `edgeware.json` file, you can rebuild the types with:
 
-You will notice that the output of the lint command contains an error. This is because the typegen script does not handle relative paths well for custom modules that depend on each other. You will have to make a manual change to [signaling/types.ts](src/interfaces/signaling/types.ts) as follows:
+  ```
+  $ yarn generate
+  $ yarn lint
+  ```
 
-```diff
-- import { VoteStage } from './voting';
-+ import { VoteStage } from '../voting';
-```
+1. You will notice that the output of the lint command contains an error. This is because the typegen script does not handle relative paths well for custom modules that depend on each other. You will have to make a manual change to [signaling/types.ts](src/interfaces/signaling/types.ts) as follows:
 
-Once completed, you will need to compile the typescript to javascript to publish on npm, as follows:
+  ```diff
+  - import { VoteStage } from './voting';
+  + import { VoteStage } from '../voting';
+  ```
 
-```
-$ yarn build
-```
+1. Once completed, you will need to compile the typescript to javascript to publish on npm, as follows:
 
-The above command should not produce any errors.
+  ```
+  $ yarn build
+  ```
+
+  The above command should not produce any errors.
 
 Alternatively: to rebuild the `interfaces/` folder for publication on npm without generating new types, simply run `tsc` in the project root.
