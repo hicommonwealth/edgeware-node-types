@@ -44,10 +44,23 @@ Run an [edgeware-node](https://github.com/hicommonwealth/edgeware-node) chain on
 Once you have an `edgeware.json` file, you can rebuild the types with:
 
 ```
-$ yarn build
+$ yarn generate
 $ yarn lint
 ```
 
-and ensure the final command does not print any errors.
+You will notice that the output of the lint command contains an error. This is because the typegen script does not handle relative paths well for custom modules that depend on each other. You will have to make a manual change to [signaling/types.ts](src/interfaces/signaling/types.ts) as follows:
 
-To rebuild the `interfaces/` folder for publication on npm, simply run `tsc` in the project root.
+```diff
+- import { VoteStage } from './voting';
++ import { VoteStage } from '../voting';
+```
+
+Once completed, you will need to compile the typescript to javascript to publish on npm, as follows:
+
+```
+$ yarn build
+```
+
+The above command should not produce any errors.
+
+Alternatively: to rebuild the `interfaces/` folder for publication on npm without generating new types, simply run `tsc` in the project root.
