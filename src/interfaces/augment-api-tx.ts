@@ -192,7 +192,7 @@ declare module '@polkadot/api/types/submittable' {
        * 
        * The schedule must have a greater version than the stored schedule.
        **/
-      updateSchedule: AugmentedSubmittable<(schedule: Schedule | { version?: any; putCodePerByteCost?: any; growMemCost?: any; regularOpCost?: any; returnDataPerByteCost?: any; eventDataPerByteCost?: any; eventPerTopicCost?: any; eventBaseCost?: any; sandboxDataReadCost?: any; sandboxDataWriteCost?: any; transferCost?: any; maxEventTopics?: any; maxStackHeight?: any; maxMemoryPages?: any; enablePrintln?: any; maxSubjectLen?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>>;
+      updateSchedule: AugmentedSubmittable<(schedule: Schedule | { version?: any; instructionWeights?: any; hostFnWeights?: any; enablePrintln?: any; maxEventTopics?: any; maxStackHeight?: any; maxMemoryPages?: any; maxTableSize?: any; maxSubjectLen?: any; maxCodeSize?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>>;
     };
     council: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
