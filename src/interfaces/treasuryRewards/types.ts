@@ -1,7 +1,7 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import { u128 } from '@polkadot/types/primitive';
+import type { u128 } from '@polkadot/types';
 
 /** @name Balance2 */
 export interface Balance2 extends u128 {}

@@ -1,29 +1,28 @@
 // Auto-generated via `yarn polkadot-types-from-chain`, do not edit
 /* eslint-disable */
 
-import { AnyNumber, ITuple } from '@polkadot/types/types';
-import { Compact, Option, U8aFixed, Vec } from '@polkadot/types/codec';
-import { Bytes, Data, bool, u16, u32, u64 } from '@polkadot/types/primitive';
-import { ProposalContents, ProposalTitle } from './signaling';
-import { TallyType, VoteOutcome, VoteType } from './voting';
-import { MemberCount, ProposalIndex } from '@polkadot/types/interfaces/collective';
-import { CodeHash, Gas, Schedule } from '@polkadot/types/interfaces/contracts';
-import { AccountVote, Conviction, PropIndex, Proposal, ReferendumIndex } from '@polkadot/types/interfaces/democracy';
-import { DefunctVoter, Renouncing } from '@polkadot/types/interfaces/elections';
-import { Extrinsic, Signature } from '@polkadot/types/interfaces/extrinsics';
-import { GrandpaEquivocationProof, KeyOwnerProof } from '@polkadot/types/interfaces/grandpa';
-import { IdentityFields, IdentityInfo, IdentityJudgement, RegistrarIndex } from '@polkadot/types/interfaces/identity';
-import { Heartbeat } from '@polkadot/types/interfaces/imOnline';
-import { ProxyType } from '@polkadot/types/interfaces/proxy';
-import { AccountId, AccountIndex, Address, AssetId, Balance, BalanceOf, BlockNumber, Call, CallHashOf, ChangesTrieConfiguration, Hash, Header, KeyValue, LookupSource, Moment, OpaqueCall, Perbill, Percent, Weight } from '@polkadot/types/interfaces/runtime';
-import { Period, Priority } from '@polkadot/types/interfaces/scheduler';
-import { Keys } from '@polkadot/types/interfaces/session';
-import { CompactAssignments, ElectionScore, ElectionSize, EraIndex, RewardDestination, ValidatorIndex, ValidatorPrefs } from '@polkadot/types/interfaces/staking';
-import { Key } from '@polkadot/types/interfaces/system';
-import { BountyIndex } from '@polkadot/types/interfaces/treasury';
-import { Timepoint } from '@polkadot/types/interfaces/utility';
-import { VestingInfo } from '@polkadot/types/interfaces/vesting';
-import { ApiTypes, SubmittableExtrinsic } from '@polkadot/api/types';
+import type { Bytes, Compact, Data, Option, U8aFixed, Vec, bool, u16, u32, u64 } from '@polkadot/types';
+import type { AnyNumber, ITuple } from '@polkadot/types/types';
+import type { ProposalContents, ProposalTitle } from './signaling';
+import type { TallyType, VoteOutcome, VoteType } from './voting';
+import type { MemberCount, ProposalIndex } from '@polkadot/types/interfaces/collective';
+import type { CodeHash, Gas, Schedule } from '@polkadot/types/interfaces/contracts';
+import type { AccountVote, Conviction, PropIndex, Proposal, ReferendumIndex } from '@polkadot/types/interfaces/democracy';
+import type { DefunctVoter, Renouncing } from '@polkadot/types/interfaces/elections';
+import type { Extrinsic, Signature } from '@polkadot/types/interfaces/extrinsics';
+import type { GrandpaEquivocationProof, KeyOwnerProof } from '@polkadot/types/interfaces/grandpa';
+import type { IdentityFields, IdentityInfo, IdentityJudgement, RegistrarIndex } from '@polkadot/types/interfaces/identity';
+import type { Heartbeat } from '@polkadot/types/interfaces/imOnline';
+import type { ProxyType } from '@polkadot/types/interfaces/proxy';
+import type { AccountId, AccountIndex, Address, AssetId, Balance, BalanceOf, BlockNumber, Call, CallHashOf, ChangesTrieConfiguration, Hash, Header, KeyValue, LookupSource, Moment, OpaqueCall, Perbill, Percent, Weight } from '@polkadot/types/interfaces/runtime';
+import type { Period, Priority } from '@polkadot/types/interfaces/scheduler';
+import type { Keys } from '@polkadot/types/interfaces/session';
+import type { CompactAssignments, ElectionScore, ElectionSize, EraIndex, RewardDestination, ValidatorIndex, ValidatorPrefs } from '@polkadot/types/interfaces/staking';
+import type { Key } from '@polkadot/types/interfaces/system';
+import type { BountyIndex } from '@polkadot/types/interfaces/treasury';
+import type { Timepoint } from '@polkadot/types/interfaces/utility';
+import type { VestingInfo } from '@polkadot/types/interfaces/vesting';
+import type { ApiTypes, SubmittableExtrinsic } from '@polkadot/api/types';
 
 declare module '@polkadot/api/types/submittable' {
   export interface AugmentedSubmittables<ApiType> {
@@ -192,7 +191,7 @@ declare module '@polkadot/api/types/submittable' {
        * 
        * The schedule must have a greater version than the stored schedule.
        **/
-      updateSchedule: AugmentedSubmittable<(schedule: Schedule | { version?: any; instructionWeights?: any; hostFnWeights?: any; enablePrintln?: any; maxEventTopics?: any; maxStackHeight?: any; maxMemoryPages?: any; maxTableSize?: any; maxSubjectLen?: any; maxCodeSize?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>>;
+      updateSchedule: AugmentedSubmittable<(schedule: Schedule | { version?: any; enablePrintln?: any; limits?: any; instructionWeights?: any; hostFnWeights?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>>;
     };
     council: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;

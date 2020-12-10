@@ -1,10 +1,9 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import { ITuple } from '@polkadot/types/types';
-import { Enum, Option, Struct, U8aFixed, Vec } from '@polkadot/types/codec';
-import { bool, u128, u64 } from '@polkadot/types/primitive';
-import { AccountId } from '@polkadot/types/interfaces/runtime';
+import type { Enum, Option, Struct, U8aFixed, Vec, bool, u128, u64 } from '@polkadot/types';
+import type { ITuple } from '@polkadot/types/types';
+import type { AccountId } from '@polkadot/types/interfaces/runtime';
 
 /** @name Commitments */
 export interface Commitments extends Vec<ITuple<[AccountId, VoteOutcome]>> {}

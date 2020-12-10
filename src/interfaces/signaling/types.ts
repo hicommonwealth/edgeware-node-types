@@ -1,10 +1,9 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import { Struct } from '@polkadot/types/codec';
-import { Bytes, Text, u32, u64 } from '@polkadot/types/primitive';
-import { VoteStage } from '../voting';
-import { AccountId } from '@polkadot/types/interfaces/runtime';
+import type { Bytes, Struct, Text, u32, u64 } from '@polkadot/types';
+import type { VoteStage } from '../voting';
+import type { AccountId } from '@polkadot/types/interfaces/runtime';
 
 /** @name ProposalContents */
 export interface ProposalContents extends Bytes {}
