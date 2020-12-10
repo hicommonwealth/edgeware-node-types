@@ -1,5 +1,9 @@
-import { RegistryTypes, OverrideModuleType } from '@polkadot/types/types';
+import { RegistryTypes, OverrideModuleType, OverrideBundleType } from '@polkadot/types/types';
 import * as edgewareDefinitions from '../interfaces/definitions';
+import v31 from './v31';
+import v38 from './v38';
+import v45 from './v45';
+import rpcGen from './rpc';
 
 const edgTypes = Object
   .values(edgewareDefinitions)
@@ -17,6 +21,27 @@ const typesAlias: Record<string, OverrideModuleType> = {
   voting: { Tally: 'VotingTally' },
 }
 
+// Support archival
+const typesBundle: OverrideBundleType = {
+  spec: {
+    'edgeware': {
+      rpc: rpcGen(),
+      types: [
+        {
+          minmax: [0, 32],
+          types: v31.types,
+        }, {
+          minmax: [32, 40],
+          types: v38.types,
+        }, {
+          minmax: [40, 46],
+          types: v45.types,
+        },
+      ]
+    }
+  }
+}
+
 export default {
-  types, typesAlias
+  types, typesAlias, typesBundle
 };

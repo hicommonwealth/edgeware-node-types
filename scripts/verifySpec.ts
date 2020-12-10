@@ -36,7 +36,6 @@ const verify = async (spec: SpecType, url: string, blockNumber?: number) => {
     types: spec.types,
     typesBundle: spec.typesBundle,
   });
-  console.log(api.rpc);
 
   await api.isReady;
 

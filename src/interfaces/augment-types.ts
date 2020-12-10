@@ -3,7 +3,7 @@
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
 import type { ChainId, DepositNonce, ProposalStatus, ProposalVotes, ResourceId } from './chainbridge';
-import type { Bloom, ExitError, ExitFatal, ExitReason, ExitRevert, ExitSucceed, Receipt, Transaction, TransactionStatus } from './frontier';
+import type { Bloom, ExitError, ExitFatal, ExitReason, ExitRevert, ExitSucceed, Receipt, Transaction, TransactionRequest, TransactionStatus } from './frontier';
 import type { ProposalContents, ProposalRecord, ProposalTitle } from './signaling';
 import type { Balance2 } from './treasuryRewards';
 import type { TallyType, VoteCommitment, VoteData, VoteOutcome, VoteRecord, VoteStage, VoteType, VotingScheme } from './voting';
@@ -1985,6 +1985,9 @@ declare module '@polkadot/types/types/registry' {
     Transaction: Transaction;
     'Option<Transaction>': Option<Transaction>;
     'Vec<Transaction>': Vec<Transaction>;
+    TransactionRequest: TransactionRequest;
+    'Option<TransactionRequest>': Option<TransactionRequest>;
+    'Vec<TransactionRequest>': Vec<TransactionRequest>;
     Bloom: Bloom;
     'Option<Bloom>': Option<Bloom>;
     'Vec<Bloom>': Vec<Bloom>;
