@@ -3,7 +3,7 @@
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
 import type { ChainId, DepositNonce, ProposalStatus, ProposalVotes, ResourceId } from './chainbridge';
-import type { Bloom, ExitError, ExitFatal, ExitReason, ExitRevert, ExitSucceed, Receipt, Transaction, TransactionRequest, TransactionStatus } from './frontier';
+import type { Bloom, ExitReason, H2048, Receipt, Transaction, TransactionCondition, TransactionStatus } from './frontier';
 import type { ProposalContents, ProposalRecord, ProposalTitle } from './signaling';
 import type { Balance2 } from './treasuryRewards';
 import type { TallyType, VoteCommitment, VoteData, VoteOutcome, VoteRecord, VoteStage, VoteType, VotingScheme } from './voting';
@@ -1964,35 +1964,26 @@ declare module '@polkadot/types/types/registry' {
     ProposalVotes: ProposalVotes;
     'Option<ProposalVotes>': Option<ProposalVotes>;
     'Vec<ProposalVotes>': Vec<ProposalVotes>;
-    ExitSucceed: ExitSucceed;
-    'Option<ExitSucceed>': Option<ExitSucceed>;
-    'Vec<ExitSucceed>': Vec<ExitSucceed>;
-    ExitError: ExitError;
-    'Option<ExitError>': Option<ExitError>;
-    'Vec<ExitError>': Vec<ExitError>;
-    ExitRevert: ExitRevert;
-    'Option<ExitRevert>': Option<ExitRevert>;
-    'Vec<ExitRevert>': Vec<ExitRevert>;
-    ExitFatal: ExitFatal;
-    'Option<ExitFatal>': Option<ExitFatal>;
-    'Vec<ExitFatal>': Vec<ExitFatal>;
-    ExitReason: ExitReason;
-    'Option<ExitReason>': Option<ExitReason>;
-    'Vec<ExitReason>': Vec<ExitReason>;
-    Receipt: Receipt;
-    'Option<Receipt>': Option<Receipt>;
-    'Vec<Receipt>': Vec<Receipt>;
+    TransactionCondition: TransactionCondition;
+    'Option<TransactionCondition>': Option<TransactionCondition>;
+    'Vec<TransactionCondition>': Vec<TransactionCondition>;
     Transaction: Transaction;
     'Option<Transaction>': Option<Transaction>;
     'Vec<Transaction>': Vec<Transaction>;
-    TransactionRequest: TransactionRequest;
-    'Option<TransactionRequest>': Option<TransactionRequest>;
-    'Vec<TransactionRequest>': Vec<TransactionRequest>;
     Bloom: Bloom;
     'Option<Bloom>': Option<Bloom>;
     'Vec<Bloom>': Vec<Bloom>;
     TransactionStatus: TransactionStatus;
     'Option<TransactionStatus>': Option<TransactionStatus>;
     'Vec<TransactionStatus>': Vec<TransactionStatus>;
+    H2048: H2048;
+    'Option<H2048>': Option<H2048>;
+    'Vec<H2048>': Vec<H2048>;
+    Receipt: Receipt;
+    'Option<Receipt>': Option<Receipt>;
+    'Vec<Receipt>': Vec<Receipt>;
+    ExitReason: ExitReason;
+    'Option<ExitReason>': Option<ExitReason>;
+    'Vec<ExitReason>': Vec<ExitReason>;
   }
 }

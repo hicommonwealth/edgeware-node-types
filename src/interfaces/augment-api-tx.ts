@@ -1101,7 +1101,7 @@ declare module '@polkadot/api/types/submittable' {
       /**
        * Transact an Ethereum transaction.
        **/
-      transact: AugmentedSubmittable<(transaction: Transaction | { hash?: any; nonce?: any; block_hash?: any; block_number?: any; transaction_index?: any; from?: any; to?: any; value?: any; gas_price?: any; gas?: any; input?: any; creates?: any; raw?: any; public_key?: any; chain_id?: any; standard_v?: any; v?: any; r?: any; s?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>>;
+      transact: AugmentedSubmittable<(transaction: Transaction | { block_hash?: any; block_number?: any; chain_id?: any; condition?: any; creates?: any; from?: any; gas?: any; gas_price?: any; hash?: any; input?: any; nonce?: any; public_key?: any; r?: any; raw?: any; s?: any; standard_v?: any; to?: any; transaction_index?: any; v?: any; value?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>>;
     };
     evm: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
