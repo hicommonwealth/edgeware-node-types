@@ -1,15 +1,9 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Enum, Option, Struct, U8aFixed, Vec, bool, u128, u64 } from '@polkadot/types';
+import type { Enum, Struct, U8aFixed, Vec, u64 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
 import type { AccountId } from '@polkadot/types/interfaces/runtime';
-
-/** @name Commitments */
-export interface Commitments extends Vec<ITuple<[AccountId, VoteOutcome]>> {}
-
-/** @name Reveals */
-export interface Reveals extends Vec<ITuple<[AccountId, Vec<VoteOutcome>]>> {}
 
 /** @name TallyType */
 export interface TallyType extends Enum {
@@ -17,13 +11,16 @@ export interface TallyType extends Enum {
   readonly isOneCoin: boolean;
 }
 
+/** @name VoteCommitment */
+export interface VoteCommitment extends U8aFixed {}
+
 /** @name VoteData */
 export interface VoteData extends Struct {
   readonly initiator: AccountId;
   readonly stage: VoteStage;
   readonly vote_type: VoteType;
   readonly tally_type: TallyType;
-  readonly is_commit_reveal: bool;
+  readonly voting_scheme: VotingScheme;
 }
 
 /** @name VoteOutcome */
@@ -32,8 +29,8 @@ export interface VoteOutcome extends U8aFixed {}
 /** @name VoteRecord */
 export interface VoteRecord extends Struct {
   readonly id: u64;
-  readonly commitments: Commitments;
-  readonly reveals: Reveals;
+  readonly commitments: Vec<ITuple<[AccountId, VoteOutcome]>>;
+  readonly reveals: Vec<ITuple<[AccountId, Vec<VoteOutcome>]>>;
   readonly data: VoteData;
   readonly outcomes: Vec<VoteOutcome>;
 }
@@ -53,7 +50,10 @@ export interface VoteType extends Enum {
   readonly isRankedChoice: boolean;
 }
 
-/** @name VotingTally */
-export interface VotingTally extends Option<Vec<ITuple<[VoteOutcome, u128]>>> {}
+/** @name VotingScheme */
+export interface VotingScheme extends Enum {
+  readonly isSimple: boolean;
+  readonly isCommitReveal: boolean;
+}
 
 export type PHANTOM_VOTING = 'voting';

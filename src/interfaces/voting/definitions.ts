@@ -9,21 +9,22 @@ export default {
     TallyType: {
       _enum: ['OnePerson', 'OneCoin']
     },
+    VotingScheme: {
+      _enum: ['Simple', 'CommitReveal']
+    },
     VoteOutcome: '[u8; 32]',
-    VotingTally: 'Option<Vec<(VoteOutcome, u128)>>',
+    VoteCommitment: '[u8; 32]',
     VoteData: {
       initiator: 'AccountId',
       stage: 'VoteStage',
       vote_type: 'VoteType',
       tally_type: 'TallyType',
-      is_commit_reveal: 'bool'
+      voting_scheme: 'VotingScheme',
     },
-    Commitments: 'Vec<(AccountId, VoteOutcome)>',
-    Reveals: 'Vec<(AccountId, Vec<VoteOutcome>)>',
     VoteRecord: {
       id: 'u64',
-      commitments: 'Commitments',
-      reveals: 'Reveals',
+      commitments: 'Vec<(AccountId, VoteOutcome)>',
+      reveals: 'Vec<(AccountId, Vec<VoteOutcome>)>',
       data: 'VoteData',
       outcomes: 'Vec<VoteOutcome>'
     }

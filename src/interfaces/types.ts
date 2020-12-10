@@ -4,3 +4,5 @@
 export * from './signaling/types';
 export * from './treasuryRewards/types';
 export * from './voting/types';
+export * from './chainbridge/types';
+export * from './frontier/types';

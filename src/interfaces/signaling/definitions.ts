@@ -12,4 +12,4 @@ export default {
     ProposalContents: 'Bytes',
     ProposalTitle: 'Bytes',
   }
-}
+};
