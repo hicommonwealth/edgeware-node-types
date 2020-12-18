@@ -33,10 +33,10 @@ const typesBundle: OverrideBundleType = {
           minmax: [0, 32],
           types: v31.types,
         }, {
-          minmax: [32, 40],
+          minmax: [32, 42],
           types: v38.types,
         }, {
-          minmax: [40, 46],
+          minmax: [42, 46],
           types: v45.types,
         },
       ]
