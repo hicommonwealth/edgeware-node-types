@@ -21,7 +21,8 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "tsc --noEmit --pretty",
-    "verify": "ts-node ./scripts/verifySpec.ts"
+    "verify": "ts-node ./scripts/verifySpec.ts",
+    "print-json": "ts-node ./scripts/printJson.ts"
   },
   "repository": {
     "type": "git",

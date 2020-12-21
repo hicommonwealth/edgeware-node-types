@@ -1,23 +1,10 @@
 import { RegistryTypes, OverrideModuleType, OverrideBundleType } from '@polkadot/types/types';
-import * as edgewareDefinitions from '../interfaces/definitions';
 import v31 from './v31';
 import v38 from './v38';
 
-const edgTypes = Object
-  .values(edgewareDefinitions)
-  .reduce((res, { types }) => ({ ...res, ...types }), {});
+const types: RegistryTypes = v38.types;
 
-const types: RegistryTypes = {
-  ...edgTypes,
-  // aliases that don't do well as part of interfaces
-  'voting::VoteType': 'VoteType',
-  'voting::TallyType': 'TallyType',
-  'voting::Tally': 'VotingTally',
-};
-
-const typesAlias: Record<string, OverrideModuleType> = {
-  voting: { Tally: 'VotingTally' },
-}
+const typesAlias: Record<string, OverrideModuleType> = v38.typesAlias;
 
 // Support archival
 const typesBundle: OverrideBundleType = {
@@ -28,7 +15,7 @@ const typesBundle: OverrideBundleType = {
           minmax: [0, 32],
           types: v31.types,
         }, {
-          minmax: [32, 40],
+          minmax: [32, 42],
           types: v38.types,
         },
       ],
