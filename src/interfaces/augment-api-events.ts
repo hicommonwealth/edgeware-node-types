@@ -4,14 +4,13 @@
 import type { Bytes, Option, U256, Vec, bool, u16, u32, u64 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
 import type { ChainId, DepositNonce, ResourceId } from './chainBridge';
-import type { ExitReason } from './frontier';
 import type { VoteOutcome, VoteStage, VoteType } from './voting';
 import type { BalanceStatus } from '@polkadot/types/interfaces/balances';
 import type { MemberCount, ProposalIndex } from '@polkadot/types/interfaces/collective';
 import type { AuthorityId } from '@polkadot/types/interfaces/consensus';
 import type { PropIndex, ReferendumIndex } from '@polkadot/types/interfaces/democracy';
 import type { VoteThreshold } from '@polkadot/types/interfaces/elections';
-import type { Log } from '@polkadot/types/interfaces/evm';
+import type { EvmLog, ExitReason } from '@polkadot/types/interfaces/evm';
 import type { AuthorityList } from '@polkadot/types/interfaces/grandpa';
 import type { RegistrarIndex } from '@polkadot/types/interfaces/identity';
 import type { Kind, OpaqueTimeSlot } from '@polkadot/types/interfaces/offences';
@@ -417,7 +416,7 @@ declare module '@polkadot/api/types/events' {
       /**
        * Ethereum events from contracts.
        **/
-      Log: AugmentedEvent<ApiType, [Log]>;
+      Log: AugmentedEvent<ApiType, [EvmLog]>;
     };
     grandpa: {
       [key: string]: AugmentedEvent<ApiType>;

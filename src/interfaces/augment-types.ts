@@ -3,7 +3,6 @@
 
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
 import type { ChainId, DepositNonce, ProposalStatus, ProposalVotes, ResourceId } from './chainBridge';
-import type { ExitReason } from './frontier';
 import type { ProposalContents, ProposalRecord, ProposalTitle } from './signaling';
 import type { Balance2 } from './treasuryRewards';
 import type { TallyType, VoteCommitment, VoteData, VoteOutcome, VoteRecord, VoteStage, VoteType, VotingScheme } from './voting';
@@ -25,7 +24,7 @@ import type { AccountVote, AccountVoteSplit, AccountVoteStandard, Conviction, De
 import type { ApprovalFlag, DefunctVoter, Renouncing, SetIndex, Vote, VoteIndex, VoteThreshold, VoterInfo } from '@polkadot/types/interfaces/elections';
 import type { CreatedBlock, ImportedAux } from '@polkadot/types/interfaces/engine';
 import type { EthAccount, EthBlock, EthBloom, EthCallRequest, EthFilter, EthFilterAddress, EthFilterTopic, EthFilterTopicEntry, EthFilterTopicInner, EthHeader, EthLog, EthReceipt, EthRichBlock, EthRichHeader, EthStorageProof, EthSubKind, EthSubParams, EthSubResult, EthSyncInfo, EthSyncStatus, EthTransaction, EthTransactionCondition, EthTransactionRequest, EthTransactionStatus, EthWork, EthereumAccountId, EthereumLookupSource, EthereumSignature } from '@polkadot/types/interfaces/eth';
-import type { Account, Log, Vicinity } from '@polkadot/types/interfaces/evm';
+import type { EvmAccount, EvmLog, EvmVicinity, ExitError, ExitFatal, ExitReason, ExitRevert, ExitSucceed } from '@polkadot/types/interfaces/evm';
 import type { AnySignature, EcdsaSignature, Ed25519Signature, Extrinsic, ExtrinsicEra, ExtrinsicPayload, ExtrinsicPayloadUnknown, ExtrinsicPayloadV4, ExtrinsicSignature, ExtrinsicSignatureV4, ExtrinsicUnknown, ExtrinsicV4, ImmortalEra, MortalEra, MultiSignature, Signature, SignerPayload, Sr25519Signature } from '@polkadot/types/interfaces/extrinsics';
 import type { AssetOptions, Owner, PermissionLatest, PermissionVersions, PermissionsV1 } from '@polkadot/types/interfaces/genericAsset';
 import type { AuthorityIndex, AuthorityList, AuthorityWeight, EncodedFinalityProofs, GrandpaEquivocation, GrandpaEquivocationProof, GrandpaEquivocationValue, GrandpaPrevote, JustificationNotification, KeyOwnerProof, NextAuthority, PendingPause, PendingResume, Precommits, Prevotes, ReportedRoundStates, RoundState, SetId, StoredPendingChange, StoredState } from '@polkadot/types/interfaces/grandpa';
@@ -728,15 +727,30 @@ declare module '@polkadot/types/types/registry' {
     ImportedAux: ImportedAux;
     'Option<ImportedAux>': Option<ImportedAux>;
     'Vec<ImportedAux>': Vec<ImportedAux>;
-    Account: Account;
-    'Option<Account>': Option<Account>;
-    'Vec<Account>': Vec<Account>;
-    Log: Log;
-    'Option<Log>': Option<Log>;
-    'Vec<Log>': Vec<Log>;
-    Vicinity: Vicinity;
-    'Option<Vicinity>': Option<Vicinity>;
-    'Vec<Vicinity>': Vec<Vicinity>;
+    EvmAccount: EvmAccount;
+    'Option<EvmAccount>': Option<EvmAccount>;
+    'Vec<EvmAccount>': Vec<EvmAccount>;
+    EvmLog: EvmLog;
+    'Option<EvmLog>': Option<EvmLog>;
+    'Vec<EvmLog>': Vec<EvmLog>;
+    EvmVicinity: EvmVicinity;
+    'Option<EvmVicinity>': Option<EvmVicinity>;
+    'Vec<EvmVicinity>': Vec<EvmVicinity>;
+    ExitError: ExitError;
+    'Option<ExitError>': Option<ExitError>;
+    'Vec<ExitError>': Vec<ExitError>;
+    ExitFatal: ExitFatal;
+    'Option<ExitFatal>': Option<ExitFatal>;
+    'Vec<ExitFatal>': Vec<ExitFatal>;
+    ExitReason: ExitReason;
+    'Option<ExitReason>': Option<ExitReason>;
+    'Vec<ExitReason>': Vec<ExitReason>;
+    ExitRevert: ExitRevert;
+    'Option<ExitRevert>': Option<ExitRevert>;
+    'Vec<ExitRevert>': Vec<ExitRevert>;
+    ExitSucceed: ExitSucceed;
+    'Option<ExitSucceed>': Option<ExitSucceed>;
+    'Vec<ExitSucceed>': Vec<ExitSucceed>;
     Extrinsic: Extrinsic;
     'Option<Extrinsic>': Option<Extrinsic>;
     'Vec<Extrinsic>': Vec<Extrinsic>;
@@ -2245,8 +2259,5 @@ declare module '@polkadot/types/types/registry' {
     ProposalVotes: ProposalVotes;
     'Option<ProposalVotes>': Option<ProposalVotes>;
     'Vec<ProposalVotes>': Vec<ProposalVotes>;
-    ExitReason: ExitReason;
-    'Option<ExitReason>': Option<ExitReason>;
-    'Vec<ExitReason>': Vec<ExitReason>;
   }
 }

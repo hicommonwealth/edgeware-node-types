@@ -5,4 +5,3 @@ export * from './signaling/types';
 export * from './treasuryRewards/types';
 export * from './voting/types';
 export * from './chainBridge/types';
-export * from './frontier/types';
