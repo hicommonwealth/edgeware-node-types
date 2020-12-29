@@ -3,7 +3,7 @@
 
 import type { Vec, u16, u32 } from '@polkadot/types';
 import type { Codec } from '@polkadot/types/types';
-import type { ChainId, ResourceId } from './chainbridge';
+import type { ChainId, ResourceId } from './chainBridge';
 import type { AccountId, Balance, BalanceOf, BlockNumber, LockIdentifier, ModuleId, Moment, Perbill, Percent, Permill, RuntimeDbWeight } from '@polkadot/types/interfaces/runtime';
 import type { SessionIndex } from '@polkadot/types/interfaces/session';
 import type { EraIndex } from '@polkadot/types/interfaces/staking';

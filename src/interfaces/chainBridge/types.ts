@@ -28,4 +28,4 @@ export interface ProposalVotes extends Struct {
 /** @name ResourceId */
 export interface ResourceId extends U8aFixed {}
 
-export type PHANTOM_CHAINBRIDGE = 'chainbridge';
+export type PHANTOM_CHAINBRIDGE = 'chainBridge';

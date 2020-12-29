@@ -2,7 +2,6 @@ import { RegistryTypes, OverrideModuleType, OverrideBundleType } from '@polkadot
 import v31 from './v31';
 import v38 from './v38';
 import v45 from './v45';
-import rpcGen from './rpc';
 
 const types: RegistryTypes = v45.types;
 
@@ -12,7 +11,6 @@ const typesAlias: Record<string, OverrideModuleType> = v45.typesAlias;
 const typesBundle: OverrideBundleType = {
   spec: {
     'edgeware': {
-      rpc: rpcGen(),
       types: [
         {
           minmax: [0, 32],
