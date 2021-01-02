@@ -1,19 +1,6 @@
-import { Mainnet, Beresheet, dev } from '../src';
+import { spec } from '../src';
 import { WsProvider, ApiPromise } from '@polkadot/api';
 import { TypeRegistry } from '@polkadot/types';
-import { RegistryTypes, OverrideModuleType, OverrideBundleType } from '@polkadot/types/types';
-
-type SpecType = {
-  types?: RegistryTypes,
-  typesAlias?: Record<string, OverrideModuleType>,
-  typesBundle?: OverrideBundleType,
-}
-
-const specs: { [name: string]: SpecType } = { 
-  'mainnet': Mainnet,
-  'beresheet': Beresheet,
-  'dev': dev,
-}
 
 const urls: { [name: string]: string } = {
   'mainnet': 'ws://mainnet1.edgewa.re:9944',
@@ -22,7 +9,7 @@ const urls: { [name: string]: string } = {
   'dev': 'ws://localhost:9944',
 };
 
-const verify = async (spec: SpecType, url: string, blockNumber?: number) => {
+const verify = async (url: string, blockNumber?: number) => {
   // connect to chain via provider
   console.log(`Connecting to url: ${url}...`);
 
@@ -32,9 +19,7 @@ const verify = async (spec: SpecType, url: string, blockNumber?: number) => {
   const api = new ApiPromise({
     provider: new WsProvider(url),
     registry,
-    typesAlias: spec.typesAlias,
-    types: spec.types,
-    typesBundle: spec.typesBundle,
+    ...spec,
   });
 
   await api.isReady;
@@ -61,12 +46,11 @@ const verify = async (spec: SpecType, url: string, blockNumber?: number) => {
 // parse args
 const args = process.argv.slice(2);
 const network = args[0] || 'mainnet';
-const spec = specs[network];
 const url = urls[network];
 const block = args[1];
 
 // kick off function
-verify(spec, url, block ? +block : undefined)
+verify(url, block ? +block : undefined)
 .then(() => {
   console.log('Done!');
   process.exit(0);
