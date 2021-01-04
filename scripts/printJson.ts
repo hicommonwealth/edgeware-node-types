@@ -1,5 +1,5 @@
 import v38 from '../src/spec/v38';
-import v45 from 'src/spec/v45';
+import v45 from '../src/spec/v45';
 
 // parse args
 const args = process.argv.slice(2);
