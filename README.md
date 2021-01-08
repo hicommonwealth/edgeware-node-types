@@ -7,11 +7,11 @@ This repo contains Typescript bindings for custom edgeware-node modules.
 In order to use the standard API against Edgeware you must initialize the API's options object as follows:
 
 ```
-import { Mainnet } from '@edgeware/node-types';
+import { spec } from '@edgeware/node-types';
 
 const options: ApiOptions = {
   provider : new WsProvider('ws://localhost:9944'),
-  ...Mainnet,
+  ...spec,
 };
 
 const api = new ApiRx(options);
