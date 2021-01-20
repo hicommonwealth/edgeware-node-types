@@ -7,18 +7,10 @@ const edgTypes = Object
 
 const types: RegistryTypes = {
   ...edgTypes,
-  // aliases that don't do well as part of interfaces
-  'voting::VoteType': 'VoteType',
-  'voting::TallyType': 'TallyType',
-  'voting::Tally': 'VotingTally',
   'Address': 'MultiAddress',
   'LookupSource': 'MultiAddress',
 };
 
-const typesAlias: Record<string, OverrideModuleType> = {
-  voting: { Tally: 'VotingTally' },
-}
-
 export default {
-  types, typesAlias
+  types
 };

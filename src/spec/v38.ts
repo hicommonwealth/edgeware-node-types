@@ -60,6 +60,8 @@ const types: RegistryTypes = {
   'voting::Tally': 'VotingTally',
 
   // overrides
+  Address: 'AccountId',
+  LookupSource: 'AccountId',
   CompactAssignments: 'CompactAssignmentsTo257',
   ContractExecResult: 'ContractExecResultTo255',
   RewardDestination: 'RewardDestinationTo257',

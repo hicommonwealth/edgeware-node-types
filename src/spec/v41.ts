@@ -60,6 +60,8 @@ const types: RegistryTypes = {
   'voting::Tally': 'VotingTally',
 
   // overrides
+  Address: 'AccountId',
+  LookupSource: 'AccountId',
   RefCount: 'u32',
 };
 
