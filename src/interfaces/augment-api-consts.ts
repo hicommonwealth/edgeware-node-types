@@ -1,10 +1,10 @@
 // Auto-generated via `yarn polkadot-types-from-chain`, do not edit
 /* eslint-disable */
 
-import type { Vec, u16, u32 } from '@polkadot/types';
+import type { Vec, u16, u32, u8 } from '@polkadot/types';
 import type { Codec } from '@polkadot/types/types';
 import type { ChainId, ResourceId } from './chainBridge';
-import type { AccountId, Balance, BalanceOf, BlockNumber, LockIdentifier, ModuleId, Moment, Perbill, Percent, Permill, RuntimeDbWeight } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, Balance, BalanceOf, BlockNumber, LockIdentifier, ModuleId, Moment, Perbill, Percent, Permill, RuntimeDbWeight, Weight } from '@polkadot/types/interfaces/runtime';
 import type { SessionIndex } from '@polkadot/types/interfaces/session';
 import type { EraIndex } from '@polkadot/types/interfaces/staking';
 import type { WeightToFeeCoefficient } from '@polkadot/types/interfaces/support';
@@ -20,6 +20,33 @@ declare module '@polkadot/api/types/consts' {
        **/
       existentialDeposit: Balance & AugmentedConst<ApiType>;
     };
+    bounties: {
+      [key: string]: Codec;
+      /**
+       * Percentage of the curator fee that will be reserved upfront as deposit for bounty curator.
+       **/
+      bountyCuratorDeposit: Permill & AugmentedConst<ApiType>;
+      /**
+       * The amount held on deposit for placing a bounty proposal.
+       **/
+      bountyDepositBase: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * The delay period for which a bounty beneficiary need to wait before claim the payout.
+       **/
+      bountyDepositPayoutDelay: BlockNumber & AugmentedConst<ApiType>;
+      /**
+       * Minimum value for a bounty.
+       **/
+      bountyValueMinimum: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * The amount held on deposit per byte within bounty description.
+       **/
+      dataDepositPerByte: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * Maximum acceptable reason length.
+       **/
+      maximumReasonLength: u32 & AugmentedConst<ApiType>;
+    };
     chainBridge: {
       [key: string]: Codec;
       bridgeAccountId: AccountId & AugmentedConst<ApiType>;
@@ -28,6 +55,40 @@ declare module '@polkadot/api/types/consts' {
     };
     contracts: {
       [key: string]: Codec;
+      /**
+       * The maximum number of tries that can be queued for deletion.
+       **/
+      deletionQueueDepth: u32 & AugmentedConst<ApiType>;
+      /**
+       * The maximum amount of weight that can be consumed per block for lazy trie removal.
+       **/
+      deletionWeightLimit: Weight & AugmentedConst<ApiType>;
+      /**
+       * The balance every contract needs to deposit to stay alive indefinitely.
+       * 
+       * This is different from the [`Self::TombstoneDeposit`] because this only needs to be
+       * deposited while the contract is alive. Costs for additional storage are added to
+       * this base cost.
+       * 
+       * This is a simple way to ensure that contracts with empty storage eventually get deleted by
+       * making them pay rent. This creates an incentive to remove them early in order to save rent.
+       **/
+      depositPerContract: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * The balance a contract needs to deposit per storage byte to stay alive indefinitely.
+       * 
+       * Let's suppose the deposit is 1,000 BU (balance units)/byte and the rent is 1 BU/byte/day,
+       * then a contract with 1,000,000 BU that uses 1,000 bytes of storage would pay no rent.
+       * But if the balance reduced to 500,000 BU and the storage stayed the same at 1,000,
+       * then it would pay 500 BU/day.
+       **/
+      depositPerStorageByte: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * The balance a contract needs to deposit per storage item to stay alive indefinitely.
+       * 
+       * It works the same as [`Self::DepositPerStorageByte`] but for storage items.
+       **/
+      depositPerStorageItem: BalanceOf & AugmentedConst<ApiType>;
       /**
        * The maximum nesting level of a call/instantiate stack. A reasonable default
        * value is 100.
@@ -38,19 +99,13 @@ declare module '@polkadot/api/types/consts' {
        **/
       maxValueSize: u32 & AugmentedConst<ApiType>;
       /**
-       * Price of a byte of storage per one block interval. Should be greater than 0.
-       **/
-      rentByteFee: BalanceOf & AugmentedConst<ApiType>;
-      /**
-       * The amount of funds a contract should deposit in order to offset
-       * the cost of one byte.
+       * The fraction of the deposit that should be used as rent per block.
        * 
-       * Let's suppose the deposit is 1,000 BU (balance units)/byte and the rent is 1 BU/byte/day,
-       * then a contract with 1,000,000 BU that uses 1,000 bytes of storage would pay no rent.
-       * But if the balance reduced to 500,000 BU and the storage stayed the same at 1,000,
-       * then it would pay 500 BU/day.
+       * When a contract hasn't enough balance deposited to stay alive indefinitely it needs
+       * to pay per block for the storage it consumes that is not covered by the deposit.
+       * This determines how high this rent payment is per block as a fraction of the deposit.
        **/
-      rentDepositOffset: BalanceOf & AugmentedConst<ApiType>;
+      rentFraction: Perbill & AugmentedConst<ApiType>;
       /**
        * Number of block delay an extrinsic claim surcharge has.
        * 
@@ -58,15 +113,6 @@ declare module '@polkadot/api/types/consts' {
        * for current_block - delay
        **/
       signedClaimHandicap: BlockNumber & AugmentedConst<ApiType>;
-      /**
-       * A size offset for an contract. A just created account with untouched storage will have that
-       * much of storage from the perspective of the state rent.
-       * 
-       * This is a simple way to ensure that contracts with empty storage eventually get deleted
-       * by making them pay rent. This creates an incentive to remove them early in order to save
-       * rent.
-       **/
-      storageSizeOffset: u32 & AugmentedConst<ApiType>;
       /**
        * Reward that is received by the party whose touch has led
        * to removal of a contract.
@@ -229,21 +275,6 @@ declare module '@polkadot/api/types/consts' {
        **/
       recoveryDeposit: BalanceOf & AugmentedConst<ApiType>;
     };
-    signaling: {
-      [key: string]: Codec;
-      /**
-       * Maxmimum length of contents in bytes.
-       **/
-      maxContentsLength: u32 & AugmentedConst<ApiType>;
-      /**
-       * Maxmimum number of proposals allowed on chain.
-       **/
-      maxSignalingProposals: u32 & AugmentedConst<ApiType>;
-      /**
-       * Maxmimum length of title in bytes.
-       **/
-      maxTitleLength: u32 & AugmentedConst<ApiType>;
-    };
     staking: {
       [key: string]: Codec;
       /**
@@ -304,6 +335,14 @@ declare module '@polkadot/api/types/consts' {
        * The weight of runtime database operations the runtime can invoke.
        **/
       dbWeight: RuntimeDbWeight & AugmentedConst<ApiType>;
+      /**
+       * The designated SS85 prefix of this chain.
+       * 
+       * This replaces the "ss58Format" property declared in the chain spec. Reason is
+       * that the runtime should know about the prefix in order to make use of it as
+       * an identifier of the chain.
+       **/
+      ss58Prefix: u8 & AugmentedConst<ApiType>;
     };
     timestamp: {
       [key: string]: Codec;
@@ -314,6 +353,29 @@ declare module '@polkadot/api/types/consts' {
        * period on default settings.
        **/
       minimumPeriod: Moment & AugmentedConst<ApiType>;
+    };
+    tips: {
+      [key: string]: Codec;
+      /**
+       * The amount held on deposit per byte within the tip report reason.
+       **/
+      dataDepositPerByte: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * Maximum acceptable reason length.
+       **/
+      maximumReasonLength: u32 & AugmentedConst<ApiType>;
+      /**
+       * The period for which a tip remains open after is has achieved threshold tippers.
+       **/
+      tipCountdown: BlockNumber & AugmentedConst<ApiType>;
+      /**
+       * The amount of the final tip which goes to the original reporter of the tip.
+       **/
+      tipFindersFee: Percent & AugmentedConst<ApiType>;
+      /**
+       * The amount held on deposit for placing a tip report.
+       **/
+      tipReportDepositBase: BalanceOf & AugmentedConst<ApiType>;
     };
     transactionPayment: {
       [key: string]: Codec;
@@ -329,30 +391,9 @@ declare module '@polkadot/api/types/consts' {
     treasury: {
       [key: string]: Codec;
       /**
-       * Percentage of the curator fee that will be reserved upfront as deposit for bounty curator.
-       **/
-      bountyCuratorDeposit: Permill & AugmentedConst<ApiType>;
-      /**
-       * The amount held on deposit for placing a bounty proposal.
-       **/
-      bountyDepositBase: BalanceOf & AugmentedConst<ApiType>;
-      /**
-       * The delay period for which a bounty beneficiary need to wait before claim the payout.
-       **/
-      bountyDepositPayoutDelay: BlockNumber & AugmentedConst<ApiType>;
-      bountyValueMinimum: BalanceOf & AugmentedConst<ApiType>;
-      /**
        * Percentage of spare funds (if any) that are burnt per spend period.
        **/
       burn: Permill & AugmentedConst<ApiType>;
-      /**
-       * The amount held on deposit per byte within the tip report reason or bounty description.
-       **/
-      dataDepositPerByte: BalanceOf & AugmentedConst<ApiType>;
-      /**
-       * Maximum acceptable reason length.
-       **/
-      maximumReasonLength: u32 & AugmentedConst<ApiType>;
       /**
        * The treasury's module id, used for deriving its sovereign account ID.
        **/
@@ -370,18 +411,6 @@ declare module '@polkadot/api/types/consts' {
        * Period between successive spends.
        **/
       spendPeriod: BlockNumber & AugmentedConst<ApiType>;
-      /**
-       * The period for which a tip remains open after is has achieved threshold tippers.
-       **/
-      tipCountdown: BlockNumber & AugmentedConst<ApiType>;
-      /**
-       * The amount of the final tip which goes to the original reporter of the tip.
-       **/
-      tipFindersFee: Percent & AugmentedConst<ApiType>;
-      /**
-       * The amount held on deposit for placing a tip report.
-       **/
-      tipReportDepositBase: BalanceOf & AugmentedConst<ApiType>;
     };
     vesting: {
       [key: string]: Codec;
@@ -389,17 +418,6 @@ declare module '@polkadot/api/types/consts' {
        * The minimum amount to be transferred to create a new vesting schedule.
        **/
       minVestedTransfer: BalanceOf & AugmentedConst<ApiType>;
-    };
-    voting: {
-      [key: string]: Codec;
-      /**
-       * Maxmimum number of outcomes.
-       **/
-      maxOutcomes: u32 & AugmentedConst<ApiType>;
-      /**
-       * Maxmimum number of voters on a single proposal.
-       **/
-      maxVotersPerProposal: u32 & AugmentedConst<ApiType>;
     };
   }
 

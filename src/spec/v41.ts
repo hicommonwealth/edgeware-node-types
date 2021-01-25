@@ -61,6 +61,9 @@ const types: RegistryTypes = {
 
   // overrides
   RefCount: 'u32',
+  AccountInfo: 'AccountInfoWithRefCount',
+  Address: 'AccountId',
+  LookupSource: 'AccountId',
 };
 
 const typesAlias: Record<string, OverrideModuleType> = {

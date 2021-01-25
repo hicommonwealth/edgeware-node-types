@@ -60,7 +60,6 @@ const types: RegistryTypes = {
   'voting::Tally': 'VotingTally',
 
   // overrides
-  Address: 'GenericAddress',
   Keys: 'SessionKeys4',
   StakingLedger: 'StakingLedgerTo240',
   Votes: 'VotesTo230',
@@ -72,6 +71,9 @@ const types: RegistryTypes = {
   CompactAssignments: 'CompactAssignmentsTo257',
   RewardDestination: 'RewardDestinationTo257',
   RefCount: 'RefCountTo259',
+  AccountInfo: 'AccountInfoWithRefCount',
+  Address: 'AccountId',
+  LookupSource: 'AccountId',
 };
 
 const typesAlias: Record<string, OverrideModuleType> = {

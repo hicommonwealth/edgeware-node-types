@@ -40,6 +40,10 @@ const verify = async (url: string, blockNumber?: number) => {
     console.log('Querying events...');
     const result = await api.query.system.events();
     console.log(`Got latest events: ${JSON.stringify(result.toHuman(), null, 2)}`)
+
+    console.log('Querying balance...');
+    const bal = await api.query.system.account('nJrsrH8dov9Z36kTDpabgCZT8CbK1FbmjJvfU6qbMTG4g4c');
+    console.log(`Got balance results: ${JSON.stringify(bal.toHuman())}.`);
   }
 };
 

@@ -4,8 +4,7 @@
 import type { Bytes, Compact, Data, Option, U256, U8aFixed, Vec, bool, u16, u32, u64 } from '@polkadot/types';
 import type { AnyNumber, ITuple } from '@polkadot/types/types';
 import type { ChainId, DepositNonce, ResourceId } from './chainBridge';
-import type { ProposalContents, ProposalTitle } from './signaling';
-import type { TallyType, VoteCommitment, VoteOutcome, VoteType, VotingScheme } from './voting';
+import type { TAssetBalance } from '@polkadot/types/interfaces/assets';
 import type { MemberCount, ProposalIndex } from '@polkadot/types/interfaces/collective';
 import type { CodeHash, Gas, Schedule } from '@polkadot/types/interfaces/contracts';
 import type { AccountVote, Conviction, PropIndex, Proposal, ReferendumIndex } from '@polkadot/types/interfaces/democracy';
@@ -47,7 +46,7 @@ declare module '@polkadot/api/types/submittable' {
        * Weight: `O(1)`
        * Modes: Post-existence of `who`; Pre & post Zombie-status of `who`.
        **/
-      burn: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, who: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, amount: Compact<Balance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<Balance>]>;
+      burn: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, who: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<TAssetBalance>]>;
       /**
        * Issue a new class of fungible assets from a public origin.
        * 
@@ -73,7 +72,7 @@ declare module '@polkadot/api/types/submittable' {
        * 
        * Weight: `O(1)`
        **/
-      create: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, admin: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, maxZombies: u32 | AnyNumber | Uint8Array, minBalance: Balance | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, u32, Balance]>;
+      create: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, admin: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, maxZombies: u32 | AnyNumber | Uint8Array, minBalance: TAssetBalance | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, u32, TAssetBalance]>;
       /**
        * Destroy a class of fungible assets owned by the sender.
        * 
@@ -110,7 +109,7 @@ declare module '@polkadot/api/types/submittable' {
        * 
        * Weight: `O(1)`
        **/
-      forceCreate: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, owner: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, maxZombies: Compact<u32> | AnyNumber | Uint8Array, minBalance: Compact<Balance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<u32>, Compact<Balance>]>;
+      forceCreate: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, owner: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, maxZombies: Compact<u32> | AnyNumber | Uint8Array, minBalance: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<u32>, Compact<TAssetBalance>]>;
       /**
        * Destroy a class of fungible assets.
        * 
@@ -145,7 +144,7 @@ declare module '@polkadot/api/types/submittable' {
        * Modes: Pre-existence of `dest`; Post-existence of `source`; Prior & post zombie-status
        * of `source`; Account pre-existence of `dest`.
        **/
-      forceTransfer: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, source: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, dest: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, amount: Compact<Balance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, LookupSource, Compact<Balance>]>;
+      forceTransfer: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, source: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, dest: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, LookupSource, Compact<TAssetBalance>]>;
       /**
        * Disallow further unprivileged transfers from an account.
        * 
@@ -173,7 +172,7 @@ declare module '@polkadot/api/types/submittable' {
        * Weight: `O(1)`
        * Modes: Pre-existing balance of `beneficiary`; Account pre-existence of `beneficiary`.
        **/
-      mint: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, beneficiary: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, amount: Compact<Balance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<Balance>]>;
+      mint: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, beneficiary: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<TAssetBalance>]>;
       setMaxZombies: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, maxZombies: Compact<u32> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, Compact<u32>]>;
       /**
        * Change the Issuer, Admin and Freezer of an asset.
@@ -223,7 +222,7 @@ declare module '@polkadot/api/types/submittable' {
        * Modes: Pre-existence of `target`; Post-existence of sender; Prior & post zombie-status
        * of sender; Account pre-existence of `target`.
        **/
-      transfer: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, target: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, amount: Compact<Balance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<Balance>]>;
+      transfer: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, target: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<TAssetBalance>]>;
       /**
        * Change the Owner of an asset.
        * 
@@ -236,7 +235,7 @@ declare module '@polkadot/api/types/submittable' {
        * 
        * Weight: `O(1)`
        **/
-      transferOwnership: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, owner: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource]>;
+      transferOwnership: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, newOwner: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource]>;
     };
     authorship: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
@@ -321,6 +320,128 @@ declare module '@polkadot/api/types/submittable' {
        * #</weight>
        **/
       transferKeepAlive: AugmentedSubmittable<(dest: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, value: Compact<Balance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [LookupSource, Compact<Balance>]>;
+    };
+    bounties: {
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+      /**
+       * Accept the curator role for a bounty.
+       * A deposit will be reserved from curator and refund upon successful payout.
+       * 
+       * May only be called from the curator.
+       * 
+       * # <weight>
+       * - O(1).
+       * # </weight>
+       **/
+      acceptCurator: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>]>;
+      /**
+       * Approve a bounty proposal. At a later time, the bounty will be funded and become active
+       * and the original deposit will be returned.
+       * 
+       * May only be called from `T::ApproveOrigin`.
+       * 
+       * # <weight>
+       * - O(1).
+       * # </weight>
+       **/
+      approveBounty: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>]>;
+      /**
+       * Award bounty to a beneficiary account. The beneficiary will be able to claim the funds after a delay.
+       * 
+       * The dispatch origin for this call must be the curator of this bounty.
+       * 
+       * - `bounty_id`: Bounty ID to award.
+       * - `beneficiary`: The beneficiary account whom will receive the payout.
+       * 
+       * # <weight>
+       * - O(1).
+       * # </weight>
+       **/
+      awardBounty: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array, beneficiary: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>, LookupSource]>;
+      /**
+       * Claim the payout from an awarded bounty after payout delay.
+       * 
+       * The dispatch origin for this call must be the beneficiary of this bounty.
+       * 
+       * - `bounty_id`: Bounty ID to claim.
+       * 
+       * # <weight>
+       * - O(1).
+       * # </weight>
+       **/
+      claimBounty: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>]>;
+      /**
+       * Cancel a proposed or active bounty. All the funds will be sent to treasury and
+       * the curator deposit will be unreserved if possible.
+       * 
+       * Only `T::RejectOrigin` is able to cancel a bounty.
+       * 
+       * - `bounty_id`: Bounty ID to cancel.
+       * 
+       * # <weight>
+       * - O(1).
+       * # </weight>
+       **/
+      closeBounty: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>]>;
+      /**
+       * Extend the expiry time of an active bounty.
+       * 
+       * The dispatch origin for this call must be the curator of this bounty.
+       * 
+       * - `bounty_id`: Bounty ID to extend.
+       * - `remark`: additional information.
+       * 
+       * # <weight>
+       * - O(1).
+       * # </weight>
+       **/
+      extendBountyExpiry: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array, remark: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>, Bytes]>;
+      /**
+       * Propose a new bounty.
+       * 
+       * The dispatch origin for this call must be _Signed_.
+       * 
+       * Payment: `TipReportDepositBase` will be reserved from the origin account, as well as
+       * `DataDepositPerByte` for each byte in `reason`. It will be unreserved upon approval,
+       * or slashed when rejected.
+       * 
+       * - `curator`: The curator account whom will manage this bounty.
+       * - `fee`: The curator fee.
+       * - `value`: The total payment amount of this bounty, curator fee included.
+       * - `description`: The description of this bounty.
+       **/
+      proposeBounty: AugmentedSubmittable<(value: Compact<BalanceOf> | AnyNumber | Uint8Array, description: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BalanceOf>, Bytes]>;
+      /**
+       * Assign a curator to a funded bounty.
+       * 
+       * May only be called from `T::ApproveOrigin`.
+       * 
+       * # <weight>
+       * - O(1).
+       * # </weight>
+       **/
+      proposeCurator: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array, curator: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, fee: Compact<BalanceOf> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>, LookupSource, Compact<BalanceOf>]>;
+      /**
+       * Unassign curator from a bounty.
+       * 
+       * This function can only be called by the `RejectOrigin` a signed origin.
+       * 
+       * If this function is called by the `RejectOrigin`, we assume that the curator is malicious
+       * or inactive. As a result, we will slash the curator when possible.
+       * 
+       * If the origin is the curator, we take this as a sign they are unable to do their job and
+       * they willingly give up. We could slash them, but for now we allow them to recover their
+       * deposit and exit without issue. (We may want to change this if it is abused.)
+       * 
+       * Finally, the origin can be anyone if and only if the curator is "inactive". This allows
+       * anyone in the community to call out that a curator is not doing their due diligence, and
+       * we should pick a new curator. In this case the curator should also be slashed.
+       * 
+       * # <weight>
+       * - O(1).
+       * # </weight>
+       **/
+      unassignCurator: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>]>;
     };
     chainBridge: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
@@ -425,8 +546,8 @@ declare module '@polkadot/api/types/submittable' {
        * Allows block producers to claim a small reward for evicting a contract. If a block producer
        * fails to do so, a regular users will be allowed to claim the reward.
        * 
-       * If contract is not evicted as a result of this call, no actions are taken and
-       * the sender is not eligible for the reward.
+       * If contract is not evicted as a result of this call, [`Error::ContractNotEvictable`]
+       * is returned and the sender is not eligible for the reward.
        **/
       claimSurcharge: AugmentedSubmittable<(dest: AccountId | string | Uint8Array, auxSender: Option<AccountId> | null | object | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [AccountId, Option<AccountId>]>;
       /**
@@ -469,6 +590,9 @@ declare module '@polkadot/api/types/submittable' {
        * 
        * If called after the end of the voting period abstentions are counted as rejections
        * unless there is a prime member set and the prime member cast an approval.
+       * 
+       * If the close operation completes successfully with disapproval, the transaction fee will
+       * be waived. Otherwise execution of the approved operation will be charged to the caller.
        * 
        * + `proposal_weight_bound`: The maximum amount of weight consumed by executing the closed proposal.
        * + `length_bound`: The upper bound for the length of the proposal in storage. Checked via
@@ -580,6 +704,8 @@ declare module '@polkadot/api/types/submittable' {
        * 
        * Requires the sender to be a member.
        * 
+       * Transaction fees will be waived if the member is voting on any particular proposal
+       * for the first time and the call is successful. Subsequent vote changes will charge a fee.
        * # <weight>
        * ## Weight
        * - `O(M)` where `M` is members-count (code- and governance-bounded)
@@ -1101,7 +1227,7 @@ declare module '@polkadot/api/types/submittable' {
       /**
        * Transact an Ethereum transaction.
        **/
-      transact: AugmentedSubmittable<(transaction: EthTransaction | { blockHash?: any; blockNumber?: any; chainId?: any; condition?: any; creates?: any; from?: any; gas?: any; gasPrice?: any; hash?: any; input?: any; nonce?: any; publicKey?: any; r?: any; raw?: any; s?: any; standardV?: any; to?: any; transactionIndex?: any; v?: any; value?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [EthTransaction]>;
+      transact: AugmentedSubmittable<(transaction: EthTransaction | { nonce?: any; gasPrice?: any; gasLimit?: any; action?: any; value?: any; input?: any; v?: any; r?: any; s?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [EthTransaction]>;
     };
     evm: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
@@ -2188,18 +2314,6 @@ declare module '@polkadot/api/types/submittable' {
        **/
       setKeys: AugmentedSubmittable<(keys: Keys, proof: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Keys, Bytes]>;
     };
-    signaling: {
-      [key: string]: SubmittableExtrinsicFunction<ApiType>;
-      /**
-       * Advance a signaling proposal into the "voting" or "commit" stage.
-       * Can only be performed by the original author of the proposal.
-       **/
-      advanceProposal: AugmentedSubmittable<(proposalHash: Hash | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Hash]>;
-      /**
-       * Creates a new signaling proposal.
-       **/
-      createProposal: AugmentedSubmittable<(title: ProposalTitle | string | Uint8Array, contents: ProposalContents | string | Uint8Array, outcomes: Vec<VoteOutcome> | (VoteOutcome | string | Uint8Array)[], voteType: VoteType | 'Binary' | 'MultiOption' | 'RankedChoice' | number | Uint8Array, tallyType: TallyType | 'OnePerson' | 'OneCoin' | number | Uint8Array, votingScheme: VotingScheme | 'Simple' | 'CommitReveal' | number | Uint8Array) => SubmittableExtrinsic<ApiType>, [ProposalTitle, ProposalContents, Vec<VoteOutcome>, VoteType, TallyType, VotingScheme]>;
-    };
     staking: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
       /**
@@ -2872,73 +2986,8 @@ declare module '@polkadot/api/types/submittable' {
        **/
       set: AugmentedSubmittable<(now: Compact<Moment> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<Moment>]>;
     };
-    treasury: {
+    tips: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
-      /**
-       * Accept the curator role for a bounty.
-       * A deposit will be reserved from curator and refund upon successful payout.
-       * 
-       * May only be called from the curator.
-       * 
-       * # <weight>
-       * - O(1).
-       * - Limited storage reads.
-       * - One DB change.
-       * # </weight>
-       **/
-      acceptCurator: AugmentedSubmittable<(bountyId: Compact<ProposalIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>]>;
-      /**
-       * Approve a bounty proposal. At a later time, the bounty will be funded and become active
-       * and the original deposit will be returned.
-       * 
-       * May only be called from `T::ApproveOrigin`.
-       * 
-       * # <weight>
-       * - O(1).
-       * - Limited storage reads.
-       * - One DB change.
-       * # </weight>
-       **/
-      approveBounty: AugmentedSubmittable<(bountyId: Compact<ProposalIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>]>;
-      /**
-       * Approve a proposal. At a later time, the proposal will be allocated to the beneficiary
-       * and the original deposit will be returned.
-       * 
-       * May only be called from `T::ApproveOrigin`.
-       * 
-       * # <weight>
-       * - Complexity: O(1).
-       * - DbReads: `Proposals`, `Approvals`
-       * - DbWrite: `Approvals`
-       * # </weight>
-       **/
-      approveProposal: AugmentedSubmittable<(proposalId: Compact<ProposalIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>]>;
-      /**
-       * Award bounty to a beneficiary account. The beneficiary will be able to claim the funds after a delay.
-       * 
-       * The dispatch origin for this call must be the curator of this bounty.
-       * 
-       * - `bounty_id`: Bounty ID to award.
-       * - `beneficiary`: The beneficiary account whom will receive the payout.
-       **/
-      awardBounty: AugmentedSubmittable<(bountyId: Compact<ProposalIndex> | AnyNumber | Uint8Array, beneficiary: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>, LookupSource]>;
-      /**
-       * Claim the payout from an awarded bounty after payout delay.
-       * 
-       * The dispatch origin for this call must be the beneficiary of this bounty.
-       * 
-       * - `bounty_id`: Bounty ID to claim.
-       **/
-      claimBounty: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>]>;
-      /**
-       * Cancel a proposed or active bounty. All the funds will be sent to treasury and
-       * the curator deposit will be unreserved if possible.
-       * 
-       * Only `T::RejectOrigin` is able to cancel a bounty.
-       * 
-       * - `bounty_id`: Bounty ID to cancel.
-       **/
-      closeBounty: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>]>;
       /**
        * Close and payout a tip.
        * 
@@ -2959,66 +3008,6 @@ declare module '@polkadot/api/types/submittable' {
        * # </weight>
        **/
       closeTip: AugmentedSubmittable<(hash: Hash | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Hash]>;
-      /**
-       * Extend the expiry time of an active bounty.
-       * 
-       * The dispatch origin for this call must be the curator of this bounty.
-       * 
-       * - `bounty_id`: Bounty ID to extend.
-       * - `remark`: additional information.
-       **/
-      extendBountyExpiry: AugmentedSubmittable<(bountyId: Compact<BountyIndex> | AnyNumber | Uint8Array, remark: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BountyIndex>, Bytes]>;
-      /**
-       * Propose a new bounty.
-       * 
-       * The dispatch origin for this call must be _Signed_.
-       * 
-       * Payment: `TipReportDepositBase` will be reserved from the origin account, as well as
-       * `DataDepositPerByte` for each byte in `reason`. It will be unreserved upon approval,
-       * or slashed when rejected.
-       * 
-       * - `curator`: The curator account whom will manage this bounty.
-       * - `fee`: The curator fee.
-       * - `value`: The total payment amount of this bounty, curator fee included.
-       * - `description`: The description of this bounty.
-       **/
-      proposeBounty: AugmentedSubmittable<(value: Compact<BalanceOf> | AnyNumber | Uint8Array, description: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BalanceOf>, Bytes]>;
-      /**
-       * Assign a curator to a funded bounty.
-       * 
-       * May only be called from `T::ApproveOrigin`.
-       * 
-       * # <weight>
-       * - O(1).
-       * - Limited storage reads.
-       * - One DB change.
-       * # </weight>
-       **/
-      proposeCurator: AugmentedSubmittable<(bountyId: Compact<ProposalIndex> | AnyNumber | Uint8Array, curator: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, fee: Compact<BalanceOf> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>, LookupSource, Compact<BalanceOf>]>;
-      /**
-       * Put forward a suggestion for spending. A deposit proportional to the value
-       * is reserved and slashed if the proposal is rejected. It is returned once the
-       * proposal is awarded.
-       * 
-       * # <weight>
-       * - Complexity: O(1)
-       * - DbReads: `ProposalCount`, `origin account`
-       * - DbWrites: `ProposalCount`, `Proposals`, `origin account`
-       * # </weight>
-       **/
-      proposeSpend: AugmentedSubmittable<(value: Compact<BalanceOf> | AnyNumber | Uint8Array, beneficiary: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BalanceOf>, LookupSource]>;
-      /**
-       * Reject a proposed spend. The original deposit will be slashed.
-       * 
-       * May only be called from `T::RejectOrigin`.
-       * 
-       * # <weight>
-       * - Complexity: O(1)
-       * - DbReads: `Proposals`, `rejected proposer account`
-       * - DbWrites: `Proposals`, `rejected proposer account`
-       * # </weight>
-       **/
-      rejectProposal: AugmentedSubmittable<(proposalId: Compact<ProposalIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>]>;
       /**
        * Report something `reason` that deserves a tip and claim any eventual the finder's fee.
        * 
@@ -3063,6 +3052,21 @@ declare module '@polkadot/api/types/submittable' {
        * # </weight>
        **/
       retractTip: AugmentedSubmittable<(hash: Hash | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Hash]>;
+      /**
+       * Remove and slash an already-open tip.
+       * 
+       * May only be called from `T::RejectOrigin`.
+       * 
+       * As a result, the finder is slashed and the deposits are lost.
+       * 
+       * Emits `TipSlashed` if successful.
+       * 
+       * # <weight>
+       * `T` is charged as upper bound given by `ContainsLengthBound`.
+       * The actual cost depends on the implementation of `T::Tippers`.
+       * # </weight>
+       **/
+      slashTip: AugmentedSubmittable<(hash: Hash | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Hash]>;
       /**
        * Declare a tip value for an already-open tip.
        * 
@@ -3116,29 +3120,46 @@ declare module '@polkadot/api/types/submittable' {
        * # </weight>
        **/
       tipNew: AugmentedSubmittable<(reason: Bytes | string | Uint8Array, who: AccountId | string | Uint8Array, tipValue: Compact<BalanceOf> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Bytes, AccountId, Compact<BalanceOf>]>;
+    };
+    treasury: {
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
       /**
-       * Unassign curator from a bounty.
+       * Approve a proposal. At a later time, the proposal will be allocated to the beneficiary
+       * and the original deposit will be returned.
        * 
-       * This function can only be called by the `RejectOrigin` a signed origin.
-       * 
-       * If this function is called by the `RejectOrigin`, we assume that the curator is malicious
-       * or inactive. As a result, we will slash the curator when possible.
-       * 
-       * If the origin is the curator, we take this as a sign they are unable to do their job and
-       * they willingly give up. We could slash them, but for now we allow them to recover their
-       * deposit and exit without issue. (We may want to change this if it is abused.)
-       * 
-       * Finally, the origin can be anyone if and only if the curator is "inactive". This allows
-       * anyone in the community to call out that a curator is not doing their due diligence, and
-       * we should pick a new curator. In this case the curator should also be slashed.
+       * May only be called from `T::ApproveOrigin`.
        * 
        * # <weight>
-       * - O(1).
-       * - Limited storage reads.
-       * - One DB change.
+       * - Complexity: O(1).
+       * - DbReads: `Proposals`, `Approvals`
+       * - DbWrite: `Approvals`
        * # </weight>
        **/
-      unassignCurator: AugmentedSubmittable<(bountyId: Compact<ProposalIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>]>;
+      approveProposal: AugmentedSubmittable<(proposalId: Compact<ProposalIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>]>;
+      /**
+       * Put forward a suggestion for spending. A deposit proportional to the value
+       * is reserved and slashed if the proposal is rejected. It is returned once the
+       * proposal is awarded.
+       * 
+       * # <weight>
+       * - Complexity: O(1)
+       * - DbReads: `ProposalCount`, `origin account`
+       * - DbWrites: `ProposalCount`, `Proposals`, `origin account`
+       * # </weight>
+       **/
+      proposeSpend: AugmentedSubmittable<(value: Compact<BalanceOf> | AnyNumber | Uint8Array, beneficiary: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<BalanceOf>, LookupSource]>;
+      /**
+       * Reject a proposed spend. The original deposit will be slashed.
+       * 
+       * May only be called from `T::RejectOrigin`.
+       * 
+       * # <weight>
+       * - Complexity: O(1)
+       * - DbReads: `Proposals`, `rejected proposer account`
+       * - DbWrites: `Proposals`, `rejected proposer account`
+       * # </weight>
+       **/
+      rejectProposal: AugmentedSubmittable<(proposalId: Compact<ProposalIndex> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<ProposalIndex>]>;
     };
     treasuryReward: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
@@ -3282,23 +3303,6 @@ declare module '@polkadot/api/types/submittable' {
        * # </weight>
        **/
       vestedTransfer: AugmentedSubmittable<(target: LookupSource | Address | AccountId | AccountIndex | string | Uint8Array, schedule: VestingInfo | { locked?: any; perBlock?: any; startingBlock?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [LookupSource, VestingInfo]>;
-    };
-    voting: {
-      [key: string]: SubmittableExtrinsicFunction<ApiType>;
-      /**
-       * A function for commit-reveal voting schemes that adds a vote commitment.
-       * 
-       * A vote commitment is formatted using the native hash function. There
-       * are currently no cryptoeconomic punishments against not revealing the
-       * commitment.
-       **/
-      commit: AugmentedSubmittable<(voteId: u64 | AnyNumber | Uint8Array, commit: VoteCommitment | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, VoteCommitment]>;
-      /**
-       * A function that reveals a vote commitment or serves as the general vote function.
-       * 
-       * There are currently no cryptoeconomic incentives for revealing commited votes.
-       **/
-      reveal: AugmentedSubmittable<(voteId: u64 | AnyNumber | Uint8Array, vote: Vec<VoteOutcome> | (VoteOutcome | string | Uint8Array)[], secret: Option<VoteOutcome> | null | object | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Vec<VoteOutcome>, Option<VoteOutcome>]>;
     };
   }
 
