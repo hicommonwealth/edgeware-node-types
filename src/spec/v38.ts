@@ -64,6 +64,9 @@ const types: RegistryTypes = {
   ContractExecResult: 'ContractExecResultTo255',
   RewardDestination: 'RewardDestinationTo257',
   RefCount: 'u32',
+  AccountInfo: 'AccountInfoWithRefCount',
+  Address: 'AccountId',
+  LookupSource: 'AccountId',
 };
 
 const typesAlias: Record<string, OverrideModuleType> = {

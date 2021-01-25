@@ -36,6 +36,18 @@ declare module '@polkadot/api/types/errors' {
        **/
       MinBalanceZero: AugmentedError<ApiType>;
       /**
+       * The asset does not allow burning functionality.
+       **/
+      NoBurningAllowed: AugmentedError<ApiType>;
+      /**
+       * The asset does not allow freezing or thawing functionality
+       **/
+      NoFreezingAllowed: AugmentedError<ApiType>;
+      /**
+       * The asset does not allow minting functionality
+       **/
+      NoMintingAllowed: AugmentedError<ApiType>;
+      /**
        * The signing account has no permission to do the operation.
        **/
       NoPermission: AugmentedError<ApiType>;
@@ -122,6 +134,46 @@ declare module '@polkadot/api/types/errors' {
        **/
       VestingBalance: AugmentedError<ApiType>;
     };
+    bounties: {
+      [key: string]: AugmentedError<ApiType>;
+      /**
+       * Proposer's balance is too low.
+       **/
+      InsufficientProposersBalance: AugmentedError<ApiType>;
+      /**
+       * Invalid bounty fee.
+       **/
+      InvalidFee: AugmentedError<ApiType>;
+      /**
+       * No proposal or bounty at that index.
+       **/
+      InvalidIndex: AugmentedError<ApiType>;
+      /**
+       * Invalid bounty value.
+       **/
+      InvalidValue: AugmentedError<ApiType>;
+      /**
+       * A bounty payout is pending.
+       * To cancel the bounty, you must unassign and slash the curator.
+       **/
+      PendingPayout: AugmentedError<ApiType>;
+      /**
+       * The bounties cannot be claimed/closed because it's still in the countdown period.
+       **/
+      Premature: AugmentedError<ApiType>;
+      /**
+       * The reason given is just too big.
+       **/
+      ReasonTooBig: AugmentedError<ApiType>;
+      /**
+       * Require bounty curator.
+       **/
+      RequireCurator: AugmentedError<ApiType>;
+      /**
+       * The bounty status is unexpected.
+       **/
+      UnexpectedStatus: AugmentedError<ApiType>;
+    };
     chainBridge: {
       [key: string]: AugmentedError<ApiType>;
       /**
@@ -203,6 +255,13 @@ declare module '@polkadot/api/types/errors' {
        **/
       CodeTooLarge: AugmentedError<ApiType>;
       /**
+       * A contract could not be evicted because it has enough balance to pay rent.
+       * 
+       * This can be returned from [`Module::claim_surcharge`] because the target
+       * contract has enough balance to pay for its rent.
+       **/
+      ContractNotEvictable: AugmentedError<ApiType>;
+      /**
        * Contract trapped during execution.
        **/
       ContractTrapped: AugmentedError<ApiType>;
@@ -210,6 +269,22 @@ declare module '@polkadot/api/types/errors' {
        * Input passed to a contract API function failed to decode as expected type.
        **/
       DecodingFailed: AugmentedError<ApiType>;
+      /**
+       * Removal of a contract failed because the deletion queue is full.
+       * 
+       * This can happen when either calling [`Module::claim_surcharge`] or `seal_terminate`.
+       * The queue is filled by deleting contracts and emptied by a fixed amount each block.
+       * Trying again during another block is the only way to resolve this issue.
+       **/
+      DeletionQueueFull: AugmentedError<ApiType>;
+      /**
+       * The topics passed to `seal_deposit_events` contains at least one duplicate.
+       **/
+      DuplicateTopics: AugmentedError<ApiType>;
+      /**
+       * `seal_input` was called twice from the same contract execution context.
+       **/
+      InputAlreadyRead: AugmentedError<ApiType>;
       /**
        * An origin TrieId written in the current block.
        **/
@@ -245,6 +320,12 @@ declare module '@polkadot/api/types/errors' {
        **/
       NewContractNotFunded: AugmentedError<ApiType>;
       /**
+       * The chain does not provide a chain extension. Calling the chain extension results
+       * in this error. Note that this usually  shouldn't happen as deploying such contracts
+       * is rejected.
+       **/
+      NoChainExtension: AugmentedError<ApiType>;
+      /**
        * The contract that was called is either no contract at all (a plain account)
        * or is a tombstone.
        **/
@@ -262,11 +343,19 @@ declare module '@polkadot/api/types/errors' {
        **/
       OutputBufferTooSmall: AugmentedError<ApiType>;
       /**
+       * The subject passed to `seal_random` exceeds the limit.
+       **/
+      RandomSubjectTooLong: AugmentedError<ApiType>;
+      /**
        * The action performed is not allowed while the contract performing it is already
        * on the call stack. Those actions are contract self destruction and restoration
        * of a tombstone.
        **/
       ReentranceDenied: AugmentedError<ApiType>;
+      /**
+       * The amount of topics passed to `seal_deposit_events` exceeds the limit.
+       **/
+      TooManyTopics: AugmentedError<ApiType>;
       /**
        * Performing the requested transfer failed for a reason originating in the
        * chosen currency implementation of the runtime. Most probably the balance is
@@ -744,6 +833,10 @@ declare module '@polkadot/api/types/errors' {
        **/
       NoPermission: AugmentedError<ApiType>;
       /**
+       * Cannot add self as proxy.
+       **/
+      NoSelfProxy: AugmentedError<ApiType>;
+      /**
        * Proxy registration not found.
        **/
       NotFound: AugmentedError<ApiType>;
@@ -868,53 +961,6 @@ declare module '@polkadot/api/types/errors' {
        * No keys are associated with this account.
        **/
       NoKeys: AugmentedError<ApiType>;
-    };
-    signaling: {
-      [key: string]: AugmentedError<ApiType>;
-      /**
-       * Contents are longer than max content length
-       **/
-      ContentsTooLong: AugmentedError<ApiType>;
-      /**
-       * Duplicate proposal
-       **/
-      DuplicateProposal: AugmentedError<ApiType>;
-      /**
-       * Empty contents of proposal
-       **/
-      EmptyProposalContents: AugmentedError<ApiType>;
-      /**
-       * Empty title of proposal
-       **/
-      EmptyProposalTitle: AugmentedError<ApiType>;
-      /**
-       * Insufficient funds to reserve bond
-       **/
-      InsufficientFunds: AugmentedError<ApiType>;
-      /**
-       * Proposal in wrong stage
-       **/
-      InvalidStage: AugmentedError<ApiType>;
-      /**
-       * Not the proposal author
-       **/
-      NotAuthor: AugmentedError<ApiType>;
-      /**
-       * Proposal does not exist with given hash
-       **/
-      ProposalMissing: AugmentedError<ApiType>;
-      /**
-       * Title is longer than max title length
-       **/
-      TitleTooLong: AugmentedError<ApiType>;
-      /**
-       * Proposal limit reached
-       **/
-      TooManyProposals: AugmentedError<ApiType>;
-      /**
-       * Corresponding voting for signaling proposal not found
-       **/
-      VoteRecordDoesntExist: AugmentedError<ApiType>;
     };
     staking: {
       [key: string]: AugmentedError<ApiType>;
@@ -1080,37 +1126,16 @@ declare module '@polkadot/api/types/errors' {
        **/
       SpecVersionNeedsToIncrease: AugmentedError<ApiType>;
     };
-    treasury: {
+    tips: {
       [key: string]: AugmentedError<ApiType>;
       /**
        * The tip was already found/started.
        **/
       AlreadyKnown: AugmentedError<ApiType>;
       /**
-       * Proposer's balance is too low.
-       **/
-      InsufficientProposersBalance: AugmentedError<ApiType>;
-      /**
-       * Invalid bounty fee.
-       **/
-      InvalidFee: AugmentedError<ApiType>;
-      /**
-       * No proposal or bounty at that index.
-       **/
-      InvalidIndex: AugmentedError<ApiType>;
-      /**
-       * Invalid bounty value.
-       **/
-      InvalidValue: AugmentedError<ApiType>;
-      /**
        * The account attempting to retract the tip is not the finder of the tip.
        **/
       NotFinder: AugmentedError<ApiType>;
-      /**
-       * A bounty payout is pending.
-       * To cancel the bounty, you must unassign and slash the curator.
-       **/
-      PendingPayout: AugmentedError<ApiType>;
       /**
        * The tip cannot be claimed/closed because it's still in the countdown period.
        **/
@@ -1120,21 +1145,24 @@ declare module '@polkadot/api/types/errors' {
        **/
       ReasonTooBig: AugmentedError<ApiType>;
       /**
-       * Require bounty curator.
-       **/
-      RequireCurator: AugmentedError<ApiType>;
-      /**
        * The tip cannot be claimed/closed because there are not enough tippers yet.
        **/
       StillOpen: AugmentedError<ApiType>;
       /**
-       * The bounty status is unexpected.
-       **/
-      UnexpectedStatus: AugmentedError<ApiType>;
-      /**
        * The tip hash is unknown.
        **/
       UnknownTip: AugmentedError<ApiType>;
+    };
+    treasury: {
+      [key: string]: AugmentedError<ApiType>;
+      /**
+       * Proposer's balance is too low.
+       **/
+      InsufficientProposersBalance: AugmentedError<ApiType>;
+      /**
+       * No proposal or bounty at that index.
+       **/
+      InvalidIndex: AugmentedError<ApiType>;
     };
     vesting: {
       [key: string]: AugmentedError<ApiType>;
@@ -1150,81 +1178,6 @@ declare module '@polkadot/api/types/errors' {
        * The account given is not vesting.
        **/
       NotVesting: AugmentedError<ApiType>;
-    };
-    voting: {
-      [key: string]: AugmentedError<ApiType>;
-      /**
-       * Commit has already been made
-       **/
-      DuplicateCommit: AugmentedError<ApiType>;
-      /**
-       * Vote has already been cast
-       **/
-      DuplicateVote: AugmentedError<ApiType>;
-      /**
-       * Binary votes must have exactly 2 outcomes
-       **/
-      InvalidBinaryOutcomes: AugmentedError<ApiType>;
-      /**
-       * Multi-option votes must have >2 outcomes
-       **/
-      InvalidMultiOptionOutcomes: AugmentedError<ApiType>;
-      /**
-       * Ranked choice votes must have >2 outcomes
-       **/
-      InvalidRankedChoiceOutcomes: AugmentedError<ApiType>;
-      /**
-       * Ranked choice vote is not valid
-       **/
-      InvalidRankedChoiceVote: AugmentedError<ApiType>;
-      /**
-       * Hash of reveal does not match commit
-       **/
-      InvalidSecret: AugmentedError<ApiType>;
-      /**
-       * Multi-option/binary vote is not valid
-       **/
-      InvalidVote: AugmentedError<ApiType>;
-      /**
-       * Cannot commit because vote is not commit-reveal
-       **/
-      IsNotCommitReveal: AugmentedError<ApiType>;
-      /**
-       * Vote not in commit stage
-       **/
-      NotCommitStage: AugmentedError<ApiType>;
-      /**
-       * Vote not in voting stage
-       **/
-      NotVotingStage: AugmentedError<ApiType>;
-      /**
-       * Record not found for id
-       **/
-      RecordMissing: AugmentedError<ApiType>;
-      /**
-       * Must pass in secret for reveal
-       **/
-      SecretMissing: AugmentedError<ApiType>;
-      /**
-       * Cannot reveal if not already committed
-       **/
-      SenderNotCommitted: AugmentedError<ApiType>;
-      /**
-       * Reached commit limit on a proposal
-       **/
-      TooManyCommits: AugmentedError<ApiType>;
-      /**
-       * Provided more outcomes than max outcome count
-       **/
-      TooManyOutcomes: AugmentedError<ApiType>;
-      /**
-       * Reached reveal limit on a proposal
-       **/
-      TooManyReveals: AugmentedError<ApiType>;
-      /**
-       * Vote already completed
-       **/
-      VoteCompleted: AugmentedError<ApiType>;
     };
   }
 
