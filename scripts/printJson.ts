@@ -7,7 +7,7 @@ const network = args[0] || 'mainnet';
 
 function printTypes(network: 'mainnet' | 'beresheet' | 'dev') {
   // TODO: support explicit versions to get v38 e.g.
-  const types = network === 'dev' ? v45.types : v41.types;
+  const types = network === 'dev' || network === 'beresheet' ? v45.types : v41.types;
   console.log(JSON.stringify(types, null, 2));
   process.exit(0);
 }
