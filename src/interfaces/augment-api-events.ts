@@ -1,21 +1,20 @@
 // Auto-generated via `yarn polkadot-types-from-chain`, do not edit
 /* eslint-disable */
 
-import type { Bytes, Option, U256, Vec, bool, u16, u32 } from '@polkadot/types';
+import type { Bytes, Option, Vec, bool, u16, u32, u64 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
-import type { ChainId, DepositNonce, ResourceId } from './chainBridge';
+import type { VoteOutcome, VoteStage, VoteType } from './voting';
 import type { TAssetBalance } from '@polkadot/types/interfaces/assets';
 import type { BalanceStatus } from '@polkadot/types/interfaces/balances';
 import type { MemberCount, ProposalIndex } from '@polkadot/types/interfaces/collective';
 import type { AuthorityId } from '@polkadot/types/interfaces/consensus';
 import type { PropIndex, ReferendumIndex } from '@polkadot/types/interfaces/democracy';
 import type { VoteThreshold } from '@polkadot/types/interfaces/elections';
-import type { EvmLog, ExitReason } from '@polkadot/types/interfaces/evm';
 import type { AuthorityList } from '@polkadot/types/interfaces/grandpa';
 import type { RegistrarIndex } from '@polkadot/types/interfaces/identity';
 import type { Kind, OpaqueTimeSlot } from '@polkadot/types/interfaces/offences';
 import type { ProxyType } from '@polkadot/types/interfaces/proxy';
-import type { AccountId, AccountIndex, AssetId, Balance, BlockNumber, CallHash, H160, H256, Hash } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, AccountIndex, AssetId, Balance, BlockNumber, CallHash, Hash } from '@polkadot/types/interfaces/runtime';
 import type { TaskAddress } from '@polkadot/types/interfaces/scheduler';
 import type { IdentificationTuple, SessionIndex } from '@polkadot/types/interfaces/session';
 import type { ElectionCompute, EraIndex } from '@polkadot/types/interfaces/staking';
@@ -31,43 +30,11 @@ declare module '@polkadot/api/types/events' {
       /**
        * Some assets were destroyed. \[asset_id, owner, balance\]
        **/
-      Burned: AugmentedEvent<ApiType, [AssetId, AccountId, TAssetBalance]>;
-      /**
-       * Some asset class was created. \[asset_id, creator, owner\]
-       **/
-      Created: AugmentedEvent<ApiType, [AssetId, AccountId, AccountId]>;
-      /**
-       * An asset class was destroyed.
-       **/
-      Destroyed: AugmentedEvent<ApiType, [AssetId]>;
-      /**
-       * Some asset class was force-created. \[asset_id, owner\]
-       **/
-      ForceCreated: AugmentedEvent<ApiType, [AssetId, AccountId]>;
-      /**
-       * Some account `who` was frozen. \[asset_id, who\]
-       **/
-      Frozen: AugmentedEvent<ApiType, [AssetId, AccountId]>;
+      Destroyed: AugmentedEvent<ApiType, [AssetId, AccountId, TAssetBalance]>;
       /**
        * Some assets were issued. \[asset_id, owner, total_supply\]
        **/
       Issued: AugmentedEvent<ApiType, [AssetId, AccountId, TAssetBalance]>;
-      /**
-       * The maximum amount of zombies allowed has changed. \[asset_id, max_zombies\]
-       **/
-      MaxZombiesChanged: AugmentedEvent<ApiType, [AssetId, u32]>;
-      /**
-       * The owner changed \[asset_id, owner\]
-       **/
-      OwnerChanged: AugmentedEvent<ApiType, [AssetId, AccountId]>;
-      /**
-       * The management team changed \[asset_id, issuer, admin, freezer\]
-       **/
-      TeamChanged: AugmentedEvent<ApiType, [AssetId, AccountId, AccountId, AccountId]>;
-      /**
-       * Some account `who` was thawed. \[asset_id, who\]
-       **/
-      Thawed: AugmentedEvent<ApiType, [AssetId, AccountId]>;
       /**
        * Some assets were transferred. \[asset_id, from, to, amount\]
        **/
@@ -110,92 +77,6 @@ declare module '@polkadot/api/types/events' {
        * Some balance was unreserved (moved from reserved to free). \[who, value\]
        **/
       Unreserved: AugmentedEvent<ApiType, [AccountId, Balance]>;
-    };
-    bounties: {
-      [key: string]: AugmentedEvent<ApiType>;
-      /**
-       * A bounty is awarded to a beneficiary. \[index, beneficiary\]
-       **/
-      BountyAwarded: AugmentedEvent<ApiType, [BountyIndex, AccountId]>;
-      /**
-       * A bounty proposal is funded and became active. \[index\]
-       **/
-      BountyBecameActive: AugmentedEvent<ApiType, [BountyIndex]>;
-      /**
-       * A bounty is cancelled. \[index\]
-       **/
-      BountyCanceled: AugmentedEvent<ApiType, [BountyIndex]>;
-      /**
-       * A bounty is claimed by beneficiary. \[index, payout, beneficiary\]
-       **/
-      BountyClaimed: AugmentedEvent<ApiType, [BountyIndex, Balance, AccountId]>;
-      /**
-       * A bounty expiry is extended. \[index\]
-       **/
-      BountyExtended: AugmentedEvent<ApiType, [BountyIndex]>;
-      /**
-       * New bounty proposal. \[index\]
-       **/
-      BountyProposed: AugmentedEvent<ApiType, [BountyIndex]>;
-      /**
-       * A bounty proposal was rejected; funds were slashed. \[index, bond\]
-       **/
-      BountyRejected: AugmentedEvent<ApiType, [BountyIndex, Balance]>;
-    };
-    chainBridge: {
-      [key: string]: AugmentedEvent<ApiType>;
-      /**
-       * Chain now available for transfers (chain_id)
-       **/
-      ChainWhitelisted: AugmentedEvent<ApiType, [ChainId]>;
-      /**
-       * FunglibleTransfer is for relaying fungibles (dest_id, nonce, resource_id, amount, recipient, metadata)
-       **/
-      FungibleTransfer: AugmentedEvent<ApiType, [ChainId, DepositNonce, ResourceId, U256, Bytes]>;
-      /**
-       * GenericTransfer is for a generic data payload (dest_id, nonce, resource_id, metadata)
-       **/
-      GenericTransfer: AugmentedEvent<ApiType, [ChainId, DepositNonce, ResourceId, Bytes]>;
-      /**
-       * NonFungibleTransfer is for relaying NFTS (dest_id, nonce, resource_id, token_id, recipient, metadata)
-       **/
-      NonFungibleTransfer: AugmentedEvent<ApiType, [ChainId, DepositNonce, ResourceId, Bytes, Bytes, Bytes]>;
-      /**
-       * Voting successful for a proposal
-       **/
-      ProposalApproved: AugmentedEvent<ApiType, [ChainId, DepositNonce]>;
-      /**
-       * Execution of call failed
-       **/
-      ProposalFailed: AugmentedEvent<ApiType, [ChainId, DepositNonce]>;
-      /**
-       * Voting rejected a proposal
-       **/
-      ProposalRejected: AugmentedEvent<ApiType, [ChainId, DepositNonce]>;
-      /**
-       * Execution of call succeeded
-       **/
-      ProposalSucceeded: AugmentedEvent<ApiType, [ChainId, DepositNonce]>;
-      /**
-       * Relayer added to set
-       **/
-      RelayerAdded: AugmentedEvent<ApiType, [AccountId]>;
-      /**
-       * Relayer removed from set
-       **/
-      RelayerRemoved: AugmentedEvent<ApiType, [AccountId]>;
-      /**
-       * Vote threshold has changed (new_threshold)
-       **/
-      RelayerThresholdChanged: AugmentedEvent<ApiType, [u32]>;
-      /**
-       * Vot submitted against proposal
-       **/
-      VoteAgainst: AugmentedEvent<ApiType, [ChainId, DepositNonce, AccountId]>;
-      /**
-       * Vote submitted in favour of proposal
-       **/
-      VoteFor: AugmentedEvent<ApiType, [ChainId, DepositNonce, AccountId]>;
     };
     contracts: {
       [key: string]: AugmentedEvent<ApiType>;
@@ -283,10 +164,6 @@ declare module '@polkadot/api/types/events' {
     democracy: {
       [key: string]: AugmentedEvent<ApiType>;
       /**
-       * A proposal \[hash\] has been blacklisted permanently.
-       **/
-      Blacklisted: AugmentedEvent<ApiType, [Hash]>;
-      /**
        * A referendum has been cancelled. \[ref_index\]
        **/
       Cancelled: AugmentedEvent<ApiType, [ReferendumIndex]>;
@@ -359,30 +236,15 @@ declare module '@polkadot/api/types/events' {
        **/
       Vetoed: AugmentedEvent<ApiType, [AccountId, Hash, BlockNumber]>;
     };
-    edgeBridge: {
-      [key: string]: AugmentedEvent<ApiType>;
-      /**
-       * A bridge transfer event from an Edgeware account to a destination account
-       **/
-      TransferOverBridge: AugmentedEvent<ApiType, [AccountId, Bytes, ChainId, Balance]>;
-    };
     elections: {
       [key: string]: AugmentedEvent<ApiType>;
-      /**
-       * A candidate was slashed due to failing to obtain a seat as member or runner-up
-       **/
-      CandidateSlashed: AugmentedEvent<ApiType, [AccountId, Balance]>;
-      /**
-       * Internal error happened while trying to perform election.
-       **/
-      ElectionError: AugmentedEvent<ApiType, []>;
       /**
        * No (or not enough) candidates existed for this round. This is different from
        * `NewTerm(\[\])`. See the description of `NewTerm`.
        **/
       EmptyTerm: AugmentedEvent<ApiType, []>;
       /**
-       * A \[member\] has been removed. This should always be followed by either `NewTerm` or
+       * A \[member\] has been removed. This should always be followed by either `NewTerm` ot
        * `EmptyTerm`.
        **/
       MemberKicked: AugmentedEvent<ApiType, [AccountId]>;
@@ -398,52 +260,10 @@ declare module '@polkadot/api/types/events' {
        **/
       NewTerm: AugmentedEvent<ApiType, [Vec<ITuple<[AccountId, Balance]>>]>;
       /**
-       * A seat holder (member or runner-up) was slashed due to failing to retaining their position.
-       **/
-      SeatHolderSlashed: AugmentedEvent<ApiType, [AccountId, Balance]>;
-      /**
        * A voter was reported with the the report being successful or not.
        * \[voter, reporter, success\]
        **/
       VoterReported: AugmentedEvent<ApiType, [AccountId, AccountId, bool]>;
-    };
-    ethereum: {
-      [key: string]: AugmentedEvent<ApiType>;
-      /**
-       * An ethereum transaction was successfully executed. [from, to/contract_address, transaction_hash, exit_reason]
-       **/
-      Executed: AugmentedEvent<ApiType, [H160, H160, H256, ExitReason]>;
-    };
-    evm: {
-      [key: string]: AugmentedEvent<ApiType>;
-      /**
-       * A deposit has been made at a given address. \[sender, address, value\]
-       **/
-      BalanceDeposit: AugmentedEvent<ApiType, [AccountId, H160, U256]>;
-      /**
-       * A withdrawal has been made from a given address. \[sender, address, value\]
-       **/
-      BalanceWithdraw: AugmentedEvent<ApiType, [AccountId, H160, U256]>;
-      /**
-       * A contract has been created at given \[address\].
-       **/
-      Created: AugmentedEvent<ApiType, [H160]>;
-      /**
-       * A \[contract\] was attempted to be created, but the execution failed.
-       **/
-      CreatedFailed: AugmentedEvent<ApiType, [H160]>;
-      /**
-       * A \[contract\] has been executed successfully with states applied.
-       **/
-      Executed: AugmentedEvent<ApiType, [H160]>;
-      /**
-       * A \[contract\] has been executed with errors. States are reverted with only gas fees applied.
-       **/
-      ExecutedFailed: AugmentedEvent<ApiType, [H160]>;
-      /**
-       * Ethereum events from contracts.
-       **/
-      Log: AugmentedEvent<ApiType, [EvmLog]>;
     };
     grandpa: {
       [key: string]: AugmentedEvent<ApiType>;
@@ -523,7 +343,7 @@ declare module '@polkadot/api/types/events' {
     indices: {
       [key: string]: AugmentedEvent<ApiType>;
       /**
-       * A account index was assigned. \[index, who\]
+       * A account index was assigned. \[who, index\]
        **/
       IndexAssigned: AugmentedEvent<ApiType, [AccountId, AccountIndex]>;
       /**
@@ -531,7 +351,7 @@ declare module '@polkadot/api/types/events' {
        **/
       IndexFreed: AugmentedEvent<ApiType, [AccountIndex]>;
       /**
-       * A account index has been frozen to its current account ID. \[index, who\]
+       * A account index has been frozen to its current account ID. \[who, index\]
        **/
       IndexFrozen: AugmentedEvent<ApiType, [AccountIndex, AccountId]>;
     };
@@ -635,6 +455,25 @@ declare module '@polkadot/api/types/events' {
        **/
       NewSession: AugmentedEvent<ApiType, [SessionIndex]>;
     };
+    signaling: {
+      [key: string]: AugmentedEvent<ApiType>;
+      /**
+       * Emitted when commit stage begins: (ProposalHash, VoteId, CommitEndTime)
+       **/
+      CommitStarted: AugmentedEvent<ApiType, [Hash, u64, BlockNumber]>;
+      /**
+       * Emitted at proposal creation: (Creator, ProposalHash)
+       **/
+      NewProposal: AugmentedEvent<ApiType, [AccountId, Hash]>;
+      /**
+       * Emitted when voting is completed: (ProposalHash, VoteId, VoteResults)
+       **/
+      VotingCompleted: AugmentedEvent<ApiType, [Hash, u64]>;
+      /**
+       * Emitted when voting begins: (ProposalHash, VoteId, VotingEndTime)
+       **/
+      VotingStarted: AugmentedEvent<ApiType, [Hash, u64, BlockNumber]>;
+    };
     staking: {
       [key: string]: AugmentedEvent<ApiType>;
       /**
@@ -695,7 +534,7 @@ declare module '@polkadot/api/types/events' {
       /**
        * A sudo just took place. \[result\]
        **/
-      SudoAsDone: AugmentedEvent<ApiType, [DispatchResult]>;
+      SudoAsDone: AugmentedEvent<ApiType, [bool]>;
     };
     system: {
       [key: string]: AugmentedEvent<ApiType>;
@@ -720,35 +559,40 @@ declare module '@polkadot/api/types/events' {
        **/
       NewAccount: AugmentedEvent<ApiType, [AccountId]>;
     };
-    tips: {
-      [key: string]: AugmentedEvent<ApiType>;
-      /**
-       * A new tip suggestion has been opened. \[tip_hash\]
-       **/
-      NewTip: AugmentedEvent<ApiType, [Hash]>;
-      /**
-       * A tip suggestion has been closed. \[tip_hash, who, payout\]
-       **/
-      TipClosed: AugmentedEvent<ApiType, [Hash, AccountId, Balance]>;
-      /**
-       * A tip suggestion has reached threshold and is closing. \[tip_hash\]
-       **/
-      TipClosing: AugmentedEvent<ApiType, [Hash]>;
-      /**
-       * A tip suggestion has been retracted. \[tip_hash\]
-       **/
-      TipRetracted: AugmentedEvent<ApiType, [Hash]>;
-      /**
-       * A tip suggestion has been slashed. \[tip_hash, finder, deposit\]
-       **/
-      TipSlashed: AugmentedEvent<ApiType, [Hash, AccountId, Balance]>;
-    };
     treasury: {
       [key: string]: AugmentedEvent<ApiType>;
       /**
        * Some funds have been allocated. \[proposal_index, award, beneficiary\]
        **/
       Awarded: AugmentedEvent<ApiType, [ProposalIndex, Balance, AccountId]>;
+      /**
+       * A bounty is awarded to a beneficiary. [index, beneficiary]
+       **/
+      BountyAwarded: AugmentedEvent<ApiType, [BountyIndex, AccountId]>;
+      /**
+       * A bounty proposal is funded and became active. [index]
+       **/
+      BountyBecameActive: AugmentedEvent<ApiType, [BountyIndex]>;
+      /**
+       * A bounty is cancelled. [index]
+       **/
+      BountyCanceled: AugmentedEvent<ApiType, [BountyIndex]>;
+      /**
+       * A bounty is claimed by beneficiary. [index, payout, beneficiary]
+       **/
+      BountyClaimed: AugmentedEvent<ApiType, [BountyIndex, Balance, AccountId]>;
+      /**
+       * A bounty expiry is extended. [index]
+       **/
+      BountyExtended: AugmentedEvent<ApiType, [BountyIndex]>;
+      /**
+       * New bounty proposal. [index]
+       **/
+      BountyProposed: AugmentedEvent<ApiType, [BountyIndex]>;
+      /**
+       * A bounty proposal was rejected; funds were slashed. [index, bond]
+       **/
+      BountyRejected: AugmentedEvent<ApiType, [BountyIndex, Balance]>;
       /**
        * Some of our funds have been burnt. \[burn\]
        **/
@@ -757,6 +601,10 @@ declare module '@polkadot/api/types/events' {
        * Some funds have been deposited. \[deposit\]
        **/
       Deposit: AugmentedEvent<ApiType, [Balance]>;
+      /**
+       * A new tip suggestion has been opened. \[tip_hash\]
+       **/
+      NewTip: AugmentedEvent<ApiType, [Hash]>;
       /**
        * New proposal. \[proposal_index\]
        **/
@@ -774,6 +622,18 @@ declare module '@polkadot/api/types/events' {
        * We have ended a spend period and will now allocate funds. \[budget_remaining\]
        **/
       Spending: AugmentedEvent<ApiType, [Balance]>;
+      /**
+       * A tip suggestion has been closed. \[tip_hash, who, payout\]
+       **/
+      TipClosed: AugmentedEvent<ApiType, [Hash, AccountId, Balance]>;
+      /**
+       * A tip suggestion has reached threshold and is closing. \[tip_hash\]
+       **/
+      TipClosing: AugmentedEvent<ApiType, [Hash]>;
+      /**
+       * A tip suggestion has been retracted. \[tip_hash\]
+       **/
+      TipRetracted: AugmentedEvent<ApiType, [Hash]>;
     };
     treasuryReward: {
       [key: string]: AugmentedEvent<ApiType>;
@@ -803,6 +663,25 @@ declare module '@polkadot/api/types/events' {
        * \[account, unvested\]
        **/
       VestingUpdated: AugmentedEvent<ApiType, [AccountId, Balance]>;
+    };
+    voting: {
+      [key: string]: AugmentedEvent<ApiType>;
+      /**
+       * vote stage transition (id, old stage, new stage)
+       **/
+      VoteAdvanced: AugmentedEvent<ApiType, [u64, VoteStage, VoteStage]>;
+      /**
+       * user commits
+       **/
+      VoteCommitted: AugmentedEvent<ApiType, [u64, AccountId]>;
+      /**
+       * new vote (id, creator, type of vote)
+       **/
+      VoteCreated: AugmentedEvent<ApiType, [u64, AccountId, VoteType]>;
+      /**
+       * user reveals a vote
+       **/
+      VoteRevealed: AugmentedEvent<ApiType, [u64, AccountId, Vec<VoteOutcome>]>;
     };
   }
 
