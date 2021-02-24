@@ -14,7 +14,7 @@ const options: ApiOptions = {
   ...spec,
 };
 
-const api = new ApiRx(options);
+const api = new ApiPromise(options);
 ```
 
 You will also need to update the `tsconfig.json` of your project to include the following:
@@ -33,7 +33,7 @@ You will also need to update the `tsconfig.json` of your project to include the 
 
 ### Dependencies
 
-Your project's @polkadot-js dependency versions **must match the versions used in this project**, including `@polkadot/api`, `@polkadot/keyring`, and all associated packages, as well as `rxjs` and `typescript`. To verify the versions required, inspect the @polkadot package.json files for the version specified in this project's package.json.
+Your project's @polkadot-js dependency versions **must match the versions used in this project**, including `@polkadot/api`, `@polkadot/keyring`, and all associated packages, as well as `rxjs` (if using `ApiRx` instead of `ApiPromise`) and `typescript`. To verify the versions required, inspect the @polkadot package.json files for the version specified in this project's package.json.
 
 ## Building
 
