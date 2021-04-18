@@ -3,6 +3,7 @@ import v31 from './v31';
 import v38 from './v38';
 import v41 from './v41';
 import v45 from './v45';
+import v46 from './v46';
 
 // Support archival
 const typesBundle: OverrideBundleType = {
@@ -22,8 +23,11 @@ const typesBundle: OverrideBundleType = {
           minmax: [39, 42],
           types: v41.types,
         }, { // 3.2.0
-          minmax: [42, undefined],
+          minmax: [42, 45],
           types: v45.types,
+        }, { // 3.3.0
+          minmax: [45, undefined],
+          types: v46.types,
         },
       ]
     }
