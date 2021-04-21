@@ -1,6 +1,6 @@
 export default {
   types: {
-    ChainId: 'u8',
+    // ChainId: 'u8',
     DepositNonce: 'u64',
     ResourceId: '[u8; 32]',
     ProposalStatus: {

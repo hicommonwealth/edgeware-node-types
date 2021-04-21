@@ -1,11 +1,8 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Enum, Struct, U8aFixed, Vec, u64, u8 } from '@polkadot/types';
+import type { Enum, Struct, U8aFixed, Vec, u64 } from '@polkadot/types';
 import type { AccountId, BlockNumber } from '@polkadot/types/interfaces/runtime';
-
-/** @name ChainId */
-export interface ChainId extends u8 {}
 
 /** @name DepositNonce */
 export interface DepositNonce extends u64 {}

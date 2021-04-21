@@ -28,10 +28,29 @@ export default {
     }
   },
   types: {
+    Amount: 'i128',
+    AmountOf: 'Amount',
+    Approval: {
+      amount: 'Balance',
+      deposit: 'Balance'
+    },
+    ApprovalKey: {
+      owner: 'AccountId',
+      delegate: 'AccountId'
+    },
+    /// Commitment data type
+    Commitment: 'ScalarData',
+    CurrencyId: 'u64',
+    CurrencyIdOf: 'CurrencyId',
+    DustHandlerType: {
+      _enum: {
+        Burn: 'Null',
+        Transfer: 'AccountId'
+      }
+    },
     HashFunction: {
       _enum: ['PoseidonDefault', 'PoseidonExp3', 'PoseidonExp5', 'PoseidonExp17', 'MiMC', 'Blake2', 'Sha256']
     },
-    TreeId: 'u32',
     Manager: {
       accountId: 'AccountId',
       required: 'bool'
@@ -45,17 +64,6 @@ export default {
       hasher: 'HashFunction',
       should_store_leaves: 'bool'
     },
-    CurrencyId: 'u64',
-    Amount: 'i128',
-    AmountOf: 'Amount',
-    BlockLength: 'u64',
-    CurrencyIdOf: 'CurrencyId',
-    /// Scalar data type for field elements, 32 bytes are needed
-    ScalarData: '[u8; 32]',
-    /// Nullifiers for mixer deposits
-    Nullifier: 'ScalarData',
-    /// Commitment data type
-    Commitment: 'ScalarData',
     MixerInfo: {
       /// Minimum duration the deposit has stayed in the mixer for a user
       minimum_deposit_length_for_reward: 'BlockNumber',
@@ -64,6 +72,30 @@ export default {
       /// Id of the currency in the mixer
       currency_id: 'CurrencyIdOf'
     },
+    /// Nullifiers for mixer deposits
+    Nullifier: 'ScalarData',
+    /// Scalar data type for field elements, 32 bytes are needed
+    ScalarData: '[u8; 32]',
+    TokenDetails: {
+      owner: 'AccountId',
+      issuer: 'AccountId',
+      admin: 'AccountId',
+      freezer: 'AccountId',
+      supply: 'Balance',
+      deposit: 'Balance',
+      min_balance: 'Balance',
+      approvals: 'u32',
+      is_frozen: 'bool',
+      dust_type: 'DustHandlerType'
+    },
+    TokenMetadata: {
+      deposit: 'Balance',
+      name: 'Vec<u8>',
+      symbol: 'Vec<u8>',
+      decimals: 'u8',
+      is_frozen: 'bool'
+    },
+    TreeId: 'u32',
     WithdrawProof: {
       /// The mixer id this withdraw proof corresponds to
       mixer_id: 'TreeId',
@@ -85,9 +117,6 @@ export default {
       recipient: 'Option<AccountId>',
       /// The recipient to withdraw amount of currency to
       relayer: 'Option<AccountId>'
-    },
-    BlockWeights: 'Vec<u8>',
-    ChainId: 'u32'
-  },
-  typesAlias: {}
+    }
+  }
 };
