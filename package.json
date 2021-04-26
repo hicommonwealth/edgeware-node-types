@@ -1,6 +1,6 @@
 {
   "name": "@edgeware/node-types",
-  "version": "3.4.0-tel-aviv.2",
+  "version": "3.4.0-tel-aviv.3",
   "description": "Type definitions for edgeware chain.",
   "main": "dist/src/index.js",
   "files": [

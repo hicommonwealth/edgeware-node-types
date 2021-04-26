@@ -7,7 +7,7 @@ const edgTypes = Object
 
 const types: RegistryTypes = {
   ...edgTypes,
-  'AccountInfo': 'AccountInfoWithProviders',
+  'AccountInfo': 'AccountInfoWithTripleRefCount',
   'Address': 'MultiAddress',
   'LookupSource': 'MultiAddress',
 };
