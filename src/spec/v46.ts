@@ -7,8 +7,9 @@ const edgTypes = Object
 
 const types: RegistryTypes = {
   ...edgTypes,
-  Address: 'AccountId',
-  LookupSource: 'AccountId'
+  'AccountInfo': 'AccountInfoWithProviders',
+  'Address': 'MultiAddress',
+  'LookupSource': 'MultiAddress',
 };
 
 export default {
