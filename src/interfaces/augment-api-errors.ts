@@ -5,6 +5,61 @@ import type { ApiTypes } from '@polkadot/api/types';
 
 declare module '@polkadot/api/types/errors' {
   export interface AugmentedErrors<ApiType> {
+    assets: {
+      [key: string]: AugmentedError<ApiType>;
+      /**
+       * Invalid metadata given.
+       **/
+      BadMetadata: AugmentedError<ApiType>;
+      /**
+       * Invalid witness data given.
+       **/
+      BadWitness: AugmentedError<ApiType>;
+      /**
+       * Account balance must be greater than or equal to the transfer amount.
+       **/
+      BalanceLow: AugmentedError<ApiType>;
+      /**
+       * Balance should be non-zero.
+       **/
+      BalanceZero: AugmentedError<ApiType>;
+      /**
+       * The origin account is frozen.
+       **/
+      Frozen: AugmentedError<ApiType>;
+      /**
+       * The asset ID is already taken.
+       **/
+      InUse: AugmentedError<ApiType>;
+      /**
+       * Minimum balance should be non-zero.
+       **/
+      MinBalanceZero: AugmentedError<ApiType>;
+      /**
+       * The signing account has no permission to do the operation.
+       **/
+      NoPermission: AugmentedError<ApiType>;
+      /**
+       * No provider reference exists to allow a non-zero balance of a non-self-sufficient asset.
+       **/
+      NoProvider: AugmentedError<ApiType>;
+      /**
+       * A mint operation lead to an overflow.
+       **/
+      Overflow: AugmentedError<ApiType>;
+      /**
+       * No approval exists that would allow the transfer.
+       **/
+      Unapproved: AugmentedError<ApiType>;
+      /**
+       * The given asset ID is unknown.
+       **/
+      Unknown: AugmentedError<ApiType>;
+      /**
+       * The source account would not survive the transfer and it needs to stay alive.
+       **/
+      WouldDie: AugmentedError<ApiType>;
+    };
     authorship: {
       [key: string]: AugmentedError<ApiType>;
       /**
@@ -454,6 +509,10 @@ declare module '@polkadot/api/types/errors' {
     electionProviderMultiPhase: {
       [key: string]: AugmentedError<ApiType>;
       /**
+       * OCW submitted solution for wrong round
+       **/
+      OcwCallWrongEra: AugmentedError<ApiType>;
+      /**
        * Submission was too early.
        **/
       PreDispatchEarlySubmission: AugmentedError<ApiType>;
@@ -465,88 +524,6 @@ declare module '@polkadot/api/types/errors' {
        * Wrong number of winners presented.
        **/
       PreDispatchWrongWinnerCount: AugmentedError<ApiType>;
-    };
-    elections: {
-      [key: string]: AugmentedError<ApiType>;
-      /**
-       * Duplicated candidate submission.
-       **/
-      DuplicatedCandidate: AugmentedError<ApiType>;
-      /**
-       * Candidate does not have enough funds.
-       **/
-      InsufficientCandidateFunds: AugmentedError<ApiType>;
-      /**
-       * The renouncing origin presented a wrong `Renouncing` parameter.
-       **/
-      InvalidRenouncing: AugmentedError<ApiType>;
-      /**
-       * Prediction regarding replacement after member removal is wrong.
-       **/
-      InvalidReplacement: AugmentedError<ApiType>;
-      /**
-       * The provided count of number of votes is incorrect.
-       **/
-      InvalidVoteCount: AugmentedError<ApiType>;
-      /**
-       * The provided count of number of candidates is incorrect.
-       **/
-      InvalidWitnessData: AugmentedError<ApiType>;
-      /**
-       * Cannot vote with stake less than minimum balance.
-       **/
-      LowBalance: AugmentedError<ApiType>;
-      /**
-       * Cannot vote more than maximum allowed.
-       **/
-      MaximumVotesExceeded: AugmentedError<ApiType>;
-      /**
-       * Member cannot re-submit candidacy.
-       **/
-      MemberSubmit: AugmentedError<ApiType>;
-      /**
-       * Must be a voter.
-       **/
-      MustBeVoter: AugmentedError<ApiType>;
-      /**
-       * Not a member.
-       **/
-      NotMember: AugmentedError<ApiType>;
-      /**
-       * Must vote for at least one candidate.
-       **/
-      NoVotes: AugmentedError<ApiType>;
-      /**
-       * Cannot report self.
-       **/
-      ReportSelf: AugmentedError<ApiType>;
-      /**
-       * Runner cannot re-submit candidacy.
-       **/
-      RunnerUpSubmit: AugmentedError<ApiType>;
-      /**
-       * Cannot vote more than candidates.
-       **/
-      TooManyVotes: AugmentedError<ApiType>;
-      /**
-       * Voter can not pay voting bond.
-       **/
-      UnableToPayBond: AugmentedError<ApiType>;
-      /**
-       * Cannot vote when no candidates or members exist.
-       **/
-      UnableToVote: AugmentedError<ApiType>;
-    };
-    ethereum: {
-      [key: string]: AugmentedError<ApiType>;
-      /**
-       * Signature is invalid.
-       **/
-      InvalidSignature: AugmentedError<ApiType>;
-      /**
-       * Pre-log is present, therefore transact is not allowed.
-       **/
-      PreLogExists: AugmentedError<ApiType>;
     };
     evm: {
       [key: string]: AugmentedError<ApiType>;
@@ -853,6 +830,141 @@ declare module '@polkadot/api/types/errors' {
        * A different timepoint was given to the multisig operation that is underway.
        **/
       WrongTimepoint: AugmentedError<ApiType>;
+    };
+    nft: {
+      [key: string]: AugmentedError<ApiType>;
+      /**
+       * Can not destroy class
+       * Total issuance is not 0
+       **/
+      CannotDestroyClass: AugmentedError<ApiType>;
+      /**
+       * ClassId not found
+       **/
+      ClassIdNotFound: AugmentedError<ApiType>;
+      /**
+       * Quantity is invalid. need >= 1
+       **/
+      InvalidQuantity: AugmentedError<ApiType>;
+      /**
+       * Property of class don't support burn
+       **/
+      NonBurnable: AugmentedError<ApiType>;
+      /**
+       * Property of class don't support transfer
+       **/
+      NonTransferable: AugmentedError<ApiType>;
+      /**
+       * The operator is not the owner of the token and has no permission
+       **/
+      NoPermission: AugmentedError<ApiType>;
+      /**
+       * TokenId not found
+       **/
+      TokenIdNotFound: AugmentedError<ApiType>;
+    };
+    nonFungibleTokenModule: {
+      [key: string]: AugmentedError<ApiType>;
+      /**
+       * Can not destroy class
+       * Total issuance is not 0
+       **/
+      CannotDestroyClass: AugmentedError<ApiType>;
+      /**
+       * Class not found
+       **/
+      ClassNotFound: AugmentedError<ApiType>;
+      /**
+       * No available class ID
+       **/
+      NoAvailableClassId: AugmentedError<ApiType>;
+      /**
+       * No available token ID
+       **/
+      NoAvailableTokenId: AugmentedError<ApiType>;
+      /**
+       * The operator is not the owner of the token and has no permission
+       **/
+      NoPermission: AugmentedError<ApiType>;
+      /**
+       * Arithmetic calculation overflow
+       **/
+      NumOverflow: AugmentedError<ApiType>;
+      /**
+       * Token(ClassId, TokenId) not found
+       **/
+      TokenNotFound: AugmentedError<ApiType>;
+    };
+    phragmenElection: {
+      [key: string]: AugmentedError<ApiType>;
+      /**
+       * Duplicated candidate submission.
+       **/
+      DuplicatedCandidate: AugmentedError<ApiType>;
+      /**
+       * Candidate does not have enough funds.
+       **/
+      InsufficientCandidateFunds: AugmentedError<ApiType>;
+      /**
+       * The renouncing origin presented a wrong `Renouncing` parameter.
+       **/
+      InvalidRenouncing: AugmentedError<ApiType>;
+      /**
+       * Prediction regarding replacement after member removal is wrong.
+       **/
+      InvalidReplacement: AugmentedError<ApiType>;
+      /**
+       * The provided count of number of votes is incorrect.
+       **/
+      InvalidVoteCount: AugmentedError<ApiType>;
+      /**
+       * The provided count of number of candidates is incorrect.
+       **/
+      InvalidWitnessData: AugmentedError<ApiType>;
+      /**
+       * Cannot vote with stake less than minimum balance.
+       **/
+      LowBalance: AugmentedError<ApiType>;
+      /**
+       * Cannot vote more than maximum allowed.
+       **/
+      MaximumVotesExceeded: AugmentedError<ApiType>;
+      /**
+       * Member cannot re-submit candidacy.
+       **/
+      MemberSubmit: AugmentedError<ApiType>;
+      /**
+       * Must be a voter.
+       **/
+      MustBeVoter: AugmentedError<ApiType>;
+      /**
+       * Not a member.
+       **/
+      NotMember: AugmentedError<ApiType>;
+      /**
+       * Must vote for at least one candidate.
+       **/
+      NoVotes: AugmentedError<ApiType>;
+      /**
+       * Cannot report self.
+       **/
+      ReportSelf: AugmentedError<ApiType>;
+      /**
+       * Runner cannot re-submit candidacy.
+       **/
+      RunnerUpSubmit: AugmentedError<ApiType>;
+      /**
+       * Cannot vote more than candidates.
+       **/
+      TooManyVotes: AugmentedError<ApiType>;
+      /**
+       * Voter can not pay voting bond.
+       **/
+      UnableToPayBond: AugmentedError<ApiType>;
+      /**
+       * Cannot vote when no candidates or members exist.
+       **/
+      UnableToVote: AugmentedError<ApiType>;
     };
     proxy: {
       [key: string]: AugmentedError<ApiType>;
@@ -1161,7 +1273,8 @@ declare module '@polkadot/api/types/errors' {
        **/
       BadWitness: AugmentedError<ApiType>;
       /**
-       * Account balance must be greater than or equal to the transfer amount.
+       * Account balance must be greater than or equal to the transfer
+       * amount.
        **/
       BalanceLow: AugmentedError<ApiType>;
       /**
@@ -1201,7 +1314,8 @@ declare module '@polkadot/api/types/errors' {
        **/
       NoPermission: AugmentedError<ApiType>;
       /**
-       * No provider reference exists to allow a non-zero balance of a non-self-sufficient currency.
+       * No provider reference exists to allow a non-zero balance of a
+       * non-self-sufficient currency.
        **/
       NoProvider: AugmentedError<ApiType>;
       /**
@@ -1233,7 +1347,8 @@ declare module '@polkadot/api/types/errors' {
        **/
       Unknown: AugmentedError<ApiType>;
       /**
-       * The source account would not survive the transfer and it needs to stay alive.
+       * The source account would not survive the transfer and it needs to
+       * stay alive.
        **/
       WouldDie: AugmentedError<ApiType>;
     };
@@ -1247,6 +1362,10 @@ declare module '@polkadot/api/types/errors' {
        * No proposal or bounty at that index.
        **/
       InvalidIndex: AugmentedError<ApiType>;
+      /**
+       * Too many approvals in the queue.
+       **/
+      TooManyApprovals: AugmentedError<ApiType>;
     };
     vesting: {
       [key: string]: AugmentedError<ApiType>;

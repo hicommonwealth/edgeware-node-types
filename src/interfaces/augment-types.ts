@@ -4,6 +4,7 @@
 import type { BitVec, Bool, Bytes, Compact, Data, DoNotConstruct, I128, I16, I256, I32, I64, I8, Json, Null, Option, Raw, StorageKey, Text, Type, U128, U16, U256, U32, U64, U8, USize, Vec, bool, i128, i16, i256, i32, i64, i8, u128, u16, u256, u32, u64, u8, usize } from '@polkadot/types';
 import type { DepositNonce, ProposalStatus, ProposalVotes, ResourceId } from './chainBridge';
 import type { ETHBlock, ETHReceipts, ETHTxStatuses } from './frontier';
+import type { CID, ClassData, ClassId, ClassIdOf, ClassInfo, ClassInfoOf, Properties, TokenData, TokenId, TokenIdOf, TokenInfo, TokenInfoOf } from './nft';
 import type { ProposalContents, ProposalRecord, ProposalTitle } from './signaling';
 import type { Balance2 } from './treasuryRewards';
 import type { Commitments, Reveals, TallyType, VoteData, VoteOutcome, VoteRecord, VoteStage, VoteType, VotingTally } from './voting';
@@ -80,6 +81,8 @@ declare module '@polkadot/types/types/registry' {
     'Compact<BalanceOf>': Compact<BalanceOf>;
     'Compact<BlockNumber>': Compact<BlockNumber>;
     'Compact<BountyIndex>': Compact<BountyIndex>;
+    'Compact<ClassId>': Compact<ClassId>;
+    'Compact<ClassIdOf>': Compact<ClassIdOf>;
     'Compact<ConsensusEngineId>': Compact<ConsensusEngineId>;
     'Compact<ContractDiscriminant>': Compact<ContractDiscriminant>;
     'Compact<CoreIndex>': Compact<CoreIndex>;
@@ -112,6 +115,7 @@ declare module '@polkadot/types/types/registry' {
     'Compact<PerU16>': Compact<PerU16>;
     'Compact<Points>': Compact<Points>;
     'Compact<Priority>': Compact<Priority>;
+    'Compact<Properties>': Compact<Properties>;
     'Compact<PropIndex>': Compact<PropIndex>;
     'Compact<ProposalIndex>': Compact<ProposalIndex>;
     'Compact<RefCount>': Compact<RefCount>;
@@ -132,6 +136,8 @@ declare module '@polkadot/types/types/registry' {
     'Compact<SubId>': Compact<SubId>;
     'Compact<TAssetBalance>': Compact<TAssetBalance>;
     'Compact<TAssetDepositBalance>': Compact<TAssetDepositBalance>;
+    'Compact<TokenId>': Compact<TokenId>;
+    'Compact<TokenIdOf>': Compact<TokenIdOf>;
     'Compact<TransactionPriority>': Compact<TransactionPriority>;
     'Compact<TreeId>': Compact<TreeId>;
     'Compact<TrieIndex>': Compact<TrieIndex>;
@@ -269,6 +275,12 @@ declare module '@polkadot/types/types/registry' {
     'Option<ChainProperties>': Option<ChainProperties>;
     'Option<ChainType>': Option<ChainType>;
     'Option<ChangesTrieConfiguration>': Option<ChangesTrieConfiguration>;
+    'Option<CID>': Option<CID>;
+    'Option<ClassData>': Option<ClassData>;
+    'Option<ClassId>': Option<ClassId>;
+    'Option<ClassIdOf>': Option<ClassIdOf>;
+    'Option<ClassInfo>': Option<ClassInfo>;
+    'Option<ClassInfoOf>': Option<ClassInfoOf>;
     'Option<CodecHash>': Option<CodecHash>;
     'Option<CodeHash>': Option<CodeHash>;
     'Option<CollatorId>': Option<CollatorId>;
@@ -691,6 +703,7 @@ declare module '@polkadot/types/types/registry' {
     'Option<Prevotes>': Option<Prevotes>;
     'Option<Priority>': Option<Priority>;
     'Option<PriorLock>': Option<PriorLock>;
+    'Option<Properties>': Option<Properties>;
     'Option<PropIndex>': Option<PropIndex>;
     'Option<Proposal>': Option<Proposal>;
     'Option<ProposalContents>': Option<ProposalContents>;
@@ -872,7 +885,12 @@ declare module '@polkadot/types/types/registry' {
     'Option<TAssetDepositBalance>': Option<TAssetDepositBalance>;
     'Option<Text>': Option<Text>;
     'Option<Timepoint>': Option<Timepoint>;
+    'Option<TokenData>': Option<TokenData>;
     'Option<TokenDetails>': Option<TokenDetails>;
+    'Option<TokenId>': Option<TokenId>;
+    'Option<TokenIdOf>': Option<TokenIdOf>;
+    'Option<TokenInfo>': Option<TokenInfo>;
+    'Option<TokenInfoOf>': Option<TokenInfoOf>;
     'Option<TokenMetadata>': Option<TokenMetadata>;
     'Option<TombstoneContractInfo>': Option<TombstoneContractInfo>;
     'Option<TransactionPriority>': Option<TransactionPriority>;
@@ -1098,6 +1116,12 @@ declare module '@polkadot/types/types/registry' {
     'Vec<ChainProperties>': Vec<ChainProperties>;
     'Vec<ChainType>': Vec<ChainType>;
     'Vec<ChangesTrieConfiguration>': Vec<ChangesTrieConfiguration>;
+    'Vec<CID>': Vec<CID>;
+    'Vec<ClassData>': Vec<ClassData>;
+    'Vec<ClassId>': Vec<ClassId>;
+    'Vec<ClassIdOf>': Vec<ClassIdOf>;
+    'Vec<ClassInfo>': Vec<ClassInfo>;
+    'Vec<ClassInfoOf>': Vec<ClassInfoOf>;
     'Vec<CodecHash>': Vec<CodecHash>;
     'Vec<CodeHash>': Vec<CodeHash>;
     'Vec<CollatorId>': Vec<CollatorId>;
@@ -1520,6 +1544,7 @@ declare module '@polkadot/types/types/registry' {
     'Vec<Prevotes>': Vec<Prevotes>;
     'Vec<Priority>': Vec<Priority>;
     'Vec<PriorLock>': Vec<PriorLock>;
+    'Vec<Properties>': Vec<Properties>;
     'Vec<PropIndex>': Vec<PropIndex>;
     'Vec<Proposal>': Vec<Proposal>;
     'Vec<ProposalContents>': Vec<ProposalContents>;
@@ -1701,7 +1726,12 @@ declare module '@polkadot/types/types/registry' {
     'Vec<TAssetDepositBalance>': Vec<TAssetDepositBalance>;
     'Vec<Text>': Vec<Text>;
     'Vec<Timepoint>': Vec<Timepoint>;
+    'Vec<TokenData>': Vec<TokenData>;
     'Vec<TokenDetails>': Vec<TokenDetails>;
+    'Vec<TokenId>': Vec<TokenId>;
+    'Vec<TokenIdOf>': Vec<TokenIdOf>;
+    'Vec<TokenInfo>': Vec<TokenInfo>;
+    'Vec<TokenInfoOf>': Vec<TokenInfoOf>;
     'Vec<TokenMetadata>': Vec<TokenMetadata>;
     'Vec<TombstoneContractInfo>': Vec<TombstoneContractInfo>;
     'Vec<TransactionPriority>': Vec<TransactionPriority>;
@@ -1927,6 +1957,12 @@ declare module '@polkadot/types/types/registry' {
     ChainProperties: ChainProperties;
     ChainType: ChainType;
     ChangesTrieConfiguration: ChangesTrieConfiguration;
+    CID: CID;
+    ClassData: ClassData;
+    ClassId: ClassId;
+    ClassIdOf: ClassIdOf;
+    ClassInfo: ClassInfo;
+    ClassInfoOf: ClassInfoOf;
     CodecHash: CodecHash;
     CodeHash: CodeHash;
     CollatorId: CollatorId;
@@ -2349,6 +2385,7 @@ declare module '@polkadot/types/types/registry' {
     Prevotes: Prevotes;
     Priority: Priority;
     PriorLock: PriorLock;
+    Properties: Properties;
     PropIndex: PropIndex;
     Proposal: Proposal;
     ProposalContents: ProposalContents;
@@ -2530,7 +2567,12 @@ declare module '@polkadot/types/types/registry' {
     TAssetDepositBalance: TAssetDepositBalance;
     Text: Text;
     Timepoint: Timepoint;
+    TokenData: TokenData;
     TokenDetails: TokenDetails;
+    TokenId: TokenId;
+    TokenIdOf: TokenIdOf;
+    TokenInfo: TokenInfo;
+    TokenInfoOf: TokenInfoOf;
     TokenMetadata: TokenMetadata;
     TombstoneContractInfo: TombstoneContractInfo;
     TransactionPriority: TransactionPriority;

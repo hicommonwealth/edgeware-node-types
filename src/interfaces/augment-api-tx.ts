@@ -3,7 +3,9 @@
 
 import type { Bytes, Compact, Data, Option, U256, U8aFixed, Vec, bool, u16, u32, u64, u8 } from '@polkadot/types';
 import type { AnyNumber, ITuple } from '@polkadot/types/types';
+import type { CID, ClassIdOf, Properties, TokenIdOf } from './nft';
 import type { CurrencyIdOf, ScalarData, TreeId, WithdrawProof } from './webb';
+import type { AssetDestroyWitness, TAssetBalance } from '@polkadot/types/interfaces/assets';
 import type { MemberCount, ProposalIndex } from '@polkadot/types/interfaces/collective';
 import type { CodeHash, Schedule } from '@polkadot/types/interfaces/contracts';
 import type { AccountVote, Conviction, PropIndex, Proposal, ReferendumIndex } from '@polkadot/types/interfaces/democracy';
@@ -14,7 +16,7 @@ import type { GrandpaEquivocationProof, KeyOwnerProof } from '@polkadot/types/in
 import type { IdentityFields, IdentityInfo, IdentityJudgement, RegistrarIndex } from '@polkadot/types/interfaces/identity';
 import type { Heartbeat } from '@polkadot/types/interfaces/imOnline';
 import type { ProxyType } from '@polkadot/types/interfaces/proxy';
-import type { AccountId, AccountIndex, Balance, BalanceOf, BlockNumber, Call, CallHashOf, ChangesTrieConfiguration, H160, H256, Hash, Header, KeyValue, LookupSource, Moment, OpaqueCall, Perbill, Percent, Weight } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, AccountIndex, AssetId, Balance, BalanceOf, BlockNumber, Call, CallHashOf, ChangesTrieConfiguration, H160, H256, Hash, Header, KeyValue, LookupSource, Moment, OpaqueCall, Perbill, Percent, Weight } from '@polkadot/types/interfaces/runtime';
 import type { Period, Priority } from '@polkadot/types/interfaces/scheduler';
 import type { Keys } from '@polkadot/types/interfaces/session';
 import type { EraIndex, RawSolution, RewardDestination, SolutionOrSnapshotSize, ValidatorPrefs } from '@polkadot/types/interfaces/staking';
@@ -26,6 +28,412 @@ import type { ApiTypes, SubmittableExtrinsic } from '@polkadot/api/types';
 
 declare module '@polkadot/api/types/submittable' {
   export interface AugmentedSubmittables<ApiType> {
+    assets: {
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+      /**
+       * Approve an amount of asset for transfer by a delegated third-party account.
+       * 
+       * Origin must be Signed.
+       * 
+       * Ensures that `ApprovalDeposit` worth of `Currency` is reserved from signing account
+       * for the purpose of holding the approval. If some non-zero amount of assets is already
+       * approved from signing account to `delegate`, then it is topped up or unreserved to
+       * meet the right value.
+       * 
+       * NOTE: The signing account does not need to own `amount` of assets at the point of
+       * making this call.
+       * 
+       * - `id`: The identifier of the asset.
+       * - `delegate`: The account to delegate permission to transfer asset.
+       * - `amount`: The amount of asset that may be transferred by `delegate`. If there is
+       * already an approval in place, then this acts additively.
+       * 
+       * Emits `ApprovedTransfer` on success.
+       * 
+       * Weight: `O(1)`
+       **/
+      approveTransfer: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, delegate: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<TAssetBalance>]>;
+      /**
+       * Reduce the balance of `who` by as much as possible up to `amount` assets of `id`.
+       * 
+       * Origin must be Signed and the sender should be the Manager of the asset `id`.
+       * 
+       * Bails with `BalanceZero` if the `who` is already dead.
+       * 
+       * - `id`: The identifier of the asset to have some amount burned.
+       * - `who`: The account to be debited from.
+       * - `amount`: The maximum amount by which `who`'s balance should be reduced.
+       * 
+       * Emits `Burned` with the actual amount burned. If this takes the balance to below the
+       * minimum for the asset, then the amount burned is increased to take it to zero.
+       * 
+       * Weight: `O(1)`
+       * Modes: Post-existence of `who`; Pre & post Zombie-status of `who`.
+       **/
+      burn: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, who: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<TAssetBalance>]>;
+      /**
+       * Cancel all of some asset approved for delegated transfer by a third-party account.
+       * 
+       * Origin must be Signed and there must be an approval in place between signer and
+       * `delegate`.
+       * 
+       * Unreserves any deposit previously reserved by `approve_transfer` for the approval.
+       * 
+       * - `id`: The identifier of the asset.
+       * - `delegate`: The account delegated permission to transfer asset.
+       * 
+       * Emits `ApprovalCancelled` on success.
+       * 
+       * Weight: `O(1)`
+       **/
+      cancelApproval: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, delegate: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource]>;
+      /**
+       * Clear the metadata for an asset.
+       * 
+       * Origin must be Signed and the sender should be the Owner of the asset `id`.
+       * 
+       * Any deposit is freed for the asset owner.
+       * 
+       * - `id`: The identifier of the asset to clear.
+       * 
+       * Emits `MetadataCleared`.
+       * 
+       * Weight: `O(1)`
+       **/
+      clearMetadata: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>]>;
+      /**
+       * Issue a new class of fungible assets from a public origin.
+       * 
+       * This new asset class has no assets initially and its owner is the origin.
+       * 
+       * The origin must be Signed and the sender must have sufficient funds free.
+       * 
+       * Funds of sender are reserved by `AssetDeposit`.
+       * 
+       * Parameters:
+       * - `id`: The identifier of the new asset. This must not be currently in use to identify
+       * an existing asset.
+       * - `admin`: The admin of this class of assets. The admin is the initial address of each
+       * member of the asset class's admin team.
+       * - `min_balance`: The minimum balance of this new asset that any single account must
+       * have. If an account's balance is reduced below this, then it collapses to zero.
+       * 
+       * Emits `Created` event when successful.
+       * 
+       * Weight: `O(1)`
+       **/
+      create: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, admin: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, minBalance: TAssetBalance | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, TAssetBalance]>;
+      /**
+       * Destroy a class of fungible assets.
+       * 
+       * The origin must conform to `ForceOrigin` or must be Signed and the sender must be the
+       * owner of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset to be destroyed. This must identify an existing
+       * asset.
+       * 
+       * Emits `Destroyed` event when successful.
+       * 
+       * Weight: `O(c + p + a)` where:
+       * - `c = (witness.accounts - witness.sufficients)`
+       * - `s = witness.sufficients`
+       * - `a = witness.approvals`
+       **/
+      destroy: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, witness: AssetDestroyWitness | { accounts?: any; sufficients?: any; approvals?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, AssetDestroyWitness]>;
+      /**
+       * Alter the attributes of a given asset.
+       * 
+       * Origin must be `ForceOrigin`.
+       * 
+       * - `id`: The identifier of the asset.
+       * - `owner`: The new Owner of this asset.
+       * - `issuer`: The new Issuer of this asset.
+       * - `admin`: The new Admin of this asset.
+       * - `freezer`: The new Freezer of this asset.
+       * - `min_balance`: The minimum balance of this new asset that any single account must
+       * have. If an account's balance is reduced below this, then it collapses to zero.
+       * - `is_sufficient`: Whether a non-zero balance of this asset is deposit of sufficient
+       * value to account for the state bloat associated with its balance storage. If set to
+       * `true`, then non-zero balances may be stored without a `consumer` reference (and thus
+       * an ED in the Balances pallet or whatever else is used to control user-account state
+       * growth).
+       * - `is_frozen`: Whether this asset class is frozen except for permissioned/admin
+       * instructions.
+       * 
+       * Emits `AssetStatusChanged` with the identity of the asset.
+       * 
+       * Weight: `O(1)`
+       **/
+      forceAssetStatus: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, owner: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, issuer: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, admin: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, freezer: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, minBalance: Compact<TAssetBalance> | AnyNumber | Uint8Array, isSufficient: bool | boolean | Uint8Array, isFrozen: bool | boolean | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, LookupSource, LookupSource, LookupSource, Compact<TAssetBalance>, bool, bool]>;
+      /**
+       * Cancel all of some asset approved for delegated transfer by a third-party account.
+       * 
+       * Origin must be either ForceOrigin or Signed origin with the signer being the Admin
+       * account of the asset `id`.
+       * 
+       * Unreserves any deposit previously reserved by `approve_transfer` for the approval.
+       * 
+       * - `id`: The identifier of the asset.
+       * - `delegate`: The account delegated permission to transfer asset.
+       * 
+       * Emits `ApprovalCancelled` on success.
+       * 
+       * Weight: `O(1)`
+       **/
+      forceCancelApproval: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, owner: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, delegate: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, LookupSource]>;
+      /**
+       * Clear the metadata for an asset.
+       * 
+       * Origin must be ForceOrigin.
+       * 
+       * Any deposit is returned.
+       * 
+       * - `id`: The identifier of the asset to clear.
+       * 
+       * Emits `MetadataCleared`.
+       * 
+       * Weight: `O(1)`
+       **/
+      forceClearMetadata: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>]>;
+      /**
+       * Issue a new class of fungible assets from a privileged origin.
+       * 
+       * This new asset class has no assets initially.
+       * 
+       * The origin must conform to `ForceOrigin`.
+       * 
+       * Unlike `create`, no funds are reserved.
+       * 
+       * - `id`: The identifier of the new asset. This must not be currently in use to identify
+       * an existing asset.
+       * - `owner`: The owner of this class of assets. The owner has full superuser permissions
+       * over this asset, but may later change and configure the permissions using `transfer_ownership`
+       * and `set_team`.
+       * - `max_zombies`: The total number of accounts which may hold assets in this class yet
+       * have no existential deposit.
+       * - `min_balance`: The minimum balance of this new asset that any single account must
+       * have. If an account's balance is reduced below this, then it collapses to zero.
+       * 
+       * Emits `ForceCreated` event when successful.
+       * 
+       * Weight: `O(1)`
+       **/
+      forceCreate: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, owner: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, isSufficient: bool | boolean | Uint8Array, minBalance: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, bool, Compact<TAssetBalance>]>;
+      /**
+       * Force the metadata for an asset to some value.
+       * 
+       * Origin must be ForceOrigin.
+       * 
+       * Any deposit is left alone.
+       * 
+       * - `id`: The identifier of the asset to update.
+       * - `name`: The user friendly name of this asset. Limited in length by `StringLimit`.
+       * - `symbol`: The exchange symbol for this asset. Limited in length by `StringLimit`.
+       * - `decimals`: The number of decimals this asset uses to represent one unit.
+       * 
+       * Emits `MetadataSet`.
+       * 
+       * Weight: `O(N + S)` where N and S are the length of the name and symbol respectively.
+       **/
+      forceSetMetadata: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, name: Bytes | string | Uint8Array, symbol: Bytes | string | Uint8Array, decimals: u8 | AnyNumber | Uint8Array, isFrozen: bool | boolean | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, Bytes, Bytes, u8, bool]>;
+      /**
+       * Move some assets from one account to another.
+       * 
+       * Origin must be Signed and the sender should be the Admin of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset to have some amount transferred.
+       * - `source`: The account to be debited.
+       * - `dest`: The account to be credited.
+       * - `amount`: The amount by which the `source`'s balance of assets should be reduced and
+       * `dest`'s balance increased. The amount actually transferred may be slightly greater in
+       * the case that the transfer would otherwise take the `source` balance above zero but
+       * below the minimum balance. Must be greater than zero.
+       * 
+       * Emits `Transferred` with the actual amount transferred. If this takes the source balance
+       * to below the minimum for the asset, then the amount transferred is increased to take it
+       * to zero.
+       * 
+       * Weight: `O(1)`
+       * Modes: Pre-existence of `dest`; Post-existence of `source`; Prior & post zombie-status
+       * of `source`; Account pre-existence of `dest`.
+       **/
+      forceTransfer: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, source: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, dest: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, LookupSource, Compact<TAssetBalance>]>;
+      /**
+       * Disallow further unprivileged transfers from an account.
+       * 
+       * Origin must be Signed and the sender should be the Freezer of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset to be frozen.
+       * - `who`: The account to be frozen.
+       * 
+       * Emits `Frozen`.
+       * 
+       * Weight: `O(1)`
+       **/
+      freeze: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, who: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource]>;
+      /**
+       * Disallow further unprivileged transfers for the asset class.
+       * 
+       * Origin must be Signed and the sender should be the Freezer of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset to be frozen.
+       * 
+       * Emits `Frozen`.
+       * 
+       * Weight: `O(1)`
+       **/
+      freezeAsset: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>]>;
+      /**
+       * Mint assets of a particular class.
+       * 
+       * The origin must be Signed and the sender must be the Issuer of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset to have some amount minted.
+       * - `beneficiary`: The account to be credited with the minted assets.
+       * - `amount`: The amount of the asset to be minted.
+       * 
+       * Emits `Destroyed` event when successful.
+       * 
+       * Weight: `O(1)`
+       * Modes: Pre-existing balance of `beneficiary`; Account pre-existence of `beneficiary`.
+       **/
+      mint: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, beneficiary: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<TAssetBalance>]>;
+      /**
+       * Set the metadata for an asset.
+       * 
+       * Origin must be Signed and the sender should be the Owner of the asset `id`.
+       * 
+       * Funds of sender are reserved according to the formula:
+       * `MetadataDepositBase + MetadataDepositPerByte * (name.len + symbol.len)` taking into
+       * account any already reserved funds.
+       * 
+       * - `id`: The identifier of the asset to update.
+       * - `name`: The user friendly name of this asset. Limited in length by `StringLimit`.
+       * - `symbol`: The exchange symbol for this asset. Limited in length by `StringLimit`.
+       * - `decimals`: The number of decimals this asset uses to represent one unit.
+       * 
+       * Emits `MetadataSet`.
+       * 
+       * Weight: `O(1)`
+       **/
+      setMetadata: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, name: Bytes | string | Uint8Array, symbol: Bytes | string | Uint8Array, decimals: u8 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, Bytes, Bytes, u8]>;
+      /**
+       * Change the Issuer, Admin and Freezer of an asset.
+       * 
+       * Origin must be Signed and the sender should be the Owner of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset to be frozen.
+       * - `issuer`: The new Issuer of this asset.
+       * - `admin`: The new Admin of this asset.
+       * - `freezer`: The new Freezer of this asset.
+       * 
+       * Emits `TeamChanged`.
+       * 
+       * Weight: `O(1)`
+       **/
+      setTeam: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, issuer: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, admin: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, freezer: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, LookupSource, LookupSource]>;
+      /**
+       * Allow unprivileged transfers from an account again.
+       * 
+       * Origin must be Signed and the sender should be the Admin of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset to be frozen.
+       * - `who`: The account to be unfrozen.
+       * 
+       * Emits `Thawed`.
+       * 
+       * Weight: `O(1)`
+       **/
+      thaw: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, who: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource]>;
+      /**
+       * Allow unprivileged transfers for the asset again.
+       * 
+       * Origin must be Signed and the sender should be the Admin of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset to be frozen.
+       * 
+       * Emits `Thawed`.
+       * 
+       * Weight: `O(1)`
+       **/
+      thawAsset: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>]>;
+      /**
+       * Move some assets from the sender account to another.
+       * 
+       * Origin must be Signed.
+       * 
+       * - `id`: The identifier of the asset to have some amount transferred.
+       * - `target`: The account to be credited.
+       * - `amount`: The amount by which the sender's balance of assets should be reduced and
+       * `target`'s balance increased. The amount actually transferred may be slightly greater in
+       * the case that the transfer would otherwise take the sender balance above zero but below
+       * the minimum balance. Must be greater than zero.
+       * 
+       * Emits `Transferred` with the actual amount transferred. If this takes the source balance
+       * to below the minimum for the asset, then the amount transferred is increased to take it
+       * to zero.
+       * 
+       * Weight: `O(1)`
+       * Modes: Pre-existence of `target`; Post-existence of sender; Prior & post zombie-status
+       * of sender; Account pre-existence of `target`.
+       **/
+      transfer: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, target: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<TAssetBalance>]>;
+      /**
+       * Transfer some asset balance from a previously delegated account to some third-party
+       * account.
+       * 
+       * Origin must be Signed and there must be an approval in place by the `owner` to the
+       * signer.
+       * 
+       * If the entire amount approved for transfer is transferred, then any deposit previously
+       * reserved by `approve_transfer` is unreserved.
+       * 
+       * - `id`: The identifier of the asset.
+       * - `owner`: The account which previously approved for a transfer of at least `amount` and
+       * from which the asset balance will be withdrawn.
+       * - `destination`: The account to which the asset balance of `amount` will be transferred.
+       * - `amount`: The amount of assets to transfer.
+       * 
+       * Emits `TransferredApproved` on success.
+       * 
+       * Weight: `O(1)`
+       **/
+      transferApproved: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, owner: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, destination: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, LookupSource, Compact<TAssetBalance>]>;
+      /**
+       * Move some assets from the sender account to another, keeping the sender account alive.
+       * 
+       * Origin must be Signed.
+       * 
+       * - `id`: The identifier of the asset to have some amount transferred.
+       * - `target`: The account to be credited.
+       * - `amount`: The amount by which the sender's balance of assets should be reduced and
+       * `target`'s balance increased. The amount actually transferred may be slightly greater in
+       * the case that the transfer would otherwise take the sender balance above zero but below
+       * the minimum balance. Must be greater than zero.
+       * 
+       * Emits `Transferred` with the actual amount transferred. If this takes the source balance
+       * to below the minimum for the asset, then the amount transferred is increased to take it
+       * to zero.
+       * 
+       * Weight: `O(1)`
+       * Modes: Pre-existence of `target`; Post-existence of sender; Prior & post zombie-status
+       * of sender; Account pre-existence of `target`.
+       **/
+      transferKeepAlive: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, target: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, amount: Compact<TAssetBalance> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource, Compact<TAssetBalance>]>;
+      /**
+       * Change the Owner of an asset.
+       * 
+       * Origin must be Signed and the sender should be the Owner of the asset `id`.
+       * 
+       * - `id`: The identifier of the asset.
+       * - `owner`: The new Owner of this asset.
+       * 
+       * Emits `OwnerChanged`.
+       * 
+       * Weight: `O(1)`
+       **/
+      transferOwnership: AugmentedSubmittable<(id: Compact<AssetId> | AnyNumber | Uint8Array, owner: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<AssetId>, LookupSource]>;
+    };
     authorship: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
       /**
@@ -790,111 +1198,6 @@ declare module '@polkadot/api/types/submittable' {
        **/
       submitUnsigned: AugmentedSubmittable<(solution: RawSolution | { compact?: any; score?: any; round?: any } | string | Uint8Array, witness: SolutionOrSnapshotSize | { voters?: any; targets?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [RawSolution, SolutionOrSnapshotSize]>;
     };
-    elections: {
-      [key: string]: SubmittableExtrinsicFunction<ApiType>;
-      /**
-       * Clean all voters who are defunct (i.e. they do not serve any purpose at all). The
-       * deposit of the removed voters are returned.
-       * 
-       * This is an root function to be used only for cleaning the state.
-       * 
-       * The dispatch origin of this call must be root.
-       * 
-       * # <weight>
-       * The total number of voters and those that are defunct must be provided as witness data.
-       * # </weight>
-       **/
-      cleanDefunctVoters: AugmentedSubmittable<(numVoters: u32 | AnyNumber | Uint8Array, numDefunct: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32]>;
-      /**
-       * Remove a particular member from the set. This is effective immediately and the bond of
-       * the outgoing member is slashed.
-       * 
-       * If a runner-up is available, then the best runner-up will be removed and replaces the
-       * outgoing member. Otherwise, a new phragmen election is started.
-       * 
-       * The dispatch origin of this call must be root.
-       * 
-       * Note that this does not affect the designated block number of the next election.
-       * 
-       * # <weight>
-       * If we have a replacement, we use a small weight. Else, since this is a root call and
-       * will go into phragmen, we assume full block for now.
-       * # </weight>
-       **/
-      removeMember: AugmentedSubmittable<(who: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, hasReplacement: bool | boolean | Uint8Array) => SubmittableExtrinsic<ApiType>, [LookupSource, bool]>;
-      /**
-       * Remove `origin` as a voter.
-       * 
-       * This removes the lock and returns the deposit.
-       * 
-       * The dispatch origin of this call must be signed and be a voter.
-       **/
-      removeVoter: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
-      /**
-       * Renounce one's intention to be a candidate for the next election round. 3 potential
-       * outcomes exist:
-       * 
-       * - `origin` is a candidate and not elected in any set. In this case, the deposit is
-       * unreserved, returned and origin is removed as a candidate.
-       * - `origin` is a current runner-up. In this case, the deposit is unreserved, returned and
-       * origin is removed as a runner-up.
-       * - `origin` is a current member. In this case, the deposit is unreserved and origin is
-       * removed as a member, consequently not being a candidate for the next round anymore.
-       * Similar to [`remove_members`], if replacement runners exists, they are immediately used.
-       * If the prime is renouncing, then no prime will exist until the next round.
-       * 
-       * The dispatch origin of this call must be signed, and have one of the above roles.
-       * 
-       * # <weight>
-       * The type of renouncing must be provided as witness data.
-       * # </weight>
-       **/
-      renounceCandidacy: AugmentedSubmittable<(renouncing: Renouncing | { Member: any } | { RunnerUp: any } | { Candidate: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Renouncing]>;
-      /**
-       * Submit oneself for candidacy. A fixed amount of deposit is recorded.
-       * 
-       * All candidates are wiped at the end of the term. They either become a member/runner-up,
-       * or leave the system while their deposit is slashed.
-       * 
-       * The dispatch origin of this call must be signed.
-       * 
-       * ### Warning
-       * 
-       * Even if a candidate ends up being a member, they must call [`Call::renounce_candidacy`]
-       * to get their deposit back. Losing the spot in an election will always lead to a slash.
-       * 
-       * # <weight>
-       * The number of current candidates must be provided as witness data.
-       * # </weight>
-       **/
-      submitCandidacy: AugmentedSubmittable<(candidateCount: Compact<u32> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<u32>]>;
-      /**
-       * Vote for a set of candidates for the upcoming round of election. This can be called to
-       * set the initial votes, or update already existing votes.
-       * 
-       * Upon initial voting, `value` units of `who`'s balance is locked and a deposit amount is
-       * reserved. The deposit is based on the number of votes and can be updated over time.
-       * 
-       * The `votes` should:
-       * - not be empty.
-       * - be less than the number of possible candidates. Note that all current members and
-       * runners-up are also automatically candidates for the next round.
-       * 
-       * If `value` is more than `who`'s total balance, then the maximum of the two is used.
-       * 
-       * The dispatch origin of this call must be signed.
-       * 
-       * ### Warning
-       * 
-       * It is the responsibility of the caller to **NOT** place all of their balance into the
-       * lock and keep some for further operations.
-       * 
-       * # <weight>
-       * We assume the maximum weight among all 3 cases: vote_equal, vote_more and vote_less.
-       * # </weight>
-       **/
-      vote: AugmentedSubmittable<(votes: Vec<AccountId> | (AccountId | string | Uint8Array)[], value: Compact<BalanceOf> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Vec<AccountId>, Compact<BalanceOf>]>;
-    };
     ethereum: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;
       /**
@@ -918,7 +1221,7 @@ declare module '@polkadot/api/types/submittable' {
        **/
       create2: AugmentedSubmittable<(source: H160 | string | Uint8Array, init: Bytes | string | Uint8Array, salt: H256 | string | Uint8Array, value: U256 | AnyNumber | Uint8Array, gasLimit: u64 | AnyNumber | Uint8Array, gasPrice: U256 | AnyNumber | Uint8Array, nonce: Option<U256> | null | object | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [H160, Bytes, H256, U256, u64, U256, Option<U256>]>;
       /**
-       * Withdraw balance from EVM into currency/balances module.
+       * Withdraw balance from EVM into currency/balances pallet.
        **/
       withdraw: AugmentedSubmittable<(address: H160 | string | Uint8Array, value: BalanceOf | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [H160, BalanceOf]>;
     };
@@ -1620,6 +1923,158 @@ declare module '@polkadot/api/types/submittable' {
        * # </weight>
        **/
       cancelAsMulti: AugmentedSubmittable<(threshold: u16 | AnyNumber | Uint8Array, otherSignatories: Vec<AccountId> | (AccountId | string | Uint8Array)[], timepoint: Timepoint | { height?: any; index?: any } | string | Uint8Array, callHash: U8aFixed | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u16, Vec<AccountId>, Timepoint, U8aFixed]>;
+    };
+    nft: {
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+      /**
+       * Burn NFT token
+       * 
+       * - `token`: (class_id, token_id)
+       **/
+      burn: AugmentedSubmittable<(token: ITuple<[ClassIdOf, TokenIdOf]> | [ClassIdOf | AnyNumber | Uint8Array, TokenIdOf | AnyNumber | Uint8Array]) => SubmittableExtrinsic<ApiType>, [ITuple<[ClassIdOf, TokenIdOf]>]>;
+      /**
+       * Burn NFT token
+       * 
+       * - `token`: (class_id, token_id)
+       * - `remark`: Vec<u8>
+       **/
+      burnWithRemark: AugmentedSubmittable<(token: ITuple<[ClassIdOf, TokenIdOf]> | [ClassIdOf | AnyNumber | Uint8Array, TokenIdOf | AnyNumber | Uint8Array], remark: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [ITuple<[ClassIdOf, TokenIdOf]>, Bytes]>;
+      /**
+       * Create NFT class, tokens belong to the class.
+       * 
+       * - `metadata`: external metadata
+       * - `properties`: class property, include `Transferable` `Burnable`
+       **/
+      createClass: AugmentedSubmittable<(metadata: CID | string | Uint8Array, properties: Properties | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [CID, Properties]>;
+      /**
+       * Destroy NFT class, remove dest from proxy, and send all the free
+       * balance to dest
+       * 
+       * - `class_id`: The class ID to destroy
+       * - `dest`: The proxy account that will receive free balance
+       **/
+      destroyClass: AugmentedSubmittable<(classId: ClassIdOf | AnyNumber | Uint8Array, dest: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [ClassIdOf, LookupSource]>;
+      /**
+       * Mint NFT token
+       * 
+       * - `to`: the token owner's account
+       * - `class_id`: token belong to the class id
+       * - `metadata`: external metadata
+       * - `quantity`: token quantity
+       **/
+      mint: AugmentedSubmittable<(to: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, classId: ClassIdOf | AnyNumber | Uint8Array, metadata: CID | string | Uint8Array, quantity: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [LookupSource, ClassIdOf, CID, u32]>;
+      /**
+       * Transfer NFT token to another account
+       * 
+       * - `to`: the token owner's account
+       * - `token`: (class_id, token_id)
+       **/
+      transfer: AugmentedSubmittable<(to: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, token: ITuple<[ClassIdOf, TokenIdOf]> | [ClassIdOf | AnyNumber | Uint8Array, TokenIdOf | AnyNumber | Uint8Array]) => SubmittableExtrinsic<ApiType>, [LookupSource, ITuple<[ClassIdOf, TokenIdOf]>]>;
+    };
+    phragmenElection: {
+      [key: string]: SubmittableExtrinsicFunction<ApiType>;
+      /**
+       * Clean all voters who are defunct (i.e. they do not serve any purpose at all). The
+       * deposit of the removed voters are returned.
+       * 
+       * This is an root function to be used only for cleaning the state.
+       * 
+       * The dispatch origin of this call must be root.
+       * 
+       * # <weight>
+       * The total number of voters and those that are defunct must be provided as witness data.
+       * # </weight>
+       **/
+      cleanDefunctVoters: AugmentedSubmittable<(numVoters: u32 | AnyNumber | Uint8Array, numDefunct: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32, u32]>;
+      /**
+       * Remove a particular member from the set. This is effective immediately and the bond of
+       * the outgoing member is slashed.
+       * 
+       * If a runner-up is available, then the best runner-up will be removed and replaces the
+       * outgoing member. Otherwise, a new phragmen election is started.
+       * 
+       * The dispatch origin of this call must be root.
+       * 
+       * Note that this does not affect the designated block number of the next election.
+       * 
+       * # <weight>
+       * If we have a replacement, we use a small weight. Else, since this is a root call and
+       * will go into phragmen, we assume full block for now.
+       * # </weight>
+       **/
+      removeMember: AugmentedSubmittable<(who: LookupSource | { Id: any } | { Index: any } | { Raw: any } | { Address32: any } | { Address20: any } | string | Uint8Array, hasReplacement: bool | boolean | Uint8Array) => SubmittableExtrinsic<ApiType>, [LookupSource, bool]>;
+      /**
+       * Remove `origin` as a voter.
+       * 
+       * This removes the lock and returns the deposit.
+       * 
+       * The dispatch origin of this call must be signed and be a voter.
+       **/
+      removeVoter: AugmentedSubmittable<() => SubmittableExtrinsic<ApiType>, []>;
+      /**
+       * Renounce one's intention to be a candidate for the next election round. 3 potential
+       * outcomes exist:
+       * 
+       * - `origin` is a candidate and not elected in any set. In this case, the deposit is
+       * unreserved, returned and origin is removed as a candidate.
+       * - `origin` is a current runner-up. In this case, the deposit is unreserved, returned and
+       * origin is removed as a runner-up.
+       * - `origin` is a current member. In this case, the deposit is unreserved and origin is
+       * removed as a member, consequently not being a candidate for the next round anymore.
+       * Similar to [`remove_members`], if replacement runners exists, they are immediately
+       * used. If the prime is renouncing, then no prime will exist until the next round.
+       * 
+       * The dispatch origin of this call must be signed, and have one of the above roles.
+       * 
+       * # <weight>
+       * The type of renouncing must be provided as witness data.
+       * # </weight>
+       **/
+      renounceCandidacy: AugmentedSubmittable<(renouncing: Renouncing | { Member: any } | { RunnerUp: any } | { Candidate: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [Renouncing]>;
+      /**
+       * Submit oneself for candidacy. A fixed amount of deposit is recorded.
+       * 
+       * All candidates are wiped at the end of the term. They either become a member/runner-up,
+       * or leave the system while their deposit is slashed.
+       * 
+       * The dispatch origin of this call must be signed.
+       * 
+       * ### Warning
+       * 
+       * Even if a candidate ends up being a member, they must call [`Call::renounce_candidacy`]
+       * to get their deposit back. Losing the spot in an election will always lead to a slash.
+       * 
+       * # <weight>
+       * The number of current candidates must be provided as witness data.
+       * # </weight>
+       **/
+      submitCandidacy: AugmentedSubmittable<(candidateCount: Compact<u32> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Compact<u32>]>;
+      /**
+       * Vote for a set of candidates for the upcoming round of election. This can be called to
+       * set the initial votes, or update already existing votes.
+       * 
+       * Upon initial voting, `value` units of `who`'s balance is locked and a deposit amount is
+       * reserved. The deposit is based on the number of votes and can be updated over time.
+       * 
+       * The `votes` should:
+       * - not be empty.
+       * - be less than the number of possible candidates. Note that all current members and
+       * runners-up are also automatically candidates for the next round.
+       * 
+       * If `value` is more than `who`'s total balance, then the maximum of the two is used.
+       * 
+       * The dispatch origin of this call must be signed.
+       * 
+       * ### Warning
+       * 
+       * It is the responsibility of the caller to **NOT** place all of their balance into the
+       * lock and keep some for further operations.
+       * 
+       * # <weight>
+       * We assume the maximum weight among all 3 cases: vote_equal, vote_more and vote_less.
+       * # </weight>
+       **/
+      vote: AugmentedSubmittable<(votes: Vec<AccountId> | (AccountId | string | Uint8Array)[], value: Compact<BalanceOf> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [Vec<AccountId>, Compact<BalanceOf>]>;
     };
     proxy: {
       [key: string]: SubmittableExtrinsicFunction<ApiType>;

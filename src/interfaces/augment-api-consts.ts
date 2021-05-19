@@ -173,6 +173,13 @@ declare module '@polkadot/api/types/consts' {
     electionProviderMultiPhase: {
       [key: string]: Codec;
       /**
+       * The repeat threshold of the offchain worker.
+       * 
+       * For example, if it is 5, that means that at least 5 blocks will elapse between attempts
+       * to submit the worker's solution.
+       **/
+      offchainRepeat: BlockNumber & AugmentedConst<ApiType>;
+      /**
        * Duration of the signed phase.
        **/
       signedPhase: BlockNumber & AugmentedConst<ApiType>;
@@ -186,20 +193,10 @@ declare module '@polkadot/api/types/consts' {
        **/
       unsignedPhase: BlockNumber & AugmentedConst<ApiType>;
     };
-    elections: {
-      [key: string]: Codec;
-      candidacyBond: BalanceOf & AugmentedConst<ApiType>;
-      desiredMembers: u32 & AugmentedConst<ApiType>;
-      desiredRunnersUp: u32 & AugmentedConst<ApiType>;
-      palletId: LockIdentifier & AugmentedConst<ApiType>;
-      termDuration: BlockNumber & AugmentedConst<ApiType>;
-      votingBondBase: BalanceOf & AugmentedConst<ApiType>;
-      votingBondFactor: BalanceOf & AugmentedConst<ApiType>;
-    };
     identity: {
       [key: string]: Codec;
       /**
-       * The amount held on deposit for a registered identity.
+       * The amount held on deposit for a registered identity
        **/
       basicDeposit: BalanceOf & AugmentedConst<ApiType>;
       /**
@@ -265,6 +262,57 @@ declare module '@polkadot/api/types/consts' {
        * The maximum amount of signatories allowed for a given multisig.
        **/
       maxSignatories: u16 & AugmentedConst<ApiType>;
+    };
+    nft: {
+      [key: string]: Codec;
+      /**
+       * The minimum balance to create class
+       **/
+      createClassDeposit: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * The minimum balance to create token
+       **/
+      createTokenDeposit: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * The NFT's module id
+       **/
+      palletId: PalletId & AugmentedConst<ApiType>;
+    };
+    phragmenElection: {
+      [key: string]: Codec;
+      /**
+       * How much should be locked up in order to submit one's candidacy.
+       **/
+      candidacyBond: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * Number of members to elect.
+       **/
+      desiredMembers: u32 & AugmentedConst<ApiType>;
+      /**
+       * Number of runners_up to keep.
+       **/
+      desiredRunnersUp: u32 & AugmentedConst<ApiType>;
+      /**
+       * Identifier for the elections-phragmen pallet's lock
+       **/
+      palletId: LockIdentifier & AugmentedConst<ApiType>;
+      /**
+       * How long each seat is kept. This defines the next block number at which an election
+       * round will happen. If set to zero, no elections are ever triggered and the module will
+       * be in passive mode.
+       **/
+      termDuration: BlockNumber & AugmentedConst<ApiType>;
+      /**
+       * Base deposit associated with voting.
+       * 
+       * This should be sensibly high to economically ensure the pallet cannot be attacked by
+       * creating a gigantic number of votes.
+       **/
+      votingBondBase: BalanceOf & AugmentedConst<ApiType>;
+      /**
+       * The amount of bond that need to be locked for each vote (32 bytes).
+       **/
+      votingBondFactor: BalanceOf & AugmentedConst<ApiType>;
     };
     proxy: {
       [key: string]: Codec;

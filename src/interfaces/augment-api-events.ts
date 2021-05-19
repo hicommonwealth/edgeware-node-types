@@ -3,7 +3,9 @@
 
 import type { Bytes, Option, U256, Vec, bool, u16, u32, u8 } from '@polkadot/types';
 import type { ITuple } from '@polkadot/types/types';
+import type { ClassIdOf, TokenIdOf } from './nft';
 import type { AmountOf, CurrencyId, CurrencyIdOf, DustHandlerType, ScalarData, TreeId } from './webb';
+import type { TAssetBalance } from '@polkadot/types/interfaces/assets';
 import type { BalanceStatus } from '@polkadot/types/interfaces/balances';
 import type { MemberCount, ProposalIndex } from '@polkadot/types/interfaces/collective';
 import type { AuthorityId } from '@polkadot/types/interfaces/consensus';
@@ -14,7 +16,7 @@ import type { AuthorityList } from '@polkadot/types/interfaces/grandpa';
 import type { RegistrarIndex } from '@polkadot/types/interfaces/identity';
 import type { Kind, OpaqueTimeSlot } from '@polkadot/types/interfaces/offences';
 import type { ProxyType } from '@polkadot/types/interfaces/proxy';
-import type { AccountId, AccountIndex, Balance, BalanceOf, BlockNumber, CallHash, H160, H256, Hash } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, AccountIndex, AssetId, Balance, BalanceOf, BlockNumber, CallHash, H160, H256, Hash } from '@polkadot/types/interfaces/runtime';
 import type { TaskAddress } from '@polkadot/types/interfaces/scheduler';
 import type { IdentificationTuple, SessionIndex } from '@polkadot/types/interfaces/session';
 import type { ElectionCompute, EraIndex } from '@polkadot/types/interfaces/staking';
@@ -25,6 +27,86 @@ import type { ApiTypes } from '@polkadot/api/types';
 
 declare module '@polkadot/api/types/events' {
   export interface AugmentedEvents<ApiType> {
+    assets: {
+      [key: string]: AugmentedEvent<ApiType>;
+      /**
+       * An approval for account `delegate` was cancelled by `owner`.
+       * \[id, owner, delegate\]
+       **/
+      ApprovalCancelled: AugmentedEvent<ApiType, [AssetId, AccountId, AccountId]>;
+      /**
+       * (Additional) funds have been approved for transfer to a destination account.
+       * \[asset_id, source, delegate, amount\]
+       **/
+      ApprovedTransfer: AugmentedEvent<ApiType, [AssetId, AccountId, AccountId, TAssetBalance]>;
+      /**
+       * Some asset `asset_id` was frozen. \[asset_id\]
+       **/
+      AssetFrozen: AugmentedEvent<ApiType, [AssetId]>;
+      /**
+       * An asset has had its attributes changed by the `Force` origin.
+       * \[id\]
+       **/
+      AssetStatusChanged: AugmentedEvent<ApiType, [AssetId]>;
+      /**
+       * Some asset `asset_id` was thawed. \[asset_id\]
+       **/
+      AssetThawed: AugmentedEvent<ApiType, [AssetId]>;
+      /**
+       * Some assets were destroyed. \[asset_id, owner, balance\]
+       **/
+      Burned: AugmentedEvent<ApiType, [AssetId, AccountId, TAssetBalance]>;
+      /**
+       * Some asset class was created. \[asset_id, creator, owner\]
+       **/
+      Created: AugmentedEvent<ApiType, [AssetId, AccountId, AccountId]>;
+      /**
+       * An asset class was destroyed.
+       **/
+      Destroyed: AugmentedEvent<ApiType, [AssetId]>;
+      /**
+       * Some asset class was force-created. \[asset_id, owner\]
+       **/
+      ForceCreated: AugmentedEvent<ApiType, [AssetId, AccountId]>;
+      /**
+       * Some account `who` was frozen. \[asset_id, who\]
+       **/
+      Frozen: AugmentedEvent<ApiType, [AssetId, AccountId]>;
+      /**
+       * Some assets were issued. \[asset_id, owner, total_supply\]
+       **/
+      Issued: AugmentedEvent<ApiType, [AssetId, AccountId, TAssetBalance]>;
+      /**
+       * Metadata has been cleared for an asset. \[asset_id\]
+       **/
+      MetadataCleared: AugmentedEvent<ApiType, [AssetId]>;
+      /**
+       * New metadata has been set for an asset. \[asset_id, name, symbol, decimals, is_frozen\]
+       **/
+      MetadataSet: AugmentedEvent<ApiType, [AssetId, Bytes, Bytes, u8, bool]>;
+      /**
+       * The owner changed \[asset_id, owner\]
+       **/
+      OwnerChanged: AugmentedEvent<ApiType, [AssetId, AccountId]>;
+      /**
+       * The management team changed \[asset_id, issuer, admin, freezer\]
+       **/
+      TeamChanged: AugmentedEvent<ApiType, [AssetId, AccountId, AccountId, AccountId]>;
+      /**
+       * Some account `who` was thawed. \[asset_id, who\]
+       **/
+      Thawed: AugmentedEvent<ApiType, [AssetId, AccountId]>;
+      /**
+       * Some assets were transferred. \[asset_id, from, to, amount\]
+       **/
+      Transferred: AugmentedEvent<ApiType, [AssetId, AccountId, AccountId, TAssetBalance]>;
+      /**
+       * An `amount` was transferred in its entirety from `owner` to `destination` by
+       * the approved `delegate`.
+       * \[id, owner, delegate, destination\]
+       **/
+      TransferredApproved: AugmentedEvent<ApiType, [AssetId, AccountId, AccountId, AccountId, TAssetBalance]>;
+    };
     balances: {
       [key: string]: AugmentedEvent<ApiType>;
       /**
@@ -332,45 +414,6 @@ declare module '@polkadot/api/types/events' {
        **/
       UnsignedPhaseStarted: AugmentedEvent<ApiType, [u32]>;
     };
-    elections: {
-      [key: string]: AugmentedEvent<ApiType>;
-      /**
-       * A \[candidate\] was slashed by \[amount\] due to failing to obtain a seat as member or
-       * runner-up.
-       * 
-       * Note that old members and runners-up are also candidates.
-       **/
-      CandidateSlashed: AugmentedEvent<ApiType, [AccountId, Balance]>;
-      /**
-       * Internal error happened while trying to perform election.
-       **/
-      ElectionError: AugmentedEvent<ApiType, []>;
-      /**
-       * No (or not enough) candidates existed for this round. This is different from
-       * `NewTerm(\[\])`. See the description of `NewTerm`.
-       **/
-      EmptyTerm: AugmentedEvent<ApiType, []>;
-      /**
-       * A \[member\] has been removed. This should always be followed by either `NewTerm` or
-       * `EmptyTerm`.
-       **/
-      MemberKicked: AugmentedEvent<ApiType, [AccountId]>;
-      /**
-       * A new term with \[new_members\]. This indicates that enough candidates existed to run the
-       * election, not that enough have has been elected. The inner value must be examined for
-       * this purpose. A `NewTerm(\[\])` indicates that some candidates got their bond slashed and
-       * none were elected, whilst `EmptyTerm` means that no candidates existed to begin with.
-       **/
-      NewTerm: AugmentedEvent<ApiType, [Vec<ITuple<[AccountId, Balance]>>]>;
-      /**
-       * Someone has renounced their candidacy.
-       **/
-      Renounced: AugmentedEvent<ApiType, [AccountId]>;
-      /**
-       * A \[seat holder\] was slashed by \[amount\] by being forcefully removed from the set.
-       **/
-      SeatHolderSlashed: AugmentedEvent<ApiType, [AccountId, Balance]>;
-    };
     ethereum: {
       [key: string]: AugmentedEvent<ApiType>;
       /**
@@ -545,15 +588,81 @@ declare module '@polkadot/api/types/events' {
        **/
       NewMultisig: AugmentedEvent<ApiType, [AccountId, AccountId, CallHash]>;
     };
+    nft: {
+      [key: string]: AugmentedEvent<ApiType>;
+      /**
+       * Burned NFT token. \[owner, class_id, token_id\]
+       **/
+      BurnedToken: AugmentedEvent<ApiType, [AccountId, ClassIdOf, TokenIdOf]>;
+      /**
+       * Burned NFT token with remark. \[owner, class_id, token_id, remark_hash\]
+       **/
+      BurnedTokenWithRemark: AugmentedEvent<ApiType, [AccountId, ClassIdOf, TokenIdOf, Hash]>;
+      /**
+       * Created NFT class. \[owner, class_id\]
+       **/
+      CreatedClass: AugmentedEvent<ApiType, [AccountId, ClassIdOf]>;
+      /**
+       * Destroyed NFT class. \[owner, class_id\]
+       **/
+      DestroyedClass: AugmentedEvent<ApiType, [AccountId, ClassIdOf]>;
+      /**
+       * Minted NFT token. \[from, to, class_id, quantity\]
+       **/
+      MintedToken: AugmentedEvent<ApiType, [AccountId, AccountId, ClassIdOf, u32]>;
+      /**
+       * Transferred NFT token. \[from, to, class_id, token_id\]
+       **/
+      TransferredToken: AugmentedEvent<ApiType, [AccountId, AccountId, ClassIdOf, TokenIdOf]>;
+    };
     offences: {
       [key: string]: AugmentedEvent<ApiType>;
       /**
        * There is an offence reported of the given `kind` happened at the `session_index` and
-       * (kind-specific) time slot. This event is not deposited for duplicate slashes. last
-       * element indicates of the offence was applied (true) or queued (false)
-       * \[kind, timeslot, applied\].
+       * (kind-specific) time slot. This event is not deposited for duplicate slashes.
+       * \[kind, timeslot\].
        **/
-      Offence: AugmentedEvent<ApiType, [Kind, OpaqueTimeSlot, bool]>;
+      Offence: AugmentedEvent<ApiType, [Kind, OpaqueTimeSlot]>;
+    };
+    phragmenElection: {
+      [key: string]: AugmentedEvent<ApiType>;
+      /**
+       * A \[candidate\] was slashed by \[amount\] due to failing to obtain a seat as member or
+       * runner-up.
+       * 
+       * Note that old members and runners-up are also candidates.
+       **/
+      CandidateSlashed: AugmentedEvent<ApiType, [AccountId, Balance]>;
+      /**
+       * Internal error happened while trying to perform election.
+       **/
+      ElectionError: AugmentedEvent<ApiType, []>;
+      /**
+       * No (or not enough) candidates existed for this round. This is different from
+       * `NewTerm(\[\])`. See the description of `NewTerm`.
+       **/
+      EmptyTerm: AugmentedEvent<ApiType, []>;
+      /**
+       * A \[member\] has been removed. This should always be followed by either `NewTerm` or
+       * `EmptyTerm`.
+       **/
+      MemberKicked: AugmentedEvent<ApiType, [AccountId]>;
+      /**
+       * A new term with \[new_members\]. This indicates that enough candidates existed to run
+       * the election, not that enough have has been elected. The inner value must be examined
+       * for this purpose. A `NewTerm(\[\])` indicates that some candidates got their bond
+       * slashed and none were elected, whilst `EmptyTerm` means that no candidates existed to
+       * begin with.
+       **/
+      NewTerm: AugmentedEvent<ApiType, [Vec<ITuple<[AccountId, Balance]>>]>;
+      /**
+       * Someone has renounced their candidacy.
+       **/
+      Renounced: AugmentedEvent<ApiType, [AccountId]>;
+      /**
+       * A \[seat holder\] was slashed by \[amount\] by being forcefully removed from the set.
+       **/
+      SeatHolderSlashed: AugmentedEvent<ApiType, [AccountId, Balance]>;
     };
     proxy: {
       [key: string]: AugmentedEvent<ApiType>;
@@ -745,8 +854,8 @@ declare module '@polkadot/api/types/events' {
        **/
       ApprovalCancelled: AugmentedEvent<ApiType, [CurrencyId, AccountId, AccountId]>;
       /**
-       * (Additional) funds have been approved for transfer to a destination account.
-       * \[asset_id, source, delegate, amount\]
+       * (Additional) funds have been approved for transfer to a destination
+       * account. \[asset_id, source, delegate, amount\]
        **/
       ApprovedTransfer: AugmentedEvent<ApiType, [CurrencyId, AccountId, AccountId, Balance]>;
       /**
@@ -793,7 +902,8 @@ declare module '@polkadot/api/types/events' {
        **/
       MetadataCleared: AugmentedEvent<ApiType, [CurrencyId]>;
       /**
-       * New metadata has been set for an asset. \[asset_id, name, symbol, decimals, is_frozen\]
+       * New metadata has been set for an asset. \[asset_id, name, symbol,
+       * decimals, is_frozen\]
        **/
       MetadataSet: AugmentedEvent<ApiType, [CurrencyId, Bytes, Bytes, u8, bool]>;
       /**
@@ -821,8 +931,8 @@ declare module '@polkadot/api/types/events' {
        **/
       Transferred: AugmentedEvent<ApiType, [CurrencyId, AccountId, AccountId, Balance]>;
       /**
-       * An `amount` was transferred in its entirety from `owner` to `destination` by
-       * the approved `delegate`.
+       * An `amount` was transferred in its entirety from `owner` to
+       * `destination` by the approved `delegate`.
        * \[id, owner, delegate, destination\]
        **/
       TransferredApproved: AugmentedEvent<ApiType, [CurrencyId, AccountId, AccountId, AccountId, Balance]>;
@@ -861,6 +971,9 @@ declare module '@polkadot/api/types/events' {
     };
     treasuryReward: {
       [key: string]: AugmentedEvent<ApiType>;
+      /**
+       * Treasury minting event
+       **/
       TreasuryMinting: AugmentedEvent<ApiType, [Balance, BlockNumber, AccountId]>;
     };
     utility: {
