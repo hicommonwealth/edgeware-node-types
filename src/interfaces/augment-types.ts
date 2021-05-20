@@ -115,7 +115,6 @@ declare module '@polkadot/types/types/registry' {
     'Compact<PerU16>': Compact<PerU16>;
     'Compact<Points>': Compact<Points>;
     'Compact<Priority>': Compact<Priority>;
-    'Compact<Properties>': Compact<Properties>;
     'Compact<PropIndex>': Compact<PropIndex>;
     'Compact<ProposalIndex>': Compact<ProposalIndex>;
     'Compact<RefCount>': Compact<RefCount>;

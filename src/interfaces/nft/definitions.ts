@@ -1,7 +1,12 @@
 export default {
   types: {
     CID: 'Vec<u8>',
-    Properties: 'u8',
+    Properties: {
+      _set: {
+        Transferable: 0b00000001,
+        Burnable: 0b00000010
+      }
+    },
     ClassData: {
       deposit: 'Balance',
       properties: 'Properties',

@@ -1945,7 +1945,7 @@ declare module '@polkadot/api/types/submittable' {
        * - `metadata`: external metadata
        * - `properties`: class property, include `Transferable` `Burnable`
        **/
-      createClass: AugmentedSubmittable<(metadata: CID | string | Uint8Array, properties: Properties | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [CID, Properties]>;
+      createClass: AugmentedSubmittable<(metadata: CID | string | Uint8Array, properties: Properties) => SubmittableExtrinsic<ApiType>, [CID, Properties]>;
       /**
        * Destroy NFT class, remove dest from proxy, and send all the free
        * balance to dest

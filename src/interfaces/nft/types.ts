@@ -1,7 +1,7 @@
 // Auto-generated via `yarn polkadot-types-from-defs`, do not edit
 /* eslint-disable */
 
-import type { Bytes, Struct, u32, u64, u8 } from '@polkadot/types';
+import type { Bytes, Set, Struct, u32, u64 } from '@polkadot/types';
 import type { AccountId, Balance } from '@polkadot/types/interfaces/runtime';
 
 /** @name CID */
@@ -31,7 +31,10 @@ export interface ClassInfo extends Struct {
 export interface ClassInfoOf extends ClassInfo {}
 
 /** @name Properties */
-export interface Properties extends u8 {}
+export interface Properties extends Set {
+  readonly isTransferable: boolean;
+  readonly isBurnable: boolean;
+}
 
 /** @name TokenData */
 export interface TokenData extends Struct {
