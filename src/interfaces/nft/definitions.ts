@@ -27,7 +27,6 @@ export default {
       data: 'TokenData',
     },
     TokenInfoOf: 'TokenInfo',
-    ClassId: 'u32',
     TokenId: 'u64',
     ClassIdOf: 'ClassId',
     TokenIdOf: 'TokenId',
