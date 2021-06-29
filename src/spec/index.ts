@@ -8,6 +8,14 @@ import v47 from './v47';
 // Support archival
 const typesBundle: OverrideBundleType = {
   spec: {
+    'beresheet': {
+      types: [
+        {
+          minmax: [10047, undefined],
+          types: v47.types,
+        }
+      ]
+    },
     'edgeware': {
       alias: {
         voting: { Tally: 'VotingTally' },
