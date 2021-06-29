@@ -3,7 +3,7 @@ import { WsProvider, ApiPromise } from '@polkadot/api';
 import { TypeRegistry } from '@polkadot/types';
 
 const urls: { [name: string]: string } = {
-  'mainnet': 'ws://mainnet1.edgewa.re:9944',
+  'mainnet': 'ws://mainnet2.edgewa.re:9944',
   // 'mainnet': 'ws://localhost:9944',
   'beresheet': 'wss://beresheet1.edgewa.re',
   'dev': 'ws://localhost:9944',
